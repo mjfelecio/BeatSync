@@ -74,7 +74,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>com.mjfelecio.beatsync/com.mjfelecio.beatsync.HelloApplication</mainClass>
+                            <mainClass>com.mjfelecio.beatsync/com.mjfelecio.beatsync.BeatSyncApplication</mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
                             <jlinkImageName>app</jlinkImageName>
