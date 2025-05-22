@@ -15,31 +15,37 @@ public class Playfield {
 
     private final File beatmapFile;
     public ArrayList<Note> notes;
+    public ArrayList<Note> activeNotes;
 
     long startTime;
 
     public Playfield(int width, int height) {
         this.width = width;
         this.height = height;
-        this.startTime = System.currentTimeMillis();
+        this.startTime = System.nanoTime();
 
         // Initializing a map here temporarily
         beatmapFile = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/test.osu");
         notes = new BeatmapParser(BeatmapReader.parse(beatmapFile)).parseNotes();
+        activeNotes = new ArrayList<>();
     }
 
     public void update(GraphicsContext gc) {
+        long currentTime = System.nanoTime();
+        long timeElapsed = currentTime - startTime;
+
+        // Check for notes to activate
         notes.forEach(n -> {
-            long timeElapsed = System.currentTimeMillis() - startTime;
-
-            // This prevents rendering of notes that have already passed the play field
-            if (n.getY() >= height) return;
-
-            if (timeElapsed >= n.getStartTime()) {
-
-                gc.strokeOval(getCircleCenteredWidthPos(n.getLaneNumber()), n.getY(), NOTE_SIZE, NOTE_SIZE);
-                n.setY(n.getY() + 1);
+            if ((timeElapsed / 1_000_000) >= n.getStartTime() && !activeNotes.contains(n)) {
+                activeNotes.add(n);
             }
+        });
+
+        // Render active notes
+        activeNotes.removeIf(n -> n.getY() >= height); // Remove notes that have passed the playfield
+        activeNotes.forEach(n -> {
+            gc.strokeOval(getCircleCenteredWidthPos(n.getLaneNumber()), n.getY(), NOTE_SIZE, NOTE_SIZE);
+            n.setY(n.getY() + 1);
         });
     }
 
