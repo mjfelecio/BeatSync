@@ -2,7 +2,7 @@ package com.mjfelecio.beatsync.core;
 
 public class Note {
     private final int x;
-    private int y = -10; // Notes start at the very top of the screen anyway
+    private int y = -100; // Notes start at the very top of the screen anyway
     private final int startTime;
 
     public Note(int laneNumber, int startTime) {
@@ -20,6 +20,8 @@ public class Note {
 
     public int getLaneNumber() {
         int lane = 0;
+
+        // Note that the lanes are zero-indexed
         switch (x) {
             case 64 -> lane = 0;
             case 192 -> lane = 1;

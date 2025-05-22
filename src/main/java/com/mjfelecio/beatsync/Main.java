@@ -7,7 +7,6 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
-import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -30,14 +29,15 @@ public class Main extends Application {
         stage.setTitle("Beat Sync: VSRG made with Java");
         stage.show();
 
-//        new AnimationTimer() {
-//            @Override
-//            public void handle(long now) {
-//                gc.clearRect(0, 0, WIDTH, HEIGHT);
-//
-//                playfield.render(gc);
-//            }
-//        }.start();
+        new AnimationTimer() {
+            @Override
+            public void handle(long now) {
+                gc.clearRect(0, 0, WIDTH, HEIGHT);
+
+                playfield.render(gc);
+                playfield.update(gc);
+            }
+        }.start();
     }
 
     public static void main(String[] args) {
