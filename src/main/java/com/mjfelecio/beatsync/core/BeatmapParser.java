@@ -17,13 +17,23 @@ public class BeatmapParser {
     public ArrayList<Note> parseNotes() {
         ArrayList<Note> notes = new ArrayList<>();
 
-        System.out.println(this.beatmap.getObjects());
-
         this.beatmap.getObjects().forEach(h -> {
-            notes.add(new Note(h.getX(), h.getTime()));
+            int laneNumber = getLaneNumber(h.getX());
+            notes.add(new Note(laneNumber, h.getTime()));
         });
 
-        System.out.println(notes);
         return notes;
+    }
+
+    public int getLaneNumber(int x) {
+        int lane = 0;
+        switch (x) {
+            case 64 -> lane = 1;
+            case 192 -> lane = 2;
+            case 320 -> lane = 3;
+            case 448 -> lane = 4;
+        }
+
+        return lane;
     }
 }
