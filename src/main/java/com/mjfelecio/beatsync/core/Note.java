@@ -1,16 +1,16 @@
 package com.mjfelecio.beatsync.core;
 
 public class Note {
-    private final int x;
+    private final int laneNumber;
     private int y = -10; // Notes start at the very top of the screen anyway
     private final int startTime;
 
-    public Note(int x, int startTime) {
-        this.x = x;
+    public Note(int laneNumber, int startTime) {
+        this.laneNumber = laneNumber;
         this.startTime = startTime;
     }
 
-    public int getX() { return x; }
+    public int getLaneNumber() { return laneNumber; }
     public int getY() { return y; }
     public int getStartTime() { return startTime; }
 
@@ -20,6 +20,6 @@ public class Note {
 
     @Override
     public String toString() {
-        return x + "," + startTime;
+        return laneNumber + "," + startTime;
     }
 }
