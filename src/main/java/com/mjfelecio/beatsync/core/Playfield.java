@@ -32,7 +32,11 @@ public class Playfield {
         notes.forEach(n -> {
             long timeElapsed = System.currentTimeMillis() - startTime;
 
+            // This prevents rendering of notes that have already passed the play field
+            if (n.getY() >= height) return;
+
             if (timeElapsed >= n.getStartTime()) {
+
                 gc.strokeOval(getCircleCenteredWidthPos(n.getLaneNumber()), n.getY(), NOTE_SIZE, NOTE_SIZE);
                 n.setY(n.getY() + 1);
             }
