@@ -18,22 +18,11 @@ public class BeatmapParser {
         ArrayList<Note> notes = new ArrayList<>();
 
         this.beatmap.getObjects().forEach(h -> {
-            int laneNumber = getLaneNumber(h.getX());
-            notes.add(new Note(laneNumber, h.getTime()));
+            notes.add(new Note(h.getX(), h.getTime()));
         });
 
         return notes;
     }
 
-    public int getLaneNumber(int x) {
-        int lane = 0;
-        switch (x) {
-            case 64 -> lane = 1;
-            case 192 -> lane = 2;
-            case 320 -> lane = 3;
-            case 448 -> lane = 4;
-        }
 
-        return lane;
-    }
 }
