@@ -1,7 +1,8 @@
 package com.mjfelecio.beatsync.core;
 
-import org.hydev.obp.Beatmap;
+import com.mjfelecio.beatsync.parser.obj.Beatmap;
 
+import java.io.File;
 import java.util.ArrayList;
 
 public class BeatmapParser {
@@ -12,12 +13,13 @@ public class BeatmapParser {
     }
 
     public void parse() {
+
     }
 
     public ArrayList<Note> parseNotes() {
         ArrayList<Note> notes = new ArrayList<>();
 
-        this.beatmap.getObjects().forEach(h -> {
+        this.beatmap.getNotes().forEach(h -> {
             notes.add(new Note(h.getX(), h.getTime()));
         });
 

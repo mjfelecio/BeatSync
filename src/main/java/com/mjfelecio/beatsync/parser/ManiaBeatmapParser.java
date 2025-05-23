@@ -1,5 +1,8 @@
 package com.mjfelecio.beatsync.parser;
 
+import com.mjfelecio.beatsync.parser.obj.Beatmap;
+import com.mjfelecio.beatsync.parser.obj.HitObject;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
@@ -90,15 +93,5 @@ public class ManiaBeatmapParser {
             }
         }
         return endTime;
-    }
-
-    public static void main(String[] args) throws IOException {
-        File file = new File("test.osu");
-        Beatmap beatmap = parse(file);
-
-        System.out.println(beatmap);
-        for (HitObject ho : beatmap.getNotes()) {
-            System.out.println(ho);
-        }
     }
 }

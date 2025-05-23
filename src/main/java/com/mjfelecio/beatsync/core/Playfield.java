@@ -1,10 +1,12 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import org.hydev.obp.BeatmapReader;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Playfield {
@@ -13,7 +15,6 @@ public class Playfield {
     private final int LANES = 4;
     private final int NOTE_SIZE = 80;
 
-    private final File beatmapFile;
     public ArrayList<Note> notes;
     public ArrayList<Note> activeNotes;
 
@@ -24,10 +25,14 @@ public class Playfield {
         this.height = height;
         this.startTime = System.nanoTime();
 
-        // Initializing a map here temporarily
-        beatmapFile = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/test.osu");
-        notes = new BeatmapParser(BeatmapReader.parse(beatmapFile)).parseNotes();
-        activeNotes = new ArrayList<>();
+        try {
+            // Initializing a map here temporarily
+            File beatmapFile = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/test.osu");
+            notes = new BeatmapParser(ManiaBeatmapParser.parse(beatmapFile)).parseNotes();
+            activeNotes = new ArrayList<>();
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+        }
     }
 
     public void update(GraphicsContext gc) {
@@ -36,7 +41,7 @@ public class Playfield {
 
         // Check for notes to activate
         notes.forEach(n -> {
-            if ((timeElapsed / 1_000_000) >= n.getStartTime() && !activeNotes.contains(n)) {
+            if ((timeElapsed / 1_000_000) >= n.getTime() && !activeNotes.contains(n)) {
                 activeNotes.add(n);
             }
         });
