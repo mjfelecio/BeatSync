@@ -20,6 +20,11 @@ public class BeatmapParser {
         ArrayList<Note> notes = new ArrayList<>();
 
         this.beatmap.getNotes().forEach(h -> {
+            if (h.isHold()) {
+                notes.add(new Note(h.getX(), h.getTime(), h.getEndTime()));
+                return;
+            }
+
             notes.add(new Note(h.getX(), h.getTime()));
         });
 
