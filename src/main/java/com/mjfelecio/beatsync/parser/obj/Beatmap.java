@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.parser;
+package com.mjfelecio.beatsync.parser.obj;
 
 import java.util.ArrayList;
 import java.util.List;

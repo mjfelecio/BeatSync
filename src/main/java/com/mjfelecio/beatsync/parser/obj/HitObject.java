@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.parser;
+package com.mjfelecio.beatsync.parser.obj;
 
 public class HitObject {
     private final int x, y, time, type, hitSound;
