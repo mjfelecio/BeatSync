@@ -3,20 +3,31 @@ package com.mjfelecio.beatsync.core;
 public class Note {
     private final int x;
     private int y = -100; // Notes start at the very top of the screen anyway
-    private final int startTime;
+    private final int time;
+    private final int endTime; // Null for normal notes
+    private final boolean isHoldNote;
 
+    // Creates a normal note
     public Note(int laneNumber, int startTime) {
         this.x = laneNumber;
-        this.startTime = startTime;
+        this.time = startTime;
+        this.endTime = 0;
+        this.isHoldNote = false;
+    }
+
+    // Creates a hold note
+    public Note(int laneNumber, int startTime, int endTime) {
+        this.x = laneNumber;
+        this.time = startTime;
+        this.endTime = endTime;
+        this.isHoldNote = true;
     }
 
     public int getX() { return x; }
     public int getY() { return y; }
-    public int getStartTime() { return startTime; }
-
-    public void setY(int y) {
-        this.y = y;
-    }
+    public int getTime() { return time; }
+    public int getEndTime() { return endTime; }
+    public void setY(int y) { this.y = y; }
 
     public int getLaneNumber() {
         int lane = 0;
@@ -34,6 +45,6 @@ public class Note {
 
     @Override
     public String toString() {
-        return x + "," + startTime;
+        return isHoldNote ? x + "," + time + "," + endTime : x + "," + time;
     }
 }
