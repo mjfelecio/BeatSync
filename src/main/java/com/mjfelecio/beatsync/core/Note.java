@@ -6,6 +6,7 @@ public class Note {
     private final int time;
     private final int endTime; // Null for normal notes
     private final boolean isHoldNote;
+    private boolean isHit = false;
 
     // Creates a normal note
     public Note(int laneNumber, int startTime) {
@@ -28,6 +29,9 @@ public class Note {
     public int getTime() { return time; }
     public int getEndTime() { return endTime; }
     public void setY(int y) { this.y = y; }
+
+    public boolean isHit() { return isHit; }
+    public void setHit(boolean b) { isHit = b; }
 
     public int getLaneNumber() {
         int lane = 0;
