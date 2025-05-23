@@ -13,6 +13,7 @@ public class Playfield {
     private final int height;
     private final int LANES = 4;
     private final int NOTE_SIZE = 80;
+    private GameClock gameClock;
 
     public ArrayList<Note> notes;
     public ArrayList<Note> activeNotes;
@@ -31,6 +32,7 @@ public class Playfield {
         this.width = width;
         this.height = height;
         this.startTime = System.nanoTime();
+        this.gameClock = new GameClock();
 
         try {
             // Initializing a map here temporarily
@@ -40,16 +42,18 @@ public class Playfield {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
+
+        // Start the clock once the notes has been loaded
+        this.gameClock.start();
     }
 
     public void update(GraphicsContext gc) {
-        long currentTime = System.nanoTime();
-        long timeElapsed = currentTime - startTime;
-        long nowMs = timeElapsed / 1_000_000;
+        long currentTime = System.currentTimeMillis();
+        long timeElapsed = gameClock.getElapsedTime(currentTime);
 
         // Check for notes to activate
         notes.forEach(n -> {
-            if ((nowMs >= n.getTime()) && !activeNotes.contains(n) && !n.isHit()) {
+            if ((timeElapsed >= n.getTime()) && !activeNotes.contains(n) && !n.isHit()) {
                 activeNotes.add(n);
             }
         });
@@ -77,7 +81,7 @@ public class Playfield {
                 for (Note note : activeNotes) {
                     if (note.isHit() || note.getLaneNumber() != lane) continue;
 
-                    long delta = Math.abs(note.getTime() - nowMs);
+                    long delta = Math.abs(note.getTime() - timeElapsed);
                     if (delta < smallestDelta && delta <= MISS_WINDOW) {
                         bestMatch = note;
                         smallestDelta = delta;
