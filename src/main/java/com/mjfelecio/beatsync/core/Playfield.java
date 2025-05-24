@@ -123,6 +123,12 @@ public class Playfield {
     public void render(GraphicsContext gc) {
         int laneWidth = getLaneWidth();
 
+        // Add miss zones cut-off for testing
+        gc.setStroke(Color.RED);
+        gc.setLineWidth(5);
+        gc.strokeLine(0, getHitZonePos() + NOTE_SIZE, width, getHitZonePos() + NOTE_SIZE);
+        gc.setStroke(Color.BLACK);
+
         // Create border
         gc.setFill(Color.BLACK);
         gc.setLineWidth(8);
@@ -145,12 +151,7 @@ public class Playfield {
             // Add circles as indications for the hit zones in each lane
             gc.strokeOval(circleCenteredWidthPos, hitZonePos, NOTE_SIZE, NOTE_SIZE);
         }
-        // Add miss zones cut-off
-        gc.setStroke(Color.RED);
-        gc.strokeLine(0, getHitZonePos() + NOTE_SIZE / 2 + MISS_WINDOW, width, getHitZonePos() + NOTE_SIZE / 2 + MISS_WINDOW);
-        gc.setStroke(Color.BLACK);
     }
-
 
     public void pressKey(KeyCode code) {
         switch (code) {
