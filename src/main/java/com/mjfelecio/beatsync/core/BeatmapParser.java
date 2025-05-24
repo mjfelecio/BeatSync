@@ -20,15 +20,28 @@ public class BeatmapParser {
         ArrayList<Note> notes = new ArrayList<>();
 
         this.beatmap.getNotes().forEach(h -> {
+            int laneNumber = getLaneNumber(h.getX());
             if (h.isHold()) {
-                notes.add(new Note(h.getX(), h.getTime(), h.getEndTime()));
+                notes.add(new Note(laneNumber, h.getTime(), h.getEndTime()));
                 return;
             }
 
-            notes.add(new Note(h.getX(), h.getTime()));
+            notes.add(new Note(laneNumber, h.getTime()));
         });
 
         return notes;
+    }
+
+    public int getLaneNumber(int x) {
+        int lane = -1;
+        switch (x) {
+            case 64 -> lane = 0;
+            case 192 -> lane = 1;
+            case 320 -> lane = 2;
+            case 448 -> lane = 3;
+        }
+
+        return lane;
     }
 
 
