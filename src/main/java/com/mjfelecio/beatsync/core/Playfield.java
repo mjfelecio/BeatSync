@@ -13,22 +13,22 @@ import java.util.Iterator;
 public class Playfield {
     private final int width;
     private final int height;
-    private final int LANES = 4;
-    private final int NOTE_SIZE = 80;
+    private final int NUM_LANES = 4;
+    private final int NOTE_DIAMETER = 80;
 
     private GameClock gameClock;
     public ArrayList<Note> notes;
     public ArrayList<Note> activeNotes;
-    public final int APPROACH_TIME = 1000;
+    public final int NOTE_APPROACH_TIME = 1000;
 
     // Hit window thresholds in ms
-    private final int PERFECT_WINDOW = 30;
-    private final int GOOD_WINDOW = 80;
-    private final int MISS_WINDOW = 150;
+    private final int PERFECT_HIT_WINDOW = 30;
+    private final int GOOD_HIT_WINDOW = 80;
+    private final int MISS_HIT_WINDOW = 150;
 
-    private final boolean[] pressedLanes = new boolean[LANES]; // Keep track of presses
+    private final boolean[] isLanePressed = new boolean[NUM_LANES]; // Keep track of presses
 
-    int clickedNotes = 0;
+    int totalClickedNotes = 0;
 
     public Playfield(int width, int height, GameClock gameClock) {
         this.width = width;
@@ -61,40 +61,40 @@ public class Playfield {
             // Explanation for future me:
             //  The notes are supposed to be hit at a specific time in the music
             //  If they haven't been hit yet at their specific time in the specified TIMING WINDOWS, they're a miss
-            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_WINDOW) {
+            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW) {
                 registerScore("Miss");
                 missIter.remove();
             }
         }
 
         // Handle presses
-        for (int lane = 0; lane < LANES; lane++) {
-            if (pressedLanes[lane]) {
-                Note best = null;
+        for (int lane = 0; lane < NUM_LANES; lane++) {
+            if (isLanePressed[lane]) {
+                Note closestNote = null;
 
-                // bestDelta represents the closest note from the elapsed time in music
+                // timeDeltaToClosestNote represents the closest note from the elapsed time in music
                 // This should result in only one note being removed and not overlapping notes
                 // However, I'm still running into bugs with it
                 // TODO: Fix multiple notes being removed at the same time if they are too close together
-                long bestDelta = Long.MAX_VALUE;
+                long timeDeltaToClosestNote = Long.MAX_VALUE;
                 for (Note n : activeNotes) {
                     if (n.getLaneNumber() != lane || n.isHit()) continue;
                     long delta = Math.abs(timeElapsed - n.getStartTime());
-                    if (delta < bestDelta && delta <= MISS_WINDOW) {
-                        bestDelta = delta;
-                        best = n;
+                    if (delta < timeDeltaToClosestNote && delta <= MISS_HIT_WINDOW) {
+                        timeDeltaToClosestNote = delta;
+                        closestNote = n;
                     }
                 }
 
-                if (best != null) {
-                    best.setHit(true);
-                    if (bestDelta <= PERFECT_WINDOW) registerScore("Perfect");
-                    else if (bestDelta <= GOOD_WINDOW) registerScore("Good");
+                if (closestNote != null) {
+                    closestNote.setHit(true);
+                    if (timeDeltaToClosestNote <= PERFECT_HIT_WINDOW) registerScore("Perfect");
+                    else if (timeDeltaToClosestNote <= GOOD_HIT_WINDOW) registerScore("Good");
                     else registerScore("Miss");
                 }
             }
         }
-        activeNotes.removeIf(n -> n.getY(timeElapsed, APPROACH_TIME, getHitZoneY()) > height); // Remove notes that have passed the playfield
+        activeNotes.removeIf(n -> n.getY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneY()) > height); // Remove notes that have passed the playfield
     }
 
     public void render(GraphicsContext gc) {
@@ -111,7 +111,7 @@ public class Playfield {
         gc.setLineWidth(8);
         gc.strokeRect(0, 0, width, height);
 
-        for (int i = 0; i < LANES; i++) {
+        for (int i = 0; i < NUM_LANES; i++) {
             gc.setLineWidth(2);
 
             // Add vertical lines as lane separators
@@ -122,42 +122,42 @@ public class Playfield {
             int hitZoneY = getHitZoneTopLeftY();
 
             // Indicator of the key press
-            if (pressedLanes[i]) {
+            if (isLanePressed[i]) {
                 gc.setFill(Color.RED);
-                gc.fillOval(circleCenteredWidthPos, hitZoneY, NOTE_SIZE, NOTE_SIZE);
+                gc.fillOval(circleCenteredWidthPos, hitZoneY, NOTE_DIAMETER, NOTE_DIAMETER);
             }
 
             // Add circles as indications for the hit zones in each lane
-            gc.strokeOval(circleCenteredWidthPos, hitZoneY, NOTE_SIZE, NOTE_SIZE);
+            gc.strokeOval(circleCenteredWidthPos, hitZoneY, NOTE_DIAMETER, NOTE_DIAMETER);
         }
 
         // Draw notes
         activeNotes.forEach(n -> {
-            double y = n.getY(gameClock.getElapsedTime(), APPROACH_TIME, getHitZoneTopLeftY());
-            gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_SIZE, NOTE_SIZE);
+            double y = n.getY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneTopLeftY());
+            gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_DIAMETER, NOTE_DIAMETER);
         });
     }
 
     public void pressKey(KeyCode code) {
         switch (code) {
-            case D -> pressedLanes[0] = true;
-            case F -> pressedLanes[1] = true;
-            case J -> pressedLanes[2] = true;
-            case K -> pressedLanes[3] = true;
+            case D -> isLanePressed[0] = true;
+            case F -> isLanePressed[1] = true;
+            case J -> isLanePressed[2] = true;
+            case K -> isLanePressed[3] = true;
         }
     }
 
     public void releaseKey(KeyCode code) {
         switch (code) {
-            case D -> pressedLanes[0] = false;
-            case F -> pressedLanes[1] = false;
-            case J -> pressedLanes[2] = false;
-            case K -> pressedLanes[3] = false;
+            case D -> isLanePressed[0] = false;
+            case F -> isLanePressed[1] = false;
+            case J -> isLanePressed[2] = false;
+            case K -> isLanePressed[3] = false;
         }
     }
 
     private int getLaneWidth() {
-        return width / LANES;
+        return width / NUM_LANES;
     }
 
     private int getHitZoneTopLeftY() {
@@ -166,12 +166,12 @@ public class Playfield {
 
     // This is the absolute perfect y level of a judgement
     private int getHitZoneY() {
-        return getHitZoneTopLeftY() + (NOTE_SIZE / 2);
+        return getHitZoneTopLeftY() + (NOTE_DIAMETER / 2);
     }
 
     private int getCircleCenteredWidthPos(int laneNum) {
         int laneWidth = getLaneWidth();
-        return (laneWidth * laneNum) + (laneWidth - NOTE_SIZE) / 2;
+        return (laneWidth * laneNum) + (laneWidth - NOTE_DIAMETER) / 2;
     }
 
     private void registerScore(String rating) {
