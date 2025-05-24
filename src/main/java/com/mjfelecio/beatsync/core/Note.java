@@ -36,7 +36,7 @@ public class Note {
         return laneNumber;
     }
 
-    public long getTime() {
+    public long getStartTime() {
         return startTime;
     }
 

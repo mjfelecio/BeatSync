@@ -8,16 +8,18 @@ import javafx.scene.paint.Color;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 
 public class Playfield {
     private final int width;
     private final int height;
     private final int LANES = 4;
     private final int NOTE_SIZE = 80;
-    private GameClock gameClock;
 
+    private GameClock gameClock;
     public ArrayList<Note> notes;
     public ArrayList<Note> activeNotes;
+    public final int APPROACH_TIME = 1000;
 
     // Hit window thresholds in ms
     private final int PERFECT_WINDOW = 30;
@@ -43,80 +45,56 @@ public class Playfield {
         }
     }
 
-    public void update(GraphicsContext gc) {
-        long timeElapsed = gameClock.getElapsedTime();
-
+    public void update(long timeElapsed) {
         // Check for notes to activate
         notes.forEach(n -> {
-            if ((timeElapsed >= n.getTime()) && !activeNotes.contains(n) && !n.isHit()) {
+            if ((timeElapsed >= n.getStartTime()) && !activeNotes.contains(n) && !n.isHit()) {
                 activeNotes.add(n);
             }
         });
 
-        // Handle automatic misses (position-based)
-        activeNotes.removeIf(n -> {
-            int noteBottomY = n.getY() + NOTE_SIZE; // bottom of the note
-            int hitZoneY = getHitZonePos();
-
-            // If note has moved completely past the hit zone and wasn't hit
-            if (!n.isHit() && noteBottomY > hitZoneY + NOTE_SIZE / 2 + MISS_WINDOW) {
+        // Remove misses automatically
+        Iterator<Note> missIter = activeNotes.iterator();
+        while (missIter.hasNext()) {
+            Note n = missIter.next();
+            // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
+            // Explanation for future me:
+            //  The notes are supposed to be hit at a specific time in the music
+            //  If they haven't been hit yet at their specific time in the specified TIMING WINDOWS, they're a miss
+            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_WINDOW) {
                 registerScore("Miss");
-                return true;
-            }
-
-            return false;
-        });
-
-        // Handle key pressKey detection for hit scoring
-        for (int lane = 0; lane < pressedLanes.length; lane++) {
-            if (pressedLanes[lane]) {
-                Note bestMatch = null;
-                long smallestDelta = Long.MAX_VALUE;
-
-                for (Note note : activeNotes) {
-                    if (note.isHit() || note.getLaneNumber() != lane) continue;
-
-                    long delta = Math.abs(note.getTime() - timeElapsed);
-                    if (delta < smallestDelta && delta <= MISS_WINDOW) {
-                        bestMatch = note;
-                        smallestDelta = delta;
-                    }
-                }
-
-                if (bestMatch != null) {
-                    bestMatch.setHit(true);
-                    if (smallestDelta <= PERFECT_WINDOW) {
-                        registerScore("Perfect");
-                    } else if (smallestDelta <= GOOD_WINDOW) {
-                        registerScore("Good");
-                    } else {
-                        registerScore("Miss");
-                    }
-                }
+                missIter.remove();
             }
         }
 
-        // Remove pressed notes
-        activeNotes.removeIf(n -> {
-            int hitZoneCenter = getHitZonePos() + NOTE_SIZE / 2;
-            int noteCenterY = n.getY() + NOTE_SIZE / 2;
-            long diff = Math.abs(noteCenterY - hitZoneCenter);
+        // Handle presses
+        for (int lane = 0; lane < LANES; lane++) {
+            if (pressedLanes[lane]) {
+                Note best = null;
 
-            // Adjust timing windows as needed (30ms, 80ms, etc.)
-            boolean pressed = diff <= 30 && pressedLanes[n.getLaneNumber()];
+                // bestDelta represents the closest note from the elapsed time in music
+                // This should result in only one note being removed and not overlapping notes
+                // However, I'm still running into bugs with it
+                // TODO: Fix multiple notes being removed at the same time if they are too close together
+                long bestDelta = Long.MAX_VALUE;
+                for (Note n : activeNotes) {
+                    if (n.getLaneNumber() != lane || n.isHit()) continue;
+                    long delta = Math.abs(timeElapsed - n.getStartTime());
+                    if (delta < bestDelta && delta <= MISS_WINDOW) {
+                        bestDelta = delta;
+                        best = n;
+                    }
+                }
 
-
-            if (pressed) n.setHit(true);
-
-            return pressed;
-        });
-
-        // Render active notes
-        activeNotes.removeIf(n -> n.getY() >= height); // Remove notes that have passed the playfield
-        activeNotes.forEach(n -> {
-            gc.strokeOval(getCircleCenteredWidthPos(n.getLaneNumber()), n.getY(), NOTE_SIZE, NOTE_SIZE);
-            n.setY(n.getY() + 1);
-        });
+                if (best != null) {
+                    best.setHit(true);
+                    if (bestDelta <= PERFECT_WINDOW) registerScore("Perfect");
+                    else if (bestDelta <= GOOD_WINDOW) registerScore("Good");
+                    else registerScore("Miss");
+                }
+            }
+        }
+        activeNotes.removeIf(n -> n.getY(timeElapsed, APPROACH_TIME, getHitZoneY()) > height); // Remove notes that have passed the playfield
     }
 
     public void render(GraphicsContext gc) {
@@ -125,7 +103,7 @@ public class Playfield {
         // Add miss zones cut-off for testing
         gc.setStroke(Color.RED);
         gc.setLineWidth(5);
-        gc.strokeLine(0, getHitZonePos() + NOTE_SIZE, width, getHitZonePos() + NOTE_SIZE);
+        gc.strokeLine(0, getHitZoneY(), width, getHitZoneY());
         gc.setStroke(Color.BLACK);
 
         // Create border
@@ -140,16 +118,24 @@ public class Playfield {
             gc.strokeLine(laneWidth * i, 0, laneWidth * i, height);
 
             int circleCenteredWidthPos = getCircleCenteredWidthPos(i);
-            int hitZonePos = getHitZonePos();
+            // This is the topLeft pos, so that the circle generated is in the middle of the hitZone
+            int hitZoneY = getHitZoneTopLeftY();
 
+            // Indicator of the key press
             if (pressedLanes[i]) {
                 gc.setFill(Color.RED);
-                gc.fillOval(circleCenteredWidthPos, hitZonePos, NOTE_SIZE, NOTE_SIZE);
+                gc.fillOval(circleCenteredWidthPos, hitZoneY, NOTE_SIZE, NOTE_SIZE);
             }
 
             // Add circles as indications for the hit zones in each lane
-            gc.strokeOval(circleCenteredWidthPos, hitZonePos, NOTE_SIZE, NOTE_SIZE);
+            gc.strokeOval(circleCenteredWidthPos, hitZoneY, NOTE_SIZE, NOTE_SIZE);
         }
+
+        // Draw notes
+        activeNotes.forEach(n -> {
+            double y = n.getY(gameClock.getElapsedTime(), APPROACH_TIME, getHitZoneTopLeftY());
+            gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_SIZE, NOTE_SIZE);
+        });
     }
 
     public void pressKey(KeyCode code) {
@@ -174,12 +160,13 @@ public class Playfield {
         return width / LANES;
     }
 
-    private int getHitZonePos() {
+    private int getHitZoneTopLeftY() {
         return height - 150;
     }
 
-    private int getHitZoneCenter() {
-        return getHitZonePos() - (NOTE_SIZE / 2);
+    // This is the absolute perfect y level of a judgement
+    private int getHitZoneY() {
+        return getHitZoneTopLeftY() + (NOTE_SIZE / 2);
     }
 
     private int getCircleCenteredWidthPos(int laneNum) {
@@ -188,18 +175,18 @@ public class Playfield {
     }
 
     private void registerScore(String rating) {
-        switch (rating) {
-            case "Perfect" -> {
-                System.out.println("Perfect hit!");
-                clickedNotes++;
-            }
-            case "Good" -> {
-                System.out.println("Good hit!");
-                clickedNotes++;
-            }
-            case "Miss" -> {
-                System.out.println("Missed!");
-            }
-        }
+//        switch (rating) {
+//            case "Perfect" -> {
+//                System.out.println("Perfect hit!");
+//                clickedNotes++;
+//            }
+//            case "Good" -> {
+//                System.out.println("Good hit!");
+//                clickedNotes++;
+//            }
+//            case "Miss" -> {
+//                System.out.println("Missed!");
+//            }
+//        }
     }
 }
