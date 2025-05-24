@@ -63,7 +63,7 @@ public class Note {
      * @param hitLineY vertical position of the hit line
      * @return Y coordinate where note should be drawn
      */
-    public double getY(long elapsedMs, long approachTimeMs, int hitLineY) {
+    public double calculateY(long elapsedMs, long approachTimeMs, int hitLineY) {
         // Calculate how far through the approach time we are
         double timeIntoApproach = elapsedMs - (startTime - approachTimeMs);
         double progress = timeIntoApproach / approachTimeMs;

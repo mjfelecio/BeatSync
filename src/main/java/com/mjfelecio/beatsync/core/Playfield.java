@@ -94,17 +94,11 @@ public class Playfield {
                 }
             }
         }
-        activeNotes.removeIf(n -> n.getY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneY()) > height); // Remove notes that have passed the playfield
+        activeNotes.removeIf(n -> n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneY()) > height); // Remove notes that have passed the playfield
     }
 
     public void render(GraphicsContext gc) {
         int laneWidth = getLaneWidth();
-
-        // Add miss zones cut-off for testing
-//        gc.setStroke(Color.RED);
-//        gc.setLineWidth(5);
-//        gc.strokeLine(0, getHitZoneY(), width, getHitZoneY());
-//        gc.setStroke(Color.BLACK);
 
         // Create border
         gc.setFill(Color.BLACK);
@@ -125,6 +119,7 @@ public class Playfield {
             if (isLanePressed[i]) {
                 gc.setFill(Color.RED);
                 gc.fillOval(circleCenteredWidthPos, hitZoneY, NOTE_DIAMETER, NOTE_DIAMETER);
+                gc.setFill(Color.BLACK);
             }
 
             // Add circles as indications for the hit zones in each lane
@@ -132,8 +127,9 @@ public class Playfield {
         }
 
         // Draw notes
+        gc.setFill(Color.BLUE);
         activeNotes.forEach(n -> {
-            double y = n.getY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneTopLeftY());
+            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneTopLeftY());
             gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_DIAMETER, NOTE_DIAMETER);
         });
     }
