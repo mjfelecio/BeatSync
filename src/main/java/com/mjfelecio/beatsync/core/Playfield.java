@@ -50,10 +50,33 @@ public class Playfield {
     public void update(long timeElapsed) {
         // Check for notes to activate
         notes.forEach(n -> {
-            if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !activeNotes.contains(n) && !n.isHit()) {
+            if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !n.missed && !n.isHit()) {
                 activeNotes.add(n);
             }
         });
+
+        Note testNote = notes.getFirst();
+        System.out.println("Contains check: " + activeNotes.contains(testNote));
+        System.out.println("Manual search: " + activeNotes.stream().anyMatch(activeNote ->
+                activeNote.getLaneNumber() == testNote.getLaneNumber() &&
+                        activeNote.getStartTime() == testNote.getStartTime()));
+
+        // Remove misses automatically
+        Iterator<Note> missIter = activeNotes.iterator();
+        while (missIter.hasNext()) {
+            Note n = missIter.next();
+            // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
+            // Explanation for future me:
+            //  The notes are supposed to be hit at a specific time in the music
+            //  If they haven't been hit yet at their specific time in the specified TIMING WINDOWS, they're a miss
+//            System.out.println("Checking note: lane=" + n.getLaneNumber() + ", startTime=" + n.getStartTime() + ", timeDiff=" + (timeElapsed - n.getStartTime()));
+            boolean check = !n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW;
+            if (check) {
+                registerScore("Miss");
+                n.missed = true;
+                missIter.remove();
+            }
+        }
 
         // Handle presses
         for (int lane = 0; lane < NUM_LANES; lane++) {
@@ -78,24 +101,20 @@ public class Playfield {
                     closestNote.setHit(true);
                     if (timeDeltaToClosestNote <= PERFECT_HIT_WINDOW) registerScore("Perfect");
                     else if (timeDeltaToClosestNote <= GOOD_HIT_WINDOW) registerScore("Good");
-                    else registerScore("Miss");
+                    else {
+                        closestNote.missed = true;
+                        registerScore("Miss");
+                    }
                 }
             }
         }
 
-        // Remove misses automatically
-        Iterator<Note> missIter = activeNotes.iterator();
-        while (missIter.hasNext()) {
-            Note n = missIter.next();
-            // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
-            // Explanation for future me:
-            //  The notes are supposed to be hit at a specific time in the music
-            //  If they haven't been hit yet at their specific time in the specified TIMING WINDOWS, they're a miss
-            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW) {
-                registerScore("Miss");
-                missIter.remove();
-            }
-        }
+        activeNotes.removeIf(n -> {
+            boolean shouldRemove = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneTopLeftY()) > height;
+            if (shouldRemove) System.out.println("Removing note that passed screen: " + n);
+            n.missed = true;
+            return shouldRemove;
+        });
 
         activeNotes.removeIf(n -> n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneTopLeftY()) > height); // Remove notes that have passed the playfield
     }

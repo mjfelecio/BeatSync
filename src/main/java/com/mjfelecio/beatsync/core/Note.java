@@ -1,11 +1,16 @@
 package com.mjfelecio.beatsync.core;
 
+import java.util.Objects;
+
 public class Note {
     private final int laneNumber;
     private final int startTime;
     private final int endTime; // 0 for normal notes
     private final boolean isHold;
     private boolean hit = false;
+
+    boolean missed = false;
+    int addCount = 0;
 
     /**
      * Normal note constructor.
@@ -73,6 +78,18 @@ public class Note {
 
         // Notes start at y=0 and move to hitLineY
         return progress * hitLineY;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == null || getClass() != o.getClass()) return false;
+        Note note = (Note) o;
+        return laneNumber == note.laneNumber && startTime == note.startTime && endTime == note.endTime && isHold == note.isHold;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(laneNumber, startTime, endTime, isHold);
     }
 
     @Override
