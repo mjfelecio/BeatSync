@@ -48,7 +48,7 @@ public class Playfield {
     public void update(long timeElapsed) {
         // Check for notes to activate
         notes.forEach(n -> {
-            if ((timeElapsed >= n.getStartTime()) && !activeNotes.contains(n) && !n.isHit()) {
+            if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !activeNotes.contains(n) && !n.isHit()) {
                 activeNotes.add(n);
             }
         });
@@ -101,10 +101,10 @@ public class Playfield {
         int laneWidth = getLaneWidth();
 
         // Add miss zones cut-off for testing
-        gc.setStroke(Color.RED);
-        gc.setLineWidth(5);
-        gc.strokeLine(0, getHitZoneY(), width, getHitZoneY());
-        gc.setStroke(Color.BLACK);
+//        gc.setStroke(Color.RED);
+//        gc.setLineWidth(5);
+//        gc.strokeLine(0, getHitZoneY(), width, getHitZoneY());
+//        gc.setStroke(Color.BLACK);
 
         // Create border
         gc.setFill(Color.BLACK);
