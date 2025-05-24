@@ -23,16 +23,14 @@ public class Playfield {
     private final int GOOD_WINDOW = 80;
     private final int MISS_WINDOW = 150;
 
-    long startTime;
     private final boolean[] pressedLanes = new boolean[4]; // Keep track of presses
 
     int clickedNotes = 0;
 
-    public Playfield(int width, int height) {
+    public Playfield(int width, int height, GameClock gameClock) {
         this.width = width;
         this.height = height;
-        this.startTime = System.nanoTime();
-        this.gameClock = new GameClock();
+        this.gameClock = gameClock;
 
         try {
             // Initializing a map here temporarily
@@ -42,9 +40,6 @@ public class Playfield {
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
-
-        // Start the clock once the notes has been loaded
-        this.gameClock.start();
     }
 
     public void update(GraphicsContext gc) {
