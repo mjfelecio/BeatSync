@@ -1,54 +1,76 @@
 package com.mjfelecio.beatsync.core;
 
 public class Note {
-    private final int x;
-    private int y = -100; // Notes start at the very top of the screen anyway
-    private final int time;
-    private final int endTime; // Null for normal notes
-    private final boolean isHoldNote;
-    private boolean isHit = false;
+    private final int laneNumber;
+    private final int startTime;
+    private final int endTime; // 0 for normal notes
+    private final boolean isHold;
+    private boolean hit = false;
 
-    // Creates a normal note
+    /**
+     * Normal note constructor.
+     * @param laneNumber zero-based lane index
+     * @param startTime time in ms when note should be hit
+     */
     public Note(int laneNumber, int startTime) {
-        this.x = laneNumber;
-        this.time = startTime;
+        this.laneNumber = laneNumber;
+        this.startTime = startTime;
         this.endTime = 0;
-        this.isHoldNote = false;
+        this.isHold = false;
     }
 
-    // Creates a hold note
+    /**
+     * Hold note constructor.
+     * @param laneNumber zero-based lane index
+     * @param startTime time in ms when hold starts
+     * @param endTime time in ms when hold ends
+     */
     public Note(int laneNumber, int startTime, int endTime) {
-        this.x = laneNumber;
-        this.time = startTime;
+        this.laneNumber = laneNumber;
+        this.startTime = startTime;
         this.endTime = endTime;
-        this.isHoldNote = true;
+        this.isHold = endTime > startTime;
     }
-
-    public int getX() { return x; }
-    public int getY() { return y; }
-    public int getTime() { return time; }
-    public int getEndTime() { return endTime; }
-    public void setY(int y) { this.y = y; }
-
-    public boolean isHit() { return isHit; }
-    public void setHit(boolean b) { isHit = b; }
 
     public int getLaneNumber() {
-        int lane = 0;
+        return laneNumber;
+    }
 
-        // Note that the lanes are zero-indexed
-        switch (x) {
-            case 64 -> lane = 0;
-            case 192 -> lane = 1;
-            case 320 -> lane = 2;
-            case 448 -> lane = 3;
-        }
+    public long getTime() {
+        return startTime;
+    }
 
-        return lane;
+    public boolean isHold() {
+        return isHold;
+    }
+
+    public long getEndTime() {
+        return endTime;
+    }
+
+    public boolean isHit() {
+        return hit;
+    }
+
+    public void setHit(boolean hit) {
+        this.hit = hit;
+    }
+
+    /**
+     * Calculates the current Y-coordinate of the note based on elapsed song time.
+     * @param elapsedMs elapsed milliseconds since song start
+     * @param approachTimeMs how early the note appears before hit
+     * @param hitLineY vertical position of the hit line
+     * @return Y coordinate where note should be drawn
+     */
+    public double getY(long elapsedMs, long approachTimeMs, int hitLineY) {
+        double timeUntilHit = startTime - elapsedMs;
+        double progress = 1.0 - (timeUntilHit / approachTimeMs);
+        return hitLineY * Math.min(Math.max(progress, 0.0), 1.0);
     }
 
     @Override
     public String toString() {
-        return isHoldNote ? x + "," + time + "," + endTime : x + "," + time;
+        return isHold ? laneNumber + "," + startTime + "," + endTime : laneNumber + "," + startTime;
     }
 }
