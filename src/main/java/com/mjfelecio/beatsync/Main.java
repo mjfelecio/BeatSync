@@ -49,24 +49,10 @@ public class Main extends Application {
         musicPlayer.getPlayer().play();
         gameClock.start();
 
-        scene.setOnKeyPressed(event -> {
-            switch (event.getCode()) {
-                case D -> playfield.press(0);
-                case F -> playfield.press(1);
-                case J -> playfield.press(2);
-                case K -> playfield.press(3);
-            }
-        });
-
-        scene.setOnKeyReleased(event -> {
-            switch (event.getCode()) {
-                case D -> playfield.release(0);
-                case F -> playfield.release(1);
-                case J -> playfield.release(2);
-                case K -> playfield.release(3);
-            }
-        });
-
+        // TODO: Create a InputHandler class for this
+        // Get inputs from the user
+        scene.setOnKeyPressed(event -> playfield.pressKey(event.getCode()));
+        scene.setOnKeyReleased(event -> playfield.releaseKey(event.getCode()));
 
         new AnimationTimer() {
             @Override

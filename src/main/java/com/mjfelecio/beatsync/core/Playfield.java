@@ -2,6 +2,7 @@ package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 
 import java.io.File;
@@ -23,7 +24,7 @@ public class Playfield {
     private final int GOOD_WINDOW = 80;
     private final int MISS_WINDOW = 150;
 
-    private final boolean[] pressedLanes = new boolean[4]; // Keep track of presses
+    private final boolean[] pressedLanes = new boolean[LANES]; // Keep track of presses
 
     int clickedNotes = 0;
 
@@ -67,7 +68,7 @@ public class Playfield {
             return false;
         });
 
-        // Handle key press detection for hit scoring
+        // Handle key pressKey detection for hit scoring
         for (int lane = 0; lane < pressedLanes.length; lane++) {
             if (pressedLanes[lane]) {
                 Note bestMatch = null;
@@ -151,15 +152,21 @@ public class Playfield {
     }
 
 
-    public void press(int laneNumber) {
-        if (laneNumber >= 0 && laneNumber < pressedLanes.length) {
-            pressedLanes[laneNumber] = true;
+    public void pressKey(KeyCode code) {
+        switch (code) {
+            case D -> pressedLanes[0] = true;
+            case F -> pressedLanes[1] = true;
+            case J -> pressedLanes[2] = true;
+            case K -> pressedLanes[3] = true;
         }
     }
 
-    public void release(int laneNumber) {
-        if (laneNumber >= 0 && laneNumber < pressedLanes.length) {
-            pressedLanes[laneNumber] = false;
+    public void releaseKey(KeyCode code) {
+        switch (code) {
+            case D -> pressedLanes[0] = false;
+            case F -> pressedLanes[1] = false;
+            case J -> pressedLanes[2] = false;
+            case K -> pressedLanes[3] = false;
         }
     }
 
