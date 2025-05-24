@@ -3,7 +3,7 @@ package com.mjfelecio.beatsync.core;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
-public class AudioEngine {
+public class AudioManager {
     private Media music;
     private MediaPlayer mediaPlayer;
 
