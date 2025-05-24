@@ -179,7 +179,7 @@ public class Playfield {
     }
 
     private int getHitZoneCenter() {
-        return getHitZonePos() + (NOTE_SIZE / 2);
+        return getHitZonePos() - (NOTE_SIZE / 2);
     }
 
     private int getCircleCenteredWidthPos(int laneNum) {
