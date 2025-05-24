@@ -4,6 +4,7 @@ import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +30,7 @@ public class Playfield {
     private final boolean[] isLanePressed = new boolean[NUM_LANES]; // Keep track of presses
 
     int combo = 0;
+    String judgementResult = "";
 
     public Playfield(int width, int height, GameClock gameClock) {
         this.width = width;
@@ -52,20 +54,6 @@ public class Playfield {
                 activeNotes.add(n);
             }
         });
-
-        // Remove misses automatically
-        Iterator<Note> missIter = activeNotes.iterator();
-        while (missIter.hasNext()) {
-            Note n = missIter.next();
-            // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
-            // Explanation for future me:
-            //  The notes are supposed to be hit at a specific time in the music
-            //  If they haven't been hit yet at their specific time in the specified TIMING WINDOWS, they're a miss
-            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW) {
-                registerScore("Miss");
-                missIter.remove();
-            }
-        }
 
         // Handle presses
         for (int lane = 0; lane < NUM_LANES; lane++) {
@@ -94,7 +82,22 @@ public class Playfield {
                 }
             }
         }
-        activeNotes.removeIf(n -> n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneY()) > height); // Remove notes that have passed the playfield
+
+        // Remove misses automatically
+        Iterator<Note> missIter = activeNotes.iterator();
+        while (missIter.hasNext()) {
+            Note n = missIter.next();
+            // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
+            // Explanation for future me:
+            //  The notes are supposed to be hit at a specific time in the music
+            //  If they haven't been hit yet at their specific time in the specified TIMING WINDOWS, they're a miss
+            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW) {
+                registerScore("Miss");
+                missIter.remove();
+            }
+        }
+
+        activeNotes.removeIf(n -> n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneTopLeftY()) > height); // Remove notes that have passed the playfield
     }
 
     public void render(GraphicsContext gc) {
@@ -126,12 +129,15 @@ public class Playfield {
             gc.strokeOval(circleCenteredWidthPos, hitZoneY, NOTE_DIAMETER, NOTE_DIAMETER);
         }
 
-        gc.fillText("Combo: " + this.combo, 20, 100);
+        gc.setFont(new Font(20));
+        gc.fillText("Combo: " + this.combo, 20, 50);
+        gc.setFont(new Font(30));
+        gc.fillText(judgementResult, (width / 2.0) - 50, 200);
 
         // Draw notes
         gc.setFill(Color.BLUE);
         activeNotes.forEach(n -> {
-            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneY());
+            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneTopLeftY());
             gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_DIAMETER, NOTE_DIAMETER);
         });
     }
@@ -175,15 +181,15 @@ public class Playfield {
     private void registerScore(String rating) {
         switch (rating) {
             case "Perfect" -> {
-                System.out.println("Perfect hit!");
+                judgementResult = "Perfect hit";
                 combo++;
             }
             case "Good" -> {
-                System.out.println("Good hit!");
+                judgementResult = "Good hit!";
                 combo++;
             }
             case "Miss" -> {
-                System.out.println("Missed!");
+                judgementResult = "Missed!";
                 combo = 0;
             }
             default -> System.out.println(rating);
