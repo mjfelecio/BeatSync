@@ -64,9 +64,15 @@ public class Note {
      * @return Y coordinate where note should be drawn
      */
     public double getY(long elapsedMs, long approachTimeMs, int hitLineY) {
-        double timeUntilHit = startTime - elapsedMs;
-        double progress = 1.0 - (timeUntilHit / approachTimeMs);
-        return hitLineY * Math.min(Math.max(progress, 0.0), 1.0);
+        // Calculate how far through the approach time we are
+        double timeIntoApproach = elapsedMs - (startTime - approachTimeMs);
+        double progress = timeIntoApproach / approachTimeMs;
+
+        // Clamp progress between 0 and 1
+        progress = Math.max(0.0, Math.min(1.0, progress));
+
+        // Notes start at y=0 and move to hitLineY
+        return progress * hitLineY;
     }
 
     @Override
