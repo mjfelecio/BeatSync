@@ -13,26 +13,27 @@ import javafx.stage.Stage;
 public class Main extends Application {
     private final int WIDTH = 1920;
     private final int HEIGHT = 1080;
-    private final int PLAYFIELD_WIDTH = 400;
-    private final int PLAYFIELD_HEIGHT = 700;
 
     private Playfield playfield;
     private GameClock gameClock;
 
     @Override
     public void start(Stage stage) {
+        // Initialize the canvas that serves as our playfield
+        int PLAYFIELD_WIDTH = 400;
+        int PLAYFIELD_HEIGHT = 700;
         Canvas canvas = new Canvas(PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
-        gameClock = new GameClock();
 
-        playfield = new Playfield(PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT, gameClock);
-        playfield.render(gc);
-
+        // Initialize the scene and window
         Scene scene = new Scene(new StackPane(canvas), WIDTH, HEIGHT);
         stage.setScene(scene);
         stage.setTitle("Beat Sync: VSRG made with Java");
         stage.show();
 
+        gameClock = new GameClock();
+        playfield = new Playfield(PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT, gameClock);
+        playfield.render(gc);
         gameClock.start();
 
         scene.setOnKeyPressed(event -> {
