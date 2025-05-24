@@ -28,7 +28,7 @@ public class Playfield {
 
     private final boolean[] isLanePressed = new boolean[NUM_LANES]; // Keep track of presses
 
-    int totalClickedNotes = 0;
+    int combo = 0;
 
     public Playfield(int width, int height, GameClock gameClock) {
         this.width = width;
@@ -126,10 +126,12 @@ public class Playfield {
             gc.strokeOval(circleCenteredWidthPos, hitZoneY, NOTE_DIAMETER, NOTE_DIAMETER);
         }
 
+        gc.fillText("Combo: " + this.combo, 20, 100);
+
         // Draw notes
         gc.setFill(Color.BLUE);
         activeNotes.forEach(n -> {
-            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneTopLeftY());
+            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneY());
             gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_DIAMETER, NOTE_DIAMETER);
         });
     }
@@ -171,18 +173,20 @@ public class Playfield {
     }
 
     private void registerScore(String rating) {
-//        switch (rating) {
-//            case "Perfect" -> {
-//                System.out.println("Perfect hit!");
-//                clickedNotes++;
-//            }
-//            case "Good" -> {
-//                System.out.println("Good hit!");
-//                clickedNotes++;
-//            }
-//            case "Miss" -> {
-//                System.out.println("Missed!");
-//            }
-//        }
+        switch (rating) {
+            case "Perfect" -> {
+                System.out.println("Perfect hit!");
+                combo++;
+            }
+            case "Good" -> {
+                System.out.println("Good hit!");
+                combo++;
+            }
+            case "Miss" -> {
+                System.out.println("Missed!");
+                combo = 0;
+            }
+            default -> System.out.println(rating);
+        }
     }
 }
