@@ -44,8 +44,7 @@ public class Playfield {
     }
 
     public void update(GraphicsContext gc) {
-        long currentTime = System.currentTimeMillis();
-        long timeElapsed = gameClock.getElapsedTime(currentTime);
+        long timeElapsed = gameClock.getElapsedTime();
 
         // Check for notes to activate
         notes.forEach(n -> {

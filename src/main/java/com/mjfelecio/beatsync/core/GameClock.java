@@ -1,13 +1,17 @@
 package com.mjfelecio.beatsync.core;
 
-public class GameClock {
-    private long startTime;
+import javafx.scene.media.MediaPlayer;
 
-    public void start() {
-        startTime = System.currentTimeMillis();
+public class GameClock {
+    private MediaPlayer player;
+    private double startTime;
+
+    public void start(MediaPlayer player) {
+        this.player = player;
+        this.startTime = this.player.getCurrentTime().toMillis();
     }
 
-    public long getElapsedTime(long timeNow) {
-        return timeNow - startTime;
+    public long getElapsedTime() {
+        return (long) (player.getCurrentTime().toMillis() - startTime);
     }
 }

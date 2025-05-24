@@ -10,6 +10,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -20,7 +21,7 @@ public class Main extends Application {
 
     private Playfield playfield;
     private GameClock gameClock;
-    private AudioEngine musicPlayer;
+    private AudioEngine audioEngine;
 
     @Override
     public void start(Stage stage) {
@@ -36,18 +37,21 @@ public class Main extends Application {
         stage.setTitle("Beat Sync: VSRG made with Java");
         stage.show();
 
-        gameClock = new GameClock();
-        playfield = new Playfield(PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT, gameClock);
-        musicPlayer = new AudioEngine();
-
-        playfield.render(gc);
+        audioEngine = new AudioEngine();
         // I'm using File.toURI() so that it parses files with spaces properly
         // TODO: Have a class dedicated to loading all of the beatmaps files, including audio
         String filePath = new File("src/main/resources/com/mjfelecio/beatsync/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/audio.mp3").toURI().toString();
-        musicPlayer.setMusic(new Media(filePath));
+        audioEngine.setMusic(new Media(filePath));
         // TODO: Have a dedicated class that handles starting the playing
-        musicPlayer.getPlayer().play();
-        gameClock.start();
+        MediaPlayer player = audioEngine.getPlayer();
+        player.play();
+
+        gameClock = new GameClock();
+        gameClock.start(player);
+
+        // Load the playfield
+        playfield = new Playfield(PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT, gameClock);
+        playfield.render(gc);
 
         // TODO: Create a InputHandler class for this
         // Get inputs from the user
@@ -61,6 +65,8 @@ public class Main extends Application {
 
                 playfield.render(gc);
                 playfield.update(gc);
+                System.out.println("Clock:" + gameClock.getElapsedTime());
+                System.out.println("Audio:" + audioEngine.getPlayer().getCurrentTime().toString());
             }
         }.start();
     }
