@@ -6,18 +6,18 @@ import com.mjfelecio.beatsync.core.Note;
 import com.mjfelecio.beatsync.input.InputState;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 
 import java.util.List;
 
 public class PlayfieldRenderer {
     public void render(GraphicsContext gc, GameState gameState,
                        List<Note> visibleNotes, InputState inputState) {
-
         clearScreen(gc);
         drawPlayfieldBorders(gc);
         drawLanes(gc, inputState);
-//        drawNotes(gc, visibleNotes);
-//        drawUI(gc, gameState);
+        drawNotes(gc, visibleNotes);
+        drawUI(gc, gameState);
     }
 
     public void clearScreen(GraphicsContext gc) {
@@ -51,5 +51,33 @@ public class PlayfieldRenderer {
 
             gc.strokeOval(centerX, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
         }
+    }
+
+    public void drawNotes(GraphicsContext gc, List<Note> visibleNotes) {
+        // Draw notes
+        gc.setFill(Color.BLUE);
+        visibleNotes.forEach(n -> {
+            if (!n.isHit()) {
+//                double y = n.calculateY(gameClock.getElapsedTime(), GameConfig.NOTE_APPROACH_TIME, GameConfig.HIT_LINE_Y);
+//                double y = n.calculateY();
+                double y = 100; // Will change this later
+                int x = calculateNoteX(n.getLaneNumber());
+                gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
+            }
+        });
+    }
+
+    private void drawUI(GraphicsContext gc, GameState gameState) {
+        gc.setFont(new Font(20));
+        gc.fillText("Combo: " + gameState.getCombo(), 20, 50);
+        gc.setFont(new Font(30));
+        gc.fillText(gameState.getLastJudgement(),
+                (GameConfig.PLAYFIELD_WIDTH / 2.0) - 50,
+                GameConfig.PLAYFIELD_HEIGHT - 250);
+    }
+
+    private int calculateNoteX(int laneNumber) {
+        int laneWidth = GameConfig.PLAYFIELD_WIDTH / GameConfig.NUM_LANES;
+        return (laneWidth * laneNumber) + (laneWidth - GameConfig.NOTE_DIAMETER) / 2;
     }
 }

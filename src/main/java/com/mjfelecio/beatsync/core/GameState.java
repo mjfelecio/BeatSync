@@ -9,4 +9,12 @@ public class GameState {
     public void incrementCombo() { combo++; }
     public void resetCombo() { combo = 0; }
     public void setJudgement(String judgement) { this.lastJudgement = judgement; }
+
+    public int getCombo() {
+        return combo;
+    }
+
+    public String getLastJudgement() {
+        return lastJudgement;
+    }
 }

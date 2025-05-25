@@ -61,7 +61,7 @@ public class Playfield {
 
             // Indicator of the key press
             // TODO: There is a bug here, it still presses the lane if you press instead of tap the key
-            if (inputState.isPressed(i)) {
+            if (inputState.isLanePressed(i)) {
                 gc.setFill(Color.RED);
                 gc.fillOval(circleCenteredWidthPos, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
                 gc.setFill(Color.BLACK);
