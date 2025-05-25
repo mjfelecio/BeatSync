@@ -3,6 +3,7 @@ package com.mjfelecio.beatsync;
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.AudioManager;
 import com.mjfelecio.beatsync.core.GameClock;
+import com.mjfelecio.beatsync.core.GameEngine;
 import com.mjfelecio.beatsync.core.Playfield;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -10,16 +11,13 @@ import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.Stage;
-
-import java.io.File;
 
 public class Main extends Application {
     private Playfield playfield;
     private GameClock gameClock;
     private AudioManager audioManager;
+    private GameEngine gameEngine;
 
     @Override
     public void start(Stage stage) {
@@ -32,24 +30,10 @@ public class Main extends Application {
         stage.setTitle("Beat Sync: VSRG made with Java");
         stage.show();
 
-        audioManager = new AudioManager();
-        // I'm using File.toURI() so that it parses files with spaces properly
-        // TODO: Have a class dedicated to loading all of the beatmaps files, including audio
-        String filePath = new File("src/main/resources/com/mjfelecio/beatsync/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/audio.mp3").toURI().toString();
-        audioManager.setMusic(new Media(filePath));
-        // TODO: Have a dedicated class that handles starting the playing
-        MediaPlayer player = audioManager.getPlayer();
-        player.play();
-
-//         Do this someday
-//        audioEngine.getPlayer().setOnReady(() -> {
-//            audioEngine.getPlayer().play();
-//            // Start clock when music begins
-//            gameClock.start();
-//        });
-
-        gameClock = new GameClock();
-        gameClock.start(player);
+        // Game setup
+        gameEngine = new GameEngine();
+        gameEngine.loadAudioAndStartClock();
+        gameClock = gameEngine.getGameClock();
 
         // Load the playfield
         playfield = new Playfield(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT, gameClock);
