@@ -98,7 +98,7 @@ public class Playfield {
 
         // Remove notes that have passed by the playfield
         activeNotes.removeIf(n -> {
-            boolean shouldRemove = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneTopLeftY()) > height;
+            boolean shouldRemove = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitLineY()) > height;
             if (shouldRemove) n.missed = true;
             return shouldRemove;
         });
@@ -119,18 +119,16 @@ public class Playfield {
             gc.strokeLine(laneWidth * i, 0, laneWidth * i, height);
 
             int circleCenteredWidthPos = getCircleCenteredWidthPos(i);
-            // This is the topLeft pos, so that the circle generated is in the middle of the hitZone
-            int hitZoneY = getHitZoneTopLeftY();
 
             // Indicator of the key press
             if (isLanePressed[i]) {
                 gc.setFill(Color.RED);
-                gc.fillOval(circleCenteredWidthPos, hitZoneY, NOTE_DIAMETER, NOTE_DIAMETER);
+                gc.fillOval(circleCenteredWidthPos, getHitLineY(), NOTE_DIAMETER, NOTE_DIAMETER);
                 gc.setFill(Color.BLACK);
             }
 
             // Add circles as indications for the hit zones in each lane
-            gc.strokeOval(circleCenteredWidthPos, hitZoneY, NOTE_DIAMETER, NOTE_DIAMETER);
+            gc.strokeOval(circleCenteredWidthPos, getHitLineY(), NOTE_DIAMETER, NOTE_DIAMETER);
         }
 
         gc.setFont(new Font(20));
@@ -141,7 +139,7 @@ public class Playfield {
         // Draw notes
         gc.setFill(Color.BLUE);
         activeNotes.forEach(n -> {
-            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitZoneTopLeftY());
+            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitLineY());
             gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_DIAMETER, NOTE_DIAMETER);
         });
     }
@@ -168,13 +166,8 @@ public class Playfield {
         return width / NUM_LANES;
     }
 
-    private int getHitZoneTopLeftY() {
+    private int getHitLineY() {
         return height - 150;
-    }
-
-    // This is the absolute perfect y level of a judgement
-    private int getHitZoneY() {
-        return getHitZoneTopLeftY() + (NOTE_DIAMETER / 2);
     }
 
     private int getCircleCenteredWidthPos(int laneNum) {
