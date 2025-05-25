@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 public class Playfield {
     private final int width;
@@ -18,8 +19,8 @@ public class Playfield {
     private final int NOTE_DIAMETER = 80;
 
     private GameClock gameClock;
-    public ArrayList<Note> notes;
-    public ArrayList<Note> activeNotes;
+    public List<Note> notes;
+    public List<Note> activeNotes;
     public final int NOTE_APPROACH_TIME = 1000;
 
     // Hit window thresholds in ms
@@ -40,7 +41,7 @@ public class Playfield {
         try {
             // Initializing a map here temporarily
             File beatmapFile = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/test.osu");
-            notes = new BeatmapParser(ManiaBeatmapParser.parse(beatmapFile)).parseNotes();
+            notes = ManiaBeatmapParser.parse(beatmapFile).getNotes();
             activeNotes = new ArrayList<>();
         } catch (IOException e) {
             System.err.println(e.getMessage());
@@ -50,7 +51,7 @@ public class Playfield {
     public void update(long timeElapsed) {
         // Check for notes to activate
         notes.forEach(n -> {
-            if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !n.missed && !n.isHit()) {
+            if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
                 activeNotes.add(n);
             }
         });
@@ -62,7 +63,7 @@ public class Playfield {
             // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
             if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW) {
                 registerScore("Miss");
-                n.missed = true;
+                n.setMiss(true);
                 missIter.remove();
             }
         }
@@ -89,7 +90,7 @@ public class Playfield {
                     if (timeDeltaToClosestNote <= PERFECT_HIT_WINDOW) registerScore("Perfect");
                     else if (timeDeltaToClosestNote <= GOOD_HIT_WINDOW) registerScore("Good");
                     else {
-                        closestNote.missed = true;
+                        closestNote.setMiss(true);
                         registerScore("Miss");
                     }
                 }
@@ -99,7 +100,7 @@ public class Playfield {
         // Remove notes that have passed by the playfield
         activeNotes.removeIf(n -> {
             boolean shouldRemove = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitLineY()) > height;
-            if (shouldRemove) n.missed = true;
+            if (shouldRemove) n.setMiss(true);
             return shouldRemove;
         });
     }

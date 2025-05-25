@@ -8,9 +8,7 @@ public class Note {
     private final int endTime; // 0 for normal notes
     private final boolean isHold;
     private boolean hit = false;
-
-    boolean missed = false;
-    int addCount = 0;
+    private boolean miss = false;
 
     /**
      * Normal note constructor.
@@ -51,6 +49,14 @@ public class Note {
 
     public long getEndTime() {
         return endTime;
+    }
+
+    public boolean isMiss() {
+        return miss;
+    }
+
+    public void setMiss(boolean miss) {
+        this.miss = miss;
     }
 
     public boolean isHit() {
