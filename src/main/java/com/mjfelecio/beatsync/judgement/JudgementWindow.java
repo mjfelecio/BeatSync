@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.core;
+package com.mjfelecio.beatsync.judgement;
 
 public enum JudgementWindow {
     PERFECT(30, "Perfect"),
