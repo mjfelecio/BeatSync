@@ -56,7 +56,7 @@ public class Playfield {
         while (missIter.hasNext()) {
             Note n = missIter.next();
             // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
-            if (!n.isHit() && (timeElapsed - n.getStartTime()) > JudgementWindow.MISS.getMillis()) {
+            if (JudgementProcessor.judge(n, timeElapsed) == JudgementResult.MISS) {
                 registerScore("Miss");
                 n.setMiss(true);
                 missIter.remove();
