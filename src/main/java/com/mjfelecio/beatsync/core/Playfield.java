@@ -23,11 +23,6 @@ public class Playfield {
     public List<Note> activeNotes;
     public final int NOTE_APPROACH_TIME = 1000;
 
-    // Hit window thresholds in ms
-    private final int PERFECT_HIT_WINDOW = 30;
-    private final int GOOD_HIT_WINDOW = 80;
-    private final int MISS_HIT_WINDOW = 150;
-
     private final boolean[] isLanePressed = new boolean[NUM_LANES]; // Keep track of presses
 
     int combo = 0;
@@ -61,7 +56,7 @@ public class Playfield {
         while (missIter.hasNext()) {
             Note n = missIter.next();
             // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
-            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW) {
+            if (!n.isHit() && (timeElapsed - n.getStartTime()) > JudgementWindow.MISS.getMillis()) {
                 registerScore("Miss");
                 n.setMiss(true);
                 missIter.remove();
@@ -79,7 +74,7 @@ public class Playfield {
                 for (Note n : activeNotes) {
                     if (n.getLaneNumber() != lane || n.isHit()) continue;
                     long delta = Math.abs(timeElapsed - n.getStartTime());
-                    if (delta < timeDeltaToClosestNote && delta <= MISS_HIT_WINDOW) {
+                    if (delta < timeDeltaToClosestNote && delta <= JudgementWindow.MISS.getMillis()) {
                         timeDeltaToClosestNote = delta;
                         closestNote = n;
                     }
@@ -87,8 +82,8 @@ public class Playfield {
 
                 if (closestNote != null) {
                     closestNote.setHit(true);
-                    if (timeDeltaToClosestNote <= PERFECT_HIT_WINDOW) registerScore("Perfect");
-                    else if (timeDeltaToClosestNote <= GOOD_HIT_WINDOW) registerScore("Good");
+                    if (timeDeltaToClosestNote <= JudgementWindow.PERFECT.getMillis()) registerScore("Perfect");
+                    else if (timeDeltaToClosestNote <= JudgementWindow.GOOD.getMillis()) registerScore("Good");
                     else {
                         closestNote.setMiss(true);
                         registerScore("Miss");
@@ -135,7 +130,7 @@ public class Playfield {
         gc.setFont(new Font(20));
         gc.fillText("Combo: " + this.combo, 20, 50);
         gc.setFont(new Font(30));
-        gc.fillText(judgementResult, (width / 2.0) - 50, 200);
+        gc.fillText(judgementResult, (width / 2.0) - 50, height - 250);
 
         // Draw notes
         gc.setFill(Color.BLUE);
@@ -180,15 +175,15 @@ public class Playfield {
     private void registerScore(String rating) {
         switch (rating) {
             case "Perfect" -> {
-                judgementResult = "Perfect hit";
+                judgementResult = JudgementWindow.PERFECT.getDescription();
                 combo++;
             }
             case "Good" -> {
-                judgementResult = "Good hit!";
+                judgementResult = JudgementWindow.GOOD.getDescription();
                 combo++;
             }
             case "Miss" -> {
-                judgementResult = "Missed!";
+                judgementResult = JudgementWindow.MISS.getDescription();
                 combo = 0;
             }
             default -> System.out.println(rating);
