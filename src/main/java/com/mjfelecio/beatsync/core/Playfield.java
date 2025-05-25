@@ -19,8 +19,7 @@ public class Playfield {
     private final int NOTE_DIAMETER = 80;
 
     private GameClock gameClock;
-    public List<Note> notes;
-    public List<Note> activeNotes;
+    private NoteManager noteManager;
     public final int NOTE_APPROACH_TIME = 1000;
 
     private final boolean[] isLanePressed = new boolean[NUM_LANES]; // Keep track of presses
@@ -36,68 +35,15 @@ public class Playfield {
         try {
             // Initializing a map here temporarily
             File beatmapFile = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/test.osu");
-            notes = ManiaBeatmapParser.parse(beatmapFile).getNotes();
-            activeNotes = new ArrayList<>();
+            List<Note> notes = ManiaBeatmapParser.parse(beatmapFile).getNotes();
+            this.noteManager = new NoteManager(notes);
         } catch (IOException e) {
             System.err.println(e.getMessage());
         }
     }
 
     public void update(long timeElapsed) {
-        // Check for notes to activate
-        notes.forEach(n -> {
-            if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
-                activeNotes.add(n);
-            }
-        });
-
-        // Remove misses automatically
-        Iterator<Note> missIter = activeNotes.iterator();
-        while (missIter.hasNext()) {
-            Note n = missIter.next();
-            // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
-            if (JudgementProcessor.judge(n, timeElapsed) == JudgementResult.MISS) {
-                registerScore("Miss");
-                n.setMiss(true);
-                missIter.remove();
-            }
-        }
-
-        // Handle presses
-        for (int lane = 0; lane < NUM_LANES; lane++) {
-            if (isLanePressed[lane]) {
-                Note closestNote = null;
-
-                // timeDeltaToClosestNote represents the closest note from the elapsed time in music
-                // This should result in only the closest note being removed and not overlapping notes
-                long timeDeltaToClosestNote = Long.MAX_VALUE;
-                for (Note n : activeNotes) {
-                    if (n.getLaneNumber() != lane || n.isHit()) continue;
-                    long delta = Math.abs(timeElapsed - n.getStartTime());
-                    if (delta < timeDeltaToClosestNote && delta <= JudgementWindow.MISS.getMillis()) {
-                        timeDeltaToClosestNote = delta;
-                        closestNote = n;
-                    }
-                }
-
-                if (closestNote != null) {
-                    closestNote.setHit(true);
-                    if (timeDeltaToClosestNote <= JudgementWindow.PERFECT.getMillis()) registerScore("Perfect");
-                    else if (timeDeltaToClosestNote <= JudgementWindow.GOOD.getMillis()) registerScore("Good");
-                    else {
-                        closestNote.setMiss(true);
-                        registerScore("Miss");
-                    }
-                }
-            }
-        }
-
-        // Remove notes that have passed by the playfield
-        activeNotes.removeIf(n -> {
-            boolean passedByPlayfield = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitLineY()) > height;
-            if (passedByPlayfield) n.setMiss(true);
-            return passedByPlayfield;
-        });
+        noteManager.update(timeElapsed, isLanePressed);
     }
 
     public void render(GraphicsContext gc) {
@@ -134,7 +80,7 @@ public class Playfield {
 
         // Draw notes
         gc.setFill(Color.BLUE);
-        activeNotes.forEach(n -> {
+        noteManager.getActiveNotes().forEach(n -> {
             if (n.isHit()) return; // Do not draw the note once it has been hit already
             double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitLineY());
             gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_DIAMETER, NOTE_DIAMETER);
