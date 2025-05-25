@@ -20,23 +20,13 @@ public class NoteManager {
 
     public void update(long timeElapsed, boolean[] isLanePressed) {
         // Check for notes to activate
-        notes.forEach(n -> {
+        List<Note> notesToActivate = new ArrayList<>();
+        for (Note n : notes) {
             if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
-                activeNotes.add(n);
+                notesToActivate.add(n);
             }
-        });
-
-        // Remove misses automatically
-//        Iterator<Note> missIter = activeNotes.iterator();
-//        while (missIter.hasNext()) {
-//            Note n = missIter.next();
-//            // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
-//            if (JudgementProcessor.judge(n, timeElapsed) == JudgementResult.MISS) {
-//                registerScore("Miss");
-//                n.setMiss(true);
-//                missIter.remove();
-//            }
-//        }
+        }
+        activeNotes.addAll(notesToActivate);
 
         // Remove misses automatically
         activeNotes.removeIf(n -> {
@@ -48,14 +38,10 @@ public class NoteManager {
             return false;
         });
 
-
         // Handle presses
         for (int lane = 0; lane < NUM_LANES; lane++) {
             if (isLanePressed[lane]) {
                 Note closestNote = null;
-
-                // timeDeltaToClosestNote represents the closest note from the elapsed time in music
-                // This should result in only the closest note being removed and not overlapping notes
                 long timeDeltaToClosestNote = Long.MAX_VALUE;
                 for (Note n : activeNotes) {
                     if (n.getLaneNumber() != lane || n.isHit()) continue;
@@ -78,8 +64,7 @@ public class NoteManager {
             }
         }
 
-
-//         Remove notes that have passed by the playfield
+        // Remove notes that have passed by the playfield
         activeNotes.removeIf(n -> {
             boolean passedByPlayfield = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitLineY()) > height;
             if (passedByPlayfield) n.setMiss(true);
