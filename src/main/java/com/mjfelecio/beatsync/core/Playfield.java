@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.InputManager;
 import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
@@ -15,10 +16,8 @@ public class Playfield {
     private final int height;
 
     private GameClock gameClock;
+    private InputManager inputManager;
     private NoteManager noteManager;
-    public final int NOTE_APPROACH_TIME = 1000;
-
-    private final boolean[] isLanePressed = new boolean[Constants.NUM_LANES]; // Keep track of presses
 
     int combo = 0;
     String judgementResult = "";
@@ -27,6 +26,7 @@ public class Playfield {
         this.width = width;
         this.height = height;
         this.gameClock = gameClock;
+        this.inputManager = new InputManager();
 
         try {
             // Initializing a map here temporarily
@@ -39,7 +39,7 @@ public class Playfield {
     }
 
     public void update(long timeElapsed) {
-        noteManager.update(timeElapsed, isLanePressed);
+        noteManager.update(timeElapsed, inputManager.getLanePressed());
     }
 
     public void render(GraphicsContext gc) {
@@ -59,7 +59,7 @@ public class Playfield {
             int circleCenteredWidthPos = getCircleCenteredWidthPos(i);
 
             // Indicator of the key press
-            if (isLanePressed[i]) {
+            if (inputManager.isPressed(i)) {
                 gc.setFill(Color.RED);
                 gc.fillOval(circleCenteredWidthPos, Constants.HIT_LINE_Y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
                 gc.setFill(Color.BLACK);
@@ -78,28 +78,20 @@ public class Playfield {
         gc.setFill(Color.BLUE);
         noteManager.getActiveNotes().forEach(n -> {
             if (n.isHit()) return; // Do not draw the note once it has been hit already
-            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, Constants.HIT_LINE_Y);
+            double y = n.calculateY(gameClock.getElapsedTime(), Constants.NOTE_APPROACH_TIME, Constants.HIT_LINE_Y);
             gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
         });
     }
 
     public void pressKey(KeyCode code) {
-        switch (code) {
-            case D -> isLanePressed[0] = true;
-            case F -> isLanePressed[1] = true;
-            case J -> isLanePressed[2] = true;
-            case K -> isLanePressed[3] = true;
-        }
+        inputManager.press(code);
     }
 
     public void releaseKey(KeyCode code) {
-        switch (code) {
-            case D -> isLanePressed[0] = false;
-            case F -> isLanePressed[1] = false;
-            case J -> isLanePressed[2] = false;
-            case K -> isLanePressed[3] = false;
-        }
+        inputManager.release(code);
     }
+
+
 
     private int getLaneWidth() {
         return width / Constants.NUM_LANES;

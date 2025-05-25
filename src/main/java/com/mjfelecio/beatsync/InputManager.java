@@ -31,4 +31,8 @@ public class InputManager {
     public boolean isPressed(int lane) {
         return lanePressed[lane];
     }
+
+    public boolean[] getLanePressed() {
+        return lanePressed;
+    }
 }
