@@ -79,8 +79,8 @@ public class Note {
         double timeIntoApproach = elapsedMs - (startTime - approachTimeMs);
         double progress = timeIntoApproach / approachTimeMs;
 
-        // Clamp progress between 0 and 1
-        progress = Math.max(0.0, Math.min(1.0, progress));
+        // Clamp progress to zero so that it doesn't generate far above the playfield
+        progress = Math.max(0.0,progress);
 
         // Notes start at y=0 and move to hitLineY
         return progress * hitLineY;
