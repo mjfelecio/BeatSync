@@ -18,7 +18,7 @@ public class InputState {
         this.lanePressed[lane] = state;
     }
 
-    public boolean isPressed(int lane) {
+    public boolean isLanePressed(int lane) {
         return lanePressed[lane];
     }
 
