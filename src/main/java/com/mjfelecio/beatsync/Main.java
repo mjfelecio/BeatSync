@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync;
 
+import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.AudioManager;
 import com.mjfelecio.beatsync.core.GameClock;
 import com.mjfelecio.beatsync.core.Playfield;
@@ -16,23 +17,17 @@ import javafx.stage.Stage;
 import java.io.File;
 
 public class Main extends Application {
-    private final int WIDTH = 1920;
-    private final int HEIGHT = 1080;
-
     private Playfield playfield;
     private GameClock gameClock;
     private AudioManager audioManager;
 
     @Override
     public void start(Stage stage) {
-        // Initialize the canvas that serves as our playfield
-        int PLAYFIELD_WIDTH = 400;
-        int PLAYFIELD_HEIGHT = 700;
-        Canvas canvas = new Canvas(PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT);
+        // UI setup
+        Canvas canvas = new Canvas(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        // Initialize the scene and window
-        Scene scene = new Scene(new StackPane(canvas), WIDTH, HEIGHT);
+        Scene scene = new Scene(new StackPane(canvas), GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
         stage.setScene(scene);
         stage.setTitle("Beat Sync: VSRG made with Java");
         stage.show();
@@ -57,8 +52,7 @@ public class Main extends Application {
         gameClock.start(player);
 
         // Load the playfield
-        playfield = new Playfield(PLAYFIELD_WIDTH, PLAYFIELD_HEIGHT, gameClock);
-        playfield.render(gc);
+        playfield = new Playfield(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT, gameClock);
 
         // TODO: Create a InputHandler class for this
         // Get inputs from the user
@@ -68,7 +62,7 @@ public class Main extends Application {
         new AnimationTimer() {
             @Override
             public void handle(long now) {
-                gc.clearRect(0, 0, WIDTH, HEIGHT);
+                gc.clearRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
 
                 playfield.render(gc);
                 playfield.update(gameClock.getElapsedTime());
