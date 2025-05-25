@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync;
+package com.mjfelecio.beatsync.input;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import javafx.scene.input.KeyCode;

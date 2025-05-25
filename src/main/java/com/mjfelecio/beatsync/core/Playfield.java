@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.InputState;
+import com.mjfelecio.beatsync.input.InputState;
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import javafx.scene.canvas.GraphicsContext;
