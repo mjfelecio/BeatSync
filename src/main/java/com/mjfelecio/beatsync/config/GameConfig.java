@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.core;
+package com.mjfelecio.beatsync.config;
 
 public final class GameConfig {
     public static final int SCREEN_WIDTH = 1920;

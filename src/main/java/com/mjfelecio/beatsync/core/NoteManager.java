@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.config.GameConfig;
+
 import java.util.ArrayList;
 import java.util.List;
 

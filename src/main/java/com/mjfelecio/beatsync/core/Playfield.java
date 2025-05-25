@@ -1,6 +1,7 @@
 package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.InputManager;
+import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
