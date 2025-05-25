@@ -99,9 +99,9 @@ public class Playfield {
 
         // Remove notes that have passed by the playfield
         activeNotes.removeIf(n -> {
-            boolean shouldRemove = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitLineY()) > height;
-            if (shouldRemove) n.setMiss(true);
-            return shouldRemove;
+            boolean passedByPlayfield = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitLineY()) > height;
+            if (passedByPlayfield) n.setMiss(true);
+            return passedByPlayfield;
         });
     }
 
