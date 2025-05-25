@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.parser.obj;
 
+import com.mjfelecio.beatsync.core.Note;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -8,7 +10,7 @@ public class Beatmap {
     private String artist;
     private String version;
     private String creator;
-    private List<HitObject> notes = new ArrayList<>();
+    private List<Note> notes = new ArrayList<>();
 
     public String getTitle() {
         return title;
@@ -26,7 +28,7 @@ public class Beatmap {
         return creator;
     }
 
-    public List<HitObject> getNotes() {
+    public List<Note> getNotes() {
         return notes;
     }
 
@@ -46,7 +48,7 @@ public class Beatmap {
         this.creator = creator;
     }
 
-    public void addNote(HitObject note) {
+    public void addNote(Note note) {
         this.notes.add(note);
     }
 

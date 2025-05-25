@@ -1,7 +1,7 @@
 package com.mjfelecio.beatsync.parser;
 
+import com.mjfelecio.beatsync.core.Note;
 import com.mjfelecio.beatsync.parser.obj.Beatmap;
-import com.mjfelecio.beatsync.parser.obj.HitObject;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -96,17 +96,30 @@ public class ManiaBeatmapParser {
 
         try {
             int x = Integer.parseInt(parts[0]);
-            int y = Integer.parseInt(parts[1]);
+//            int y = Integer.parseInt(parts[1]); // Don't need this as well
             int time = Integer.parseInt(parts[2]);
             int type = Integer.parseInt(parts[3]);
-            int hitSound = Integer.parseInt(parts[4]);
+//            int hitSound = Integer.parseInt(parts[4]); // I don't need hit sound for now
 
+            int laneNumber = getLaneNumber(x);
             Integer endTime = getEndTime(type, parts);
 
-            beatmap.addNote(new HitObject(x, y, time, type, hitSound, endTime));
+            beatmap.addNote(endTime == null ? new Note(laneNumber, time) : new Note(laneNumber, time, endTime));
         } catch (NumberFormatException e) {
             System.err.println("Invalid number: " + e.getMessage());
         }
+    }
+
+    private static int getLaneNumber(int x) {
+        int lane = -1;
+        switch (x) {
+            case 64 -> lane = 0;
+            case 192 -> lane = 1;
+            case 320 -> lane = 2;
+            case 448 -> lane = 3;
+        }
+
+        return lane;
     }
 
     private static Integer getEndTime(int type, String[] parts) {
