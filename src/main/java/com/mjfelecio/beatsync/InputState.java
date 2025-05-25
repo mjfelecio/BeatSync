@@ -3,7 +3,7 @@ package com.mjfelecio.beatsync;
 import com.mjfelecio.beatsync.config.GameConfig;
 import javafx.scene.input.KeyCode;
 
-public class InputManager {
+public class InputState {
     private boolean[] lanePressed = new boolean[GameConfig.NUM_LANES];
 
     public void press(KeyCode code) {

@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.InputManager;
+import com.mjfelecio.beatsync.InputState;
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import javafx.scene.canvas.GraphicsContext;
@@ -17,7 +17,7 @@ public class Playfield {
     private final int height;
 
     private GameClock gameClock;
-    private InputManager inputManager;
+    private InputState inputManager;
     private NoteManager noteManager;
 
     int combo = 0;
@@ -27,7 +27,7 @@ public class Playfield {
         this.width = width;
         this.height = height;
         this.gameClock = gameClock;
-        this.inputManager = new InputManager();
+        this.inputManager = new InputState();
 
         try {
             // Initializing a map here temporarily
