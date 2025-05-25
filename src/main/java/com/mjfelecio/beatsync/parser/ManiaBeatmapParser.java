@@ -8,6 +8,33 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
+ /* See: https://osu.ppy.sh/wiki/en/Client/File_formats/osu_(file_format)
+     I probably need:
+    [General]
+        AudioFilename
+        AudioLeadIn
+        Stack Leniency
+        Mode (Reject map if it isn't osu mania)
+
+    [Metadata]
+        Title
+        Artist
+        Creator
+        Version
+        BeatmapID
+        BeatmapSetID
+
+    [Difficulty]
+        Approach Rate (Maybe, needs more research)
+
+    [Events]
+        Breaks
+
+    [TimingPoints]
+
+    [HitObjects] - ALL
+    * */
+
 public class ManiaBeatmapParser {
     private enum Section {
         NONE,
