@@ -46,36 +46,40 @@ public class ManiaBeatmapParser {
                 }
 
                 // Metadata
-                if (section == Section.METADATA) {
-                    if (line.startsWith("Title:")) beatmap.setTitle(line.substring(6).trim());
-                    if (line.startsWith("Artist:")) beatmap.setArtist(line.substring(7).trim());
-                    if (line.startsWith("Version:")) beatmap.setVersion(line.substring(8).trim());
-                    if (line.startsWith("Creator:")) beatmap.setCreator(line.substring(8).trim());
-                }
+                if (section == Section.METADATA) parseMetaData(beatmap, line);
 
                 // HitObjects
-                if (section == Section.HIT_OBJECTS) {
-                    String[] parts = line.split(",");
-                    if (parts.length < 5) continue;
-
-                    try {
-                        int x = Integer.parseInt(parts[0]);
-                        int y = Integer.parseInt(parts[1]);
-                        int time = Integer.parseInt(parts[2]);
-                        int type = Integer.parseInt(parts[3]);
-                        int hitSound = Integer.parseInt(parts[4]);
-
-                        Integer endTime = getEndTime(type, parts);
-
-                        beatmap.addNote(new HitObject(x, y, time, type, hitSound, endTime));
-                    } catch (NumberFormatException e) {
-                        System.err.println("Invalid number: " + e.getMessage());
-                    }
-                }
+                if (section == Section.HIT_OBJECTS) parseHitObjects(beatmap, line);
             }
         }
 
         return beatmap;
+    }
+
+    private static void parseMetaData(Beatmap beatmap, String line) {
+        if (line.startsWith("Title:")) beatmap.setTitle(line.substring(6).trim());
+        if (line.startsWith("Artist:")) beatmap.setArtist(line.substring(7).trim());
+        if (line.startsWith("Version:")) beatmap.setVersion(line.substring(8).trim());
+        if (line.startsWith("Creator:")) beatmap.setCreator(line.substring(8).trim());
+    }
+
+    private static void parseHitObjects(Beatmap beatmap, String line) {
+        String[] parts = line.split(",");
+        if (parts.length < 5) return;
+
+        try {
+            int x = Integer.parseInt(parts[0]);
+            int y = Integer.parseInt(parts[1]);
+            int time = Integer.parseInt(parts[2]);
+            int type = Integer.parseInt(parts[3]);
+            int hitSound = Integer.parseInt(parts[4]);
+
+            Integer endTime = getEndTime(type, parts);
+
+            beatmap.addNote(new HitObject(x, y, time, type, hitSound, endTime));
+        } catch (NumberFormatException e) {
+            System.err.println("Invalid number: " + e.getMessage());
+        }
     }
 
     private static Integer getEndTime(int type, String[] parts) {
