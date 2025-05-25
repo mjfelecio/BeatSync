@@ -55,23 +55,12 @@ public class Playfield {
             }
         });
 
-        Note testNote = notes.getFirst();
-        System.out.println("Contains check: " + activeNotes.contains(testNote));
-        System.out.println("Manual search: " + activeNotes.stream().anyMatch(activeNote ->
-                activeNote.getLaneNumber() == testNote.getLaneNumber() &&
-                        activeNote.getStartTime() == testNote.getStartTime()));
-
         // Remove misses automatically
         Iterator<Note> missIter = activeNotes.iterator();
         while (missIter.hasNext()) {
             Note n = missIter.next();
             // If the notes wasn't hit already AND has passed the miss window, mark it as a miss
-            // Explanation for future me:
-            //  The notes are supposed to be hit at a specific time in the music
-            //  If they haven't been hit yet at their specific time in the specified TIMING WINDOWS, they're a miss
-//            System.out.println("Checking note: lane=" + n.getLaneNumber() + ", startTime=" + n.getStartTime() + ", timeDiff=" + (timeElapsed - n.getStartTime()));
-            boolean check = !n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW;
-            if (check) {
+            if (!n.isHit() && (timeElapsed - n.getStartTime()) > MISS_HIT_WINDOW) {
                 registerScore("Miss");
                 n.missed = true;
                 missIter.remove();
@@ -84,9 +73,7 @@ public class Playfield {
                 Note closestNote = null;
 
                 // timeDeltaToClosestNote represents the closest note from the elapsed time in music
-                // This should result in only one note being removed and not overlapping notes
-                // However, I'm still running into bugs with it
-                // TODO: Fix multiple notes being removed at the same time if they are too close together
+                // This should result in only the closest note being removed and not overlapping notes
                 long timeDeltaToClosestNote = Long.MAX_VALUE;
                 for (Note n : activeNotes) {
                     if (n.getLaneNumber() != lane || n.isHit()) continue;
@@ -109,14 +96,12 @@ public class Playfield {
             }
         }
 
+        // Remove notes that have passed by the playfield
         activeNotes.removeIf(n -> {
             boolean shouldRemove = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneTopLeftY()) > height;
-            if (shouldRemove) System.out.println("Removing note that passed screen: " + n);
-            n.missed = true;
+            if (shouldRemove) n.missed = true;
             return shouldRemove;
         });
-
-        activeNotes.removeIf(n -> n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitZoneTopLeftY()) > height); // Remove notes that have passed the playfield
     }
 
     public void render(GraphicsContext gc) {
