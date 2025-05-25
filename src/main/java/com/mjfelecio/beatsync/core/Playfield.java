@@ -8,21 +8,17 @@ import javafx.scene.text.Font;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class Playfield {
     private final int width;
     private final int height;
-    private final int NUM_LANES = 4;
-    private final int NOTE_DIAMETER = 80;
 
     private GameClock gameClock;
     private NoteManager noteManager;
     public final int NOTE_APPROACH_TIME = 1000;
 
-    private final boolean[] isLanePressed = new boolean[NUM_LANES]; // Keep track of presses
+    private final boolean[] isLanePressed = new boolean[Constants.NUM_LANES]; // Keep track of presses
 
     int combo = 0;
     String judgementResult = "";
@@ -34,7 +30,7 @@ public class Playfield {
 
         try {
             // Initializing a map here temporarily
-            File beatmapFile = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/test.osu");
+            File beatmapFile = new File(Constants.TEST_BEATMAP_PATH);
             List<Note> notes = ManiaBeatmapParser.parse(beatmapFile).getNotes();
             this.noteManager = new NoteManager(notes);
         } catch (IOException e) {
@@ -54,7 +50,7 @@ public class Playfield {
         gc.setLineWidth(8);
         gc.strokeRect(0, 0, width, height);
 
-        for (int i = 0; i < NUM_LANES; i++) {
+        for (int i = 0; i < Constants.NUM_LANES; i++) {
             gc.setLineWidth(2);
 
             // Add vertical lines as lane separators
@@ -65,12 +61,12 @@ public class Playfield {
             // Indicator of the key press
             if (isLanePressed[i]) {
                 gc.setFill(Color.RED);
-                gc.fillOval(circleCenteredWidthPos, getHitLineY(), NOTE_DIAMETER, NOTE_DIAMETER);
+                gc.fillOval(circleCenteredWidthPos, Constants.HIT_LINE_Y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
                 gc.setFill(Color.BLACK);
             }
 
             // Add circles as indications for the hit zones in each lane
-            gc.strokeOval(circleCenteredWidthPos, getHitLineY(), NOTE_DIAMETER, NOTE_DIAMETER);
+            gc.strokeOval(circleCenteredWidthPos, Constants.HIT_LINE_Y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
         }
 
         gc.setFont(new Font(20));
@@ -82,8 +78,8 @@ public class Playfield {
         gc.setFill(Color.BLUE);
         noteManager.getActiveNotes().forEach(n -> {
             if (n.isHit()) return; // Do not draw the note once it has been hit already
-            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, getHitLineY());
-            gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, NOTE_DIAMETER, NOTE_DIAMETER);
+            double y = n.calculateY(gameClock.getElapsedTime(), NOTE_APPROACH_TIME, Constants.HIT_LINE_Y);
+            gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
         });
     }
 
@@ -106,16 +102,12 @@ public class Playfield {
     }
 
     private int getLaneWidth() {
-        return width / NUM_LANES;
-    }
-
-    private int getHitLineY() {
-        return height - 150;
+        return width / Constants.NUM_LANES;
     }
 
     private int getCircleCenteredWidthPos(int laneNum) {
         int laneWidth = getLaneWidth();
-        return (laneWidth * laneNum) + (laneWidth - NOTE_DIAMETER) / 2;
+        return (laneWidth * laneNum) + (laneWidth - Constants.NOTE_DIAMETER) / 2;
     }
 
     private void registerScore(String rating) {

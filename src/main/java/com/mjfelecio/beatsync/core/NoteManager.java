@@ -1,7 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class NoteManager {
@@ -9,8 +8,6 @@ public class NoteManager {
     private List<Note> activeNotes;
     private String judgementResult;
 
-    public final int NOTE_APPROACH_TIME = 1000;
-    public final int NUM_LANES = 4;
     public final int height = 700;
 
     public NoteManager(List<Note> notes) {
@@ -22,7 +19,7 @@ public class NoteManager {
         // Check for notes to activate
         List<Note> notesToActivate = new ArrayList<>();
         for (Note n : notes) {
-            if ((timeElapsed >= n.getStartTime() - NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
+            if ((timeElapsed >= n.getStartTime() - Constants.NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
                 notesToActivate.add(n);
             }
         }
@@ -39,7 +36,7 @@ public class NoteManager {
         });
 
         // Handle presses
-        for (int lane = 0; lane < NUM_LANES; lane++) {
+        for (int lane = 0; lane < Constants.NUM_LANES; lane++) {
             if (isLanePressed[lane]) {
                 Note closestNote = null;
                 long timeDeltaToClosestNote = Long.MAX_VALUE;
@@ -66,7 +63,7 @@ public class NoteManager {
 
         // Remove notes that have passed by the playfield
         activeNotes.removeIf(n -> {
-            boolean passedByPlayfield = n.calculateY(timeElapsed, NOTE_APPROACH_TIME, getHitLineY()) > height;
+            boolean passedByPlayfield = n.calculateY(timeElapsed, Constants.NOTE_APPROACH_TIME, getHitLineY()) > height;
             if (passedByPlayfield) n.setMiss(true);
             return passedByPlayfield;
         });
