@@ -19,7 +19,7 @@ public class NoteManager {
         // Check for notes to activate
         List<Note> notesToActivate = new ArrayList<>();
         for (Note n : notes) {
-            if ((timeElapsed >= n.getStartTime() - Constants.NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
+            if ((timeElapsed >= n.getStartTime() - GameConfig.NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
                 notesToActivate.add(n);
             }
         }
@@ -36,7 +36,7 @@ public class NoteManager {
         });
 
         // Handle presses
-        for (int lane = 0; lane < Constants.NUM_LANES; lane++) {
+        for (int lane = 0; lane < GameConfig.NUM_LANES; lane++) {
             if (isLanePressed[lane]) {
                 Note closestNote = null;
                 long timeDeltaToClosestNote = Long.MAX_VALUE;
@@ -63,7 +63,7 @@ public class NoteManager {
 
         // Remove notes that have passed by the playfield
         activeNotes.removeIf(n -> {
-            boolean passedByPlayfield = n.calculateY(timeElapsed, Constants.NOTE_APPROACH_TIME, getHitLineY()) > height;
+            boolean passedByPlayfield = n.calculateY(timeElapsed, GameConfig.NOTE_APPROACH_TIME, getHitLineY()) > height;
             if (passedByPlayfield) n.setMiss(true);
             return passedByPlayfield;
         });

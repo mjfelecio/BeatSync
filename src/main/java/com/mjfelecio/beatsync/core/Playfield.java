@@ -30,7 +30,7 @@ public class Playfield {
 
         try {
             // Initializing a map here temporarily
-            File beatmapFile = new File(Constants.TEST_BEATMAP_PATH);
+            File beatmapFile = new File(GameConfig.TEST_BEATMAP_PATH);
             List<Note> notes = ManiaBeatmapParser.parse(beatmapFile).getNotes();
             this.noteManager = new NoteManager(notes);
         } catch (IOException e) {
@@ -50,7 +50,7 @@ public class Playfield {
         gc.setLineWidth(8);
         gc.strokeRect(0, 0, width, height);
 
-        for (int i = 0; i < Constants.NUM_LANES; i++) {
+        for (int i = 0; i < GameConfig.NUM_LANES; i++) {
             gc.setLineWidth(2);
 
             // Add vertical lines as lane separators
@@ -61,12 +61,12 @@ public class Playfield {
             // Indicator of the key press
             if (inputManager.isPressed(i)) {
                 gc.setFill(Color.RED);
-                gc.fillOval(circleCenteredWidthPos, Constants.HIT_LINE_Y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
+                gc.fillOval(circleCenteredWidthPos, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
                 gc.setFill(Color.BLACK);
             }
 
             // Add circles as indications for the hit zones in each lane
-            gc.strokeOval(circleCenteredWidthPos, Constants.HIT_LINE_Y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
+            gc.strokeOval(circleCenteredWidthPos, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
         }
 
         gc.setFont(new Font(20));
@@ -78,8 +78,8 @@ public class Playfield {
         gc.setFill(Color.BLUE);
         noteManager.getActiveNotes().forEach(n -> {
             if (n.isHit()) return; // Do not draw the note once it has been hit already
-            double y = n.calculateY(gameClock.getElapsedTime(), Constants.NOTE_APPROACH_TIME, Constants.HIT_LINE_Y);
-            gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, Constants.NOTE_DIAMETER, Constants.NOTE_DIAMETER);
+            double y = n.calculateY(gameClock.getElapsedTime(), GameConfig.NOTE_APPROACH_TIME, GameConfig.HIT_LINE_Y);
+            gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
         });
     }
 
@@ -94,12 +94,12 @@ public class Playfield {
 
 
     private int getLaneWidth() {
-        return width / Constants.NUM_LANES;
+        return width / GameConfig.NUM_LANES;
     }
 
     private int getCircleCenteredWidthPos(int laneNum) {
         int laneWidth = getLaneWidth();
-        return (laneWidth * laneNum) + (laneWidth - Constants.NOTE_DIAMETER) / 2;
+        return (laneWidth * laneNum) + (laneWidth - GameConfig.NOTE_DIAMETER) / 2;
     }
 
     private void registerScore(String rating) {

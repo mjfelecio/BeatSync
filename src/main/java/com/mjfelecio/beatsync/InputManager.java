@@ -1,10 +1,10 @@
 package com.mjfelecio.beatsync;
 
-import com.mjfelecio.beatsync.core.Constants;
+import com.mjfelecio.beatsync.core.GameConfig;
 import javafx.scene.input.KeyCode;
 
 public class InputManager {
-    private boolean[] lanePressed = new boolean[Constants.NUM_LANES];
+    private boolean[] lanePressed = new boolean[GameConfig.NUM_LANES];
 
     public void press(KeyCode code) {
         switch (code) {
