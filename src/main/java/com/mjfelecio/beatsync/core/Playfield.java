@@ -17,7 +17,7 @@ public class Playfield {
     private final int height;
 
     private GameClock gameClock;
-    private InputState inputManager;
+    private InputState inputState;
     private NoteManager noteManager;
 
     int combo = 0;
@@ -27,7 +27,7 @@ public class Playfield {
         this.width = width;
         this.height = height;
         this.gameClock = gameClock;
-        this.inputManager = new InputState();
+        this.inputState = new InputState();
 
         try {
             // Initializing a map here temporarily
@@ -40,7 +40,7 @@ public class Playfield {
     }
 
     public void update(long timeElapsed) {
-        noteManager.update(timeElapsed, inputManager.getLanePressed());
+        noteManager.update(timeElapsed, inputState.getLanePressed());
     }
 
     public void render(GraphicsContext gc) {
@@ -60,7 +60,8 @@ public class Playfield {
             int circleCenteredWidthPos = getCircleCenteredWidthPos(i);
 
             // Indicator of the key press
-            if (inputManager.isPressed(i)) {
+            // TODO: There is a bug here, it still presses the lane if you press instead of tap the key
+            if (inputState.isPressed(i)) {
                 gc.setFill(Color.RED);
                 gc.fillOval(circleCenteredWidthPos, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
                 gc.setFill(Color.BLACK);
@@ -85,11 +86,25 @@ public class Playfield {
     }
 
     public void pressKey(KeyCode code) {
-        inputManager.press(code);
+        int lane = -1;
+        switch (code) {
+            case D -> lane = 0;
+            case F -> lane = 1;
+            case J -> lane = 2;
+            case K -> lane = 3;
+        }
+        inputState.pressLane(lane);
     }
 
     public void releaseKey(KeyCode code) {
-        inputManager.release(code);
+        int lane = -1;
+        switch (code) {
+            case D -> lane = 0;
+            case F -> lane = 1;
+            case J -> lane = 2;
+            case K -> lane = 3;
+        }
+        inputState.releaseLane(lane);
     }
 
 
