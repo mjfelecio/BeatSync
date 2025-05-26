@@ -1,8 +1,13 @@
 package com.mjfelecio.beatsync.gameplay;
 
 import com.mjfelecio.beatsync.core.GameState;
+import com.mjfelecio.beatsync.judgement.JudgementProcessor;
+import com.mjfelecio.beatsync.core.Note;
 import com.mjfelecio.beatsync.core.NoteManager;
+import com.mjfelecio.beatsync.judgement.JudgementResult;
 import com.mjfelecio.beatsync.parser.obj.Beatmap;
+
+import java.util.List;
 
 public class GameplayLogic {
     private final GameState gameState;
@@ -22,4 +27,29 @@ public class GameplayLogic {
         noteManager.cullExpiredNotes(currentTime);
     }
 
+    public void handleLanePress(int laneNumber, long currentTime) {
+        Note hitNote = noteManager.getHittableNote(laneNumber, currentTime);
+        if (hitNote != null) {
+            JudgementResult judgement = JudgementProcessor.judge(hitNote, currentTime);
+            processJudgement(judgement);
+            hitNote.setHit(true);
+        }
+    }
+
+    private void processJudgement(JudgementResult judgementResult) {
+        switch (judgementResult) {
+            case JudgementResult.PERFECT, JudgementResult.GOOD -> {
+                gameState.incrementCombo();
+//                gameState.addScore(100); // will think about the scoring system later
+            }
+            case JudgementResult.MISS -> {
+                gameState.resetCombo();
+            }
+        }
+        gameState.setJudgement(judgementResult.toString());
+    }
+
+    public List<Note> getVisibleNotes() {
+        return noteManager.getVisibleNotes();
+    }
 }
