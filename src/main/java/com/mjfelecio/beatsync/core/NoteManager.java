@@ -76,6 +76,22 @@ public class NoteManager {
         allNotes.forEach(n -> n.update(timeElapsed));
     }
 
+    public void cullExpiredNotes(long currentTime) {
+        visibleNotes.removeIf(n -> {
+            final int MISS_WINDOW_MS = JudgementWindow.MISS.getMillis();
+            // Arbitrary delay to allow the note to move below the playfield before removing it
+            final int REMOVAL_DELAY_MS = 200;
+
+            long timeSinceNote = currentTime - n.getStartTime();
+            boolean shouldRemove = timeSinceNote > (MISS_WINDOW_MS + REMOVAL_DELAY_MS);
+
+            if (shouldRemove && !n.isHit()) {
+                n.setMiss(true);
+            }
+            return shouldRemove;
+        });
+    }
+
     public void registerScore(String score) {
         this.judgementResult = score;
     }
