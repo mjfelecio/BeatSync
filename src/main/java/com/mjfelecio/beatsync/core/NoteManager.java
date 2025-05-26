@@ -6,6 +6,7 @@ import com.mjfelecio.beatsync.judgement.JudgementResult;
 import com.mjfelecio.beatsync.judgement.JudgementWindow;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class NoteManager {
@@ -90,6 +91,20 @@ public class NoteManager {
             }
             return shouldRemove;
         });
+    }
+
+    public Note getHittableNote(int laneNumber, long currentTime) {
+        return visibleNotes.stream()
+                           .filter(n -> n.getLaneNumber() == laneNumber)
+                           .filter(n -> !n.isHit())
+                           .filter(n -> isWithinHitWindow(n, currentTime))
+                           .min(Comparator.comparingLong(n -> Math.abs(currentTime - n.getStartTime())))
+                           .orElse(null);
+    }
+
+    private boolean isWithinHitWindow(Note note, long currentTime) {
+        long timeDiff = Math.abs(currentTime - note.getStartTime());
+        return timeDiff <= JudgementWindow.MISS.getMillis();
     }
 
     public void registerScore(String score) {
