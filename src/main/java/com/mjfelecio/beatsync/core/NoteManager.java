@@ -22,13 +22,11 @@ public class NoteManager {
 
     public void update(long timeElapsed, boolean[] isLanePressed) {
         // Check for notes to activate
-        List<Note> notesToActivate = new ArrayList<>();
         for (Note n : notes) {
             if ((timeElapsed >= n.getStartTime() - GameConfig.NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
-                notesToActivate.add(n);
+                activeNotes.add(n);
             }
         }
-        activeNotes.addAll(notesToActivate);
 
         // Remove misses automatically
         activeNotes.removeIf(n -> {
@@ -72,6 +70,10 @@ public class NoteManager {
             if (passedByPlayfield) n.setMiss(true);
             return passedByPlayfield;
         });
+    }
+
+    public void updateNotesPosition(long timeElapsed) {
+        notes.forEach(n -> n.update(timeElapsed));
     }
 
     public void registerScore(String score) {
