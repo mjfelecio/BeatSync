@@ -5,6 +5,7 @@ import java.util.Objects;
 public class Note {
     private final int laneNumber;
     private final int startTime;
+    public long currentTime = 0; // Tracks the current time in the map internally
     private final int endTime; // 0 for normal notes
     private final boolean isHold;
     private boolean hit = false;
@@ -33,6 +34,10 @@ public class Note {
         this.startTime = startTime;
         this.endTime = endTime;
         this.isHold = endTime > startTime;
+    }
+
+    public void update(long timeElapsed) {
+        this.currentTime = timeElapsed;
     }
 
     public int getLaneNumber() {
