@@ -67,7 +67,7 @@ public class NoteManager {
 
         // Remove notes that have passed by the playfield
         visibleNotes.removeIf(n -> {
-            boolean passedByPlayfield = n.calculateY(timeElapsed, GameConfig.NOTE_APPROACH_TIME, getHitLineY()) > height;
+            boolean passedByPlayfield = n.calculateY(timeElapsed, GameConfig.NOTE_APPROACH_TIME, GameConfig.HIT_LINE_Y) > height;
             if (passedByPlayfield) n.setMiss(true);
             return passedByPlayfield;
         });
@@ -107,16 +107,9 @@ public class NoteManager {
         return timeDiff <= JudgementWindow.MISS.getMillis();
     }
 
+    // TODO: Remove this later
     public void registerScore(String score) {
         this.judgementResult = score;
-    }
-
-    public String getJudgementResult() {
-        return judgementResult;
-    }
-
-    public int getHitLineY() {
-        return height - 150;
     }
 
     public List<Note> getVisibleNotes() {
