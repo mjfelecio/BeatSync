@@ -17,7 +17,7 @@ public class GameEngine {
     public void loadAudioAndStartClock() {
         // I'm using File.toURI() so that it parses files with spaces properly
         // TODO: Have a class dedicated to loading all of the beatmaps files, including audio
-        String filePath = new File("src/main/resources/com/mjfelecio/beatsync/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/audio.mp3").toURI().toString();
+        String filePath = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/audio.mp3").toURI().toString();
         this.audioManager.setMusic(new Media(filePath));
         // TODO: Have a dedicated class that handles starting the playing
         MediaPlayer player = this.audioManager.getPlayer();
