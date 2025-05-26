@@ -79,7 +79,7 @@ public class Playfield {
 
         // Draw notes
         gc.setFill(Color.BLUE);
-        noteManager.getActiveNotes().forEach(n -> {
+        noteManager.getVisibleNotes().forEach(n -> {
             if (n.isHit()) return; // Do not draw the note once it has been hit already
             double y = n.calculateY(gameClock.getElapsedTime(), GameConfig.NOTE_APPROACH_TIME, GameConfig.HIT_LINE_Y);
             gc.fillOval(getCircleCenteredWidthPos(n.getLaneNumber()), y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);

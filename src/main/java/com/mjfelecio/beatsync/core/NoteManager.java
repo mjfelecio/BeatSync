@@ -9,27 +9,27 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class NoteManager {
-    private List<Note> notes;
-    private List<Note> activeNotes;
+    private List<Note> allNotes;
+    private List<Note> visibleNotes;
     private String judgementResult;
 
     public final int height = 700;
 
-    public NoteManager(List<Note> notes) {
-        this.notes = notes;
-        this.activeNotes = new ArrayList<>();
+    public NoteManager(List<Note> allNotes) {
+        this.allNotes = allNotes;
+        this.visibleNotes = new ArrayList<>();
     }
 
     public void update(long timeElapsed, boolean[] isLanePressed) {
         // Check for notes to activate
-        for (Note n : notes) {
+        for (Note n : allNotes) {
             if ((timeElapsed >= n.getStartTime() - GameConfig.NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
-                activeNotes.add(n);
+                visibleNotes.add(n);
             }
         }
 
         // Remove misses automatically
-        activeNotes.removeIf(n -> {
+        visibleNotes.removeIf(n -> {
             if (JudgementProcessor.judge(n, timeElapsed) == JudgementResult.MISS) {
                 registerScore("Miss");
                 n.setMiss(true);
@@ -43,7 +43,7 @@ public class NoteManager {
             if (isLanePressed[lane]) {
                 Note closestNote = null;
                 long timeDeltaToClosestNote = Long.MAX_VALUE;
-                for (Note n : activeNotes) {
+                for (Note n : visibleNotes) {
                     if (n.getLaneNumber() != lane || n.isHit()) continue;
                     long delta = Math.abs(timeElapsed - n.getStartTime());
                     if (delta < timeDeltaToClosestNote && delta <= JudgementWindow.MISS.getMillis()) {
@@ -65,7 +65,7 @@ public class NoteManager {
         }
 
         // Remove notes that have passed by the playfield
-        activeNotes.removeIf(n -> {
+        visibleNotes.removeIf(n -> {
             boolean passedByPlayfield = n.calculateY(timeElapsed, GameConfig.NOTE_APPROACH_TIME, getHitLineY()) > height;
             if (passedByPlayfield) n.setMiss(true);
             return passedByPlayfield;
@@ -73,7 +73,7 @@ public class NoteManager {
     }
 
     public void updateNotesPosition(long timeElapsed) {
-        notes.forEach(n -> n.update(timeElapsed));
+        allNotes.forEach(n -> n.update(timeElapsed));
     }
 
     public void registerScore(String score) {
@@ -88,7 +88,7 @@ public class NoteManager {
         return height - 150;
     }
 
-    public List<Note> getActiveNotes() {
-        return activeNotes;
+    public List<Note> getVisibleNotes() {
+        return visibleNotes;
     }
 }
