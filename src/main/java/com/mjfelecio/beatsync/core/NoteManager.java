@@ -30,14 +30,14 @@ public class NoteManager {
         }
 
         // Remove misses automatically
-        visibleNotes.removeIf(n -> {
-            if (JudgementProcessor.judge(n, timeElapsed) == JudgementResult.MISS) {
-                registerScore("Miss");
-                n.setMiss(true);
-                return true;
-            }
-            return false;
-        });
+//        visibleNotes.removeIf(n -> {
+//            if (JudgementProcessor.judge(n, timeElapsed) == JudgementResult.MISS) {
+//                registerScore("Miss");
+//                n.setMiss(true);
+//                return true;
+//            }
+//            return false;
+//        });
 
         // Handle presses
         for (int lane = 0; lane < GameConfig.NUM_LANES; lane++) {
@@ -66,11 +66,7 @@ public class NoteManager {
         }
 
         // Remove notes that have passed by the playfield
-        visibleNotes.removeIf(n -> {
-            boolean passedByPlayfield = n.calculateY(timeElapsed, GameConfig.NOTE_APPROACH_TIME, GameConfig.HIT_LINE_Y) > height;
-            if (passedByPlayfield) n.setMiss(true);
-            return passedByPlayfield;
-        });
+        cullExpiredNotes(timeElapsed);
     }
 
     public void updateNotesPosition(long timeElapsed) {
@@ -81,7 +77,7 @@ public class NoteManager {
         visibleNotes.removeIf(n -> {
             final int MISS_WINDOW_MS = JudgementWindow.MISS.getMillis();
             // Arbitrary delay to allow the note to move below the playfield before removing it
-            final int REMOVAL_DELAY_MS = 200;
+            final int REMOVAL_DELAY_MS = 100;
 
             long timeSinceNote = currentTime - n.getStartTime();
             boolean shouldRemove = timeSinceNote > (MISS_WINDOW_MS + REMOVAL_DELAY_MS);
