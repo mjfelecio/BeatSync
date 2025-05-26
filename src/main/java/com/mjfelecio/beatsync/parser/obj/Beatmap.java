@@ -10,6 +10,7 @@ public class Beatmap {
     private String artist;
     private String version;
     private String creator;
+    private String audioPath;
     private List<Note> notes = new ArrayList<>();
 
     public String getTitle() {
@@ -32,6 +33,10 @@ public class Beatmap {
         return notes;
     }
 
+    public String getAudioPath() {
+        return audioPath;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -46,6 +51,10 @@ public class Beatmap {
 
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public void setAudioPath(String audioPath) {
+        this.audioPath = audioPath;
     }
 
     public void addNote(Note note) {

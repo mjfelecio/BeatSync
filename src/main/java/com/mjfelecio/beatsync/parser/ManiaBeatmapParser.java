@@ -72,6 +72,9 @@ public class ManiaBeatmapParser {
                     continue;
                 }
 
+                // General
+                if (section == Section.GENERAL) parseGeneral(beatmap, line);
+
                 // Metadata
                 if (section == Section.METADATA) parseMetaData(beatmap, line);
 
@@ -81,6 +84,10 @@ public class ManiaBeatmapParser {
         }
 
         return beatmap;
+    }
+
+    private static void parseGeneral(Beatmap beatmap, String line) {
+        if (line.startsWith("AudioFilename:")) beatmap.setAudioPath(line.substring(14).trim());
     }
 
     private static void parseMetaData(Beatmap beatmap, String line) {
