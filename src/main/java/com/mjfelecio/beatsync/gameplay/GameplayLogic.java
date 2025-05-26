@@ -4,8 +4,6 @@ import com.mjfelecio.beatsync.core.GameState;
 import com.mjfelecio.beatsync.core.NoteManager;
 import com.mjfelecio.beatsync.parser.obj.Beatmap;
 
-import java.util.List;
-
 public class GameplayLogic {
     private final GameState gameState;
     private NoteManager noteManager;
@@ -16,6 +14,12 @@ public class GameplayLogic {
 
     public void loadBeatmap(Beatmap beatmap) {
         this.noteManager = new NoteManager(beatmap.getNotes());
+    }
+
+    public void update(long currentTime, long deltaTime) {
+        noteManager.updateNotesPosition(currentTime);
+        // Remove notes that are too far past
+        noteManager.cullExpiredNotes(currentTime);
     }
 
 }
