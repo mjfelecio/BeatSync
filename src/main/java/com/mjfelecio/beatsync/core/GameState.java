@@ -9,6 +9,7 @@ public class GameState {
     public void incrementCombo() { combo++; }
     public void resetCombo() { combo = 0; }
     public void setJudgement(String judgement) { this.lastJudgement = judgement; }
+    public void setPlaying(boolean b) { this.isPlaying = b; }
 
     public int getCombo() {
         return combo;
@@ -17,4 +18,6 @@ public class GameState {
     public String getLastJudgement() {
         return lastJudgement;
     }
+
+    public boolean isPlaying() { return isPlaying; }
 }
