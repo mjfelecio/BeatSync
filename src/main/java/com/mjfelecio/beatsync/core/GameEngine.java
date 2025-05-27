@@ -34,7 +34,7 @@ public class GameEngine {
             // Load beatmap and audio
 //            Beatmap beatmap = BeatmapLoader.load(beatmapPath);
             String fullPath = "src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/";
-            Beatmap beatmap = ManiaBeatmapParser.parse(new File(GameConfig.TEST_BEATMAP_PATH));
+            Beatmap beatmap = ManiaBeatmapParser.parse(new File(beatmapPath));
             audioManager.loadMusic(fullPath + beatmap.getAudioPath());
             gameplayLogic.loadBeatmap(beatmap);
         } catch (Exception e) {
@@ -80,4 +80,5 @@ public class GameEngine {
 
     public InputHandler getInputHandler() { return inputHandler; }
     public GameState getGameState() { return gameState; }
+    public long getCurrentTime() { return gameClock.getCurrentTime(); }
 }

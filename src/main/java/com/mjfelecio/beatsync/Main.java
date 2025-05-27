@@ -5,6 +5,7 @@ import com.mjfelecio.beatsync.core.AudioManager;
 import com.mjfelecio.beatsync.core.GameClock;
 import com.mjfelecio.beatsync.core.GameEngine;
 import com.mjfelecio.beatsync.core.Playfield;
+import com.mjfelecio.beatsync.input.InputHandler;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
 import javafx.scene.Scene;
@@ -30,7 +31,6 @@ public class Main extends Application {
 
         // Game setup
         gameEngine = new GameEngine();
-        gameEngine = new GameEngine();
         try {
             gameEngine.initialize(GameConfig.TEST_BEATMAP_PATH);
             gameEngine.start();
@@ -42,10 +42,12 @@ public class Main extends Application {
         // Load the playfield
         playfield = new Playfield(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT, gameClock);
 
-        // TODO: Create a InputHandler class for this
-        // Get inputs from the user
-        scene.setOnKeyPressed(event -> playfield.pressKey(event.getCode()));
-        scene.setOnKeyReleased(event -> playfield.releaseKey(event.getCode()));
+        // Input Setup
+        InputHandler inputHandler = gameEngine.getInputHandler();
+        scene.setOnKeyPressed(event ->
+                inputHandler.handleKeyPress(event.getCode(), gameEngine.getCurrentTime()));
+        scene.setOnKeyReleased(event ->
+                inputHandler.handleKeyRelease(event.getCode()));
 
         new AnimationTimer() {
             @Override
