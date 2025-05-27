@@ -39,9 +39,6 @@ public class Main extends Application {
             return;
         }
 
-        // Load the playfield
-        playfield = new Playfield(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT, gameClock);
-
         // Input Setup
         InputHandler inputHandler = gameEngine.getInputHandler();
         scene.setOnKeyPressed(event ->
@@ -49,13 +46,17 @@ public class Main extends Application {
         scene.setOnKeyReleased(event ->
                 inputHandler.handleKeyRelease(event.getCode()));
 
+        // Game Loop
         new AnimationTimer() {
+            private long lastTime = 0;
+
             @Override
             public void handle(long now) {
-                gc.clearRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
+                long deltaTime = now - lastTime;
+                lastTime = now;
 
-                playfield.render(gc);
-                playfield.update(gameClock.getCurrentTime());
+                gameEngine.update(deltaTime);
+                gameEngine.render(gc);
             }
         }.start();
     }
