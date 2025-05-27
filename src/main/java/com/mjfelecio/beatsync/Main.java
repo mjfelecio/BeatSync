@@ -1,10 +1,7 @@
 package com.mjfelecio.beatsync;
 
 import com.mjfelecio.beatsync.config.GameConfig;
-import com.mjfelecio.beatsync.core.AudioManager;
-import com.mjfelecio.beatsync.core.GameClock;
 import com.mjfelecio.beatsync.core.GameEngine;
-import com.mjfelecio.beatsync.core.Playfield;
 import com.mjfelecio.beatsync.input.InputHandler;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
@@ -14,8 +11,9 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public class Main extends Application {
-    private Playfield playfield;
     private GameEngine gameEngine;
 
     @Override
@@ -32,7 +30,8 @@ public class Main extends Application {
         // Game setup
         gameEngine = new GameEngine();
         try {
-            gameEngine.initialize(GameConfig.TEST_BEATMAP_PATH);
+            String beatmapOszFolderPath = new File("src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/").toURI().toString();
+            gameEngine.initialize(beatmapOszFolderPath);
             gameEngine.start();
         } catch (RuntimeException e) {
             System.err.println("Failed to start game: " + e.getMessage());
