@@ -45,11 +45,11 @@ public class Note {
 
     public double calculateY() {
         // Calculate how far through the approach time we are
-        double timeIntoApproach = currentTime - (startTime - GameConfig.HIT_LINE_Y);
+        double timeIntoApproach = currentTime - (startTime - GameConfig.NOTE_APPROACH_TIME);
         double progress = timeIntoApproach / GameConfig.NOTE_APPROACH_TIME;
 
         // Clamp progress to zero so that it doesn't generate far above the playfield
-        progress = Math.max(0.0,progress);
+        progress = Math.max(-10, progress);
 
         // Notes start at y=0 and move to hitLineY
         return progress * GameConfig.HIT_LINE_Y;
