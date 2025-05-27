@@ -1,8 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.config.GameConfig;
-import com.mjfelecio.beatsync.judgement.JudgementProcessor;
-import com.mjfelecio.beatsync.judgement.JudgementResult;
 import com.mjfelecio.beatsync.judgement.JudgementWindow;
 
 import java.util.ArrayList;
@@ -10,63 +8,12 @@ import java.util.Comparator;
 import java.util.List;
 
 public class NoteManager {
-    private List<Note> allNotes;
-    private List<Note> visibleNotes;
-    private String judgementResult;
-
-    public final int height = 700;
+    private final List<Note> allNotes;
+    private final List<Note> visibleNotes;
 
     public NoteManager(List<Note> allNotes) {
         this.allNotes = allNotes;
         this.visibleNotes = new ArrayList<>();
-    }
-
-    public void update(long timeElapsed, boolean[] isLanePressed) {
-        // Check for notes to activate
-        for (Note n : allNotes) {
-            if ((timeElapsed >= n.getStartTime() - GameConfig.NOTE_APPROACH_TIME) && !n.isMiss() && !n.isHit()) {
-                visibleNotes.add(n);
-            }
-        }
-
-        // Remove misses automatically
-//        visibleNotes.removeIf(n -> {
-//            if (JudgementProcessor.judge(n, timeElapsed) == JudgementResult.MISS) {
-//                registerScore("Miss");
-//                n.setMiss(true);
-//                return true;
-//            }
-//            return false;
-//        });
-
-        // Handle presses
-        for (int lane = 0; lane < GameConfig.NUM_LANES; lane++) {
-            if (isLanePressed[lane]) {
-                Note closestNote = null;
-                long timeDeltaToClosestNote = Long.MAX_VALUE;
-                for (Note n : visibleNotes) {
-                    if (n.getLaneNumber() != lane || n.isHit()) continue;
-                    long delta = Math.abs(timeElapsed - n.getStartTime());
-                    if (delta < timeDeltaToClosestNote && delta <= JudgementWindow.MISS.getMillis()) {
-                        timeDeltaToClosestNote = delta;
-                        closestNote = n;
-                    }
-                }
-
-                if (closestNote != null) {
-                    closestNote.setHit(true);
-                    if (timeDeltaToClosestNote <= JudgementWindow.PERFECT.getMillis()) registerScore("Perfect");
-                    else if (timeDeltaToClosestNote <= JudgementWindow.GOOD.getMillis()) registerScore("Good");
-                    else {
-                        closestNote.setMiss(true);
-                        registerScore("Miss");
-                    }
-                }
-            }
-        }
-
-        // Remove notes that have passed by the playfield
-        cullExpiredNotes(timeElapsed);
     }
 
     public void updateNotesPosition(long timeElapsed) {
@@ -112,11 +59,6 @@ public class NoteManager {
     private boolean isWithinHitWindow(Note note, long currentTime) {
         long timeDiff = Math.abs(currentTime - note.getStartTime());
         return timeDiff <= JudgementWindow.MISS.getMillis();
-    }
-
-    // TODO: Remove this later
-    public void registerScore(String score) {
-        this.judgementResult = score;
     }
 
     public List<Note> getVisibleNotes() {
