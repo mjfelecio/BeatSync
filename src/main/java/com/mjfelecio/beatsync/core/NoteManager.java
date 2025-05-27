@@ -71,15 +71,17 @@ public class NoteManager {
 
     public void updateNotesPosition(long timeElapsed) {
         allNotes.forEach(n -> n.update(timeElapsed));
-        this.visibleNotes.clear();
 
-        List<Note> visibleNotes =
-                allNotes.stream()
-                        .filter(n -> !n.isMiss() && !n.isHit())
-                        .filter(n -> timeElapsed >= n.getStartTime() - GameConfig.NOTE_APPROACH_TIME)
-                        .toList();
-
-        this.visibleNotes.addAll(visibleNotes);
+        // Add newly visible notes based on currentTime
+        for (Note note : allNotes) {
+            if (   !note.isMiss()
+                && !note.isHit()
+                && timeElapsed >= note.getStartTime() - GameConfig.NOTE_APPROACH_TIME
+                && !visibleNotes.contains(note))
+            {
+                visibleNotes.add(note);
+            }
+        }
     }
 
     public void cullExpiredNotes(long currentTime) {
