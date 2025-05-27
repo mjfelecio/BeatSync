@@ -2,7 +2,7 @@ package com.mjfelecio.beatsync.rendering;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.GameState;
-import com.mjfelecio.beatsync.core.Note;
+import com.mjfelecio.beatsync.object.Note;
 import com.mjfelecio.beatsync.input.InputState;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;

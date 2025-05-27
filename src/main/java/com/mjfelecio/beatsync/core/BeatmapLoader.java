@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.parser.obj.Beatmap;
+import com.mjfelecio.beatsync.object.Beatmap;
 
 public class BeatmapLoader {
     private Beatmap beatmap;

@@ -1,7 +1,7 @@
 package com.mjfelecio.beatsync.parser;
 
-import com.mjfelecio.beatsync.core.Note;
-import com.mjfelecio.beatsync.parser.obj.Beatmap;
+import com.mjfelecio.beatsync.object.Note;
+import com.mjfelecio.beatsync.object.Beatmap;
 
 import java.io.BufferedReader;
 import java.io.File;

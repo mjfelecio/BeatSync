@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.core;
+package com.mjfelecio.beatsync.object;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 

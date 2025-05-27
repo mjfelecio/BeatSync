@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.judgement;
 
-import com.mjfelecio.beatsync.core.Note;
+import com.mjfelecio.beatsync.object.Note;
 
 public class JudgementProcessor {
 

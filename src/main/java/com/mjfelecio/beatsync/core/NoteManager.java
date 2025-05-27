@@ -2,6 +2,7 @@ package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.judgement.JudgementWindow;
+import com.mjfelecio.beatsync.object.Note;
 
 import java.util.ArrayList;
 import java.util.Comparator;

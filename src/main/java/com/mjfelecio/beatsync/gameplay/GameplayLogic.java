@@ -2,10 +2,10 @@ package com.mjfelecio.beatsync.gameplay;
 
 import com.mjfelecio.beatsync.core.GameState;
 import com.mjfelecio.beatsync.judgement.JudgementProcessor;
-import com.mjfelecio.beatsync.core.Note;
+import com.mjfelecio.beatsync.object.Note;
 import com.mjfelecio.beatsync.core.NoteManager;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
-import com.mjfelecio.beatsync.parser.obj.Beatmap;
+import com.mjfelecio.beatsync.object.Beatmap;
 
 import java.util.List;
 
