@@ -58,9 +58,7 @@ public class PlayfieldRenderer {
         gc.setFill(Color.BLUE);
         visibleNotes.forEach(n -> {
             if (!n.isHit()) {
-//                double y = n.calculateY(gameClock.getElapsedTime(), GameConfig.NOTE_APPROACH_TIME, GameConfig.HIT_LINE_Y);
-//                double y = n.calculateY();
-                double y = 100; // Will change this later
+                double y = n.calculateY();
                 int x = calculateNoteX(n.getLaneNumber());
                 gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
             }
