@@ -15,8 +15,6 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
     private Playfield playfield;
-    private GameClock gameClock;
-    private AudioManager audioManager;
     private GameEngine gameEngine;
 
     @Override
@@ -32,8 +30,14 @@ public class Main extends Application {
 
         // Game setup
         gameEngine = new GameEngine();
-        gameEngine.loadAudioAndStartClock();
-        gameClock = gameEngine.getGameClock();
+        gameEngine = new GameEngine();
+        try {
+            gameEngine.initialize(GameConfig.TEST_BEATMAP_PATH);
+            gameEngine.start();
+        } catch (RuntimeException e) {
+            System.err.println("Failed to start game: " + e.getMessage());
+            return;
+        }
 
         // Load the playfield
         playfield = new Playfield(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT, gameClock);
@@ -49,7 +53,7 @@ public class Main extends Application {
                 gc.clearRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
 
                 playfield.render(gc);
-                playfield.update(gameClock.getElapsedTime());
+                playfield.update(gameClock.getCurrentTime());
             }
         }.start();
     }
