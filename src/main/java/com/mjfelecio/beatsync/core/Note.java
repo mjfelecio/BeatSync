@@ -42,14 +42,17 @@ public class Note {
         this.currentTime = timeElapsed;
     }
 
-
+    /**
+     * Calculates the current Y-coordinate of the note based on elapsed song time.
+     * @return Y coordinate where note should be drawn
+     */
     public double calculateY() {
         // Calculate how far through the approach time we are
         double timeIntoApproach = currentTime - (startTime - GameConfig.NOTE_APPROACH_TIME);
         double progress = timeIntoApproach / GameConfig.NOTE_APPROACH_TIME;
 
         // Clamp progress to zero so that it doesn't generate far above the playfield
-        progress = Math.max(-10, progress);
+        progress = Math.max(0, progress);
 
         // Notes start at y=0 and move to hitLineY
         return progress * GameConfig.HIT_LINE_Y;
@@ -85,25 +88,6 @@ public class Note {
 
     public void setHit(boolean hit) {
         this.hit = hit;
-    }
-
-    /**
-     * Calculates the current Y-coordinate of the note based on elapsed song time.
-     * @param elapsedMs elapsed milliseconds since song start
-     * @param approachTimeMs how early the note appears before hit
-     * @param hitLineY vertical position of the hit line
-     * @return Y coordinate where note should be drawn
-     */
-    public double calculateY(long elapsedMs, long approachTimeMs, int hitLineY) {
-        // Calculate how far through the approach time we are
-        double timeIntoApproach = elapsedMs - (startTime - approachTimeMs);
-        double progress = timeIntoApproach / approachTimeMs;
-
-        // Clamp progress to zero so that it doesn't generate far above the playfield
-        progress = Math.max(0.0,progress);
-
-        // Notes start at y=0 and move to hitLineY
-        return progress * hitLineY;
     }
 
     @Override
