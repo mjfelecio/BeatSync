@@ -63,6 +63,7 @@ public class NoteManager {
     }
 
     public List<Note> getVisibleNotes() {
-        return visibleNotes;
+        // Return a copy to prevent external modification
+        return new ArrayList<>(visibleNotes);
     }
 }
