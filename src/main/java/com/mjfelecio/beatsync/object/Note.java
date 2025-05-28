@@ -12,6 +12,7 @@ public class Note {
     private final boolean isHold;
     private boolean hit = false;
     private boolean miss = false;
+    private boolean isHeld = false;
 
     /**
      * Normal note constructor.
@@ -101,6 +102,14 @@ public class Note {
 
     public void setHit(boolean hit) {
         this.hit = hit;
+    }
+
+    public boolean isHeld() {
+        return isHeld;
+    }
+
+    public void setHeld(boolean b) {
+        this.isHeld = b;
     }
 
     @Override
