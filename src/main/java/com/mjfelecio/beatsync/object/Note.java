@@ -94,12 +94,12 @@ public class Note {
     public boolean equals(Object o) {
         if (o == null || getClass() != o.getClass()) return false;
         Note note = (Note) o;
-        return laneNumber == note.laneNumber && startTime == note.startTime && endTime == note.endTime && isHold == note.isHold;
+        return laneNumber == note.laneNumber && startTime == note.startTime;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(laneNumber, startTime, endTime, isHold);
+        return Objects.hash(laneNumber, startTime);
     }
 
     @Override
