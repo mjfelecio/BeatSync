@@ -54,6 +54,15 @@ public class NoteManager {
             if (shouldRemove && !n.isHit()) {
                 n.setMiss(true);
             }
+
+            // Sends a callback to an outside class that can listen if a note was missed
+            // due to the note being beyond the hitZone
+            if (missCallback != null && shouldRemove) {
+                if (n.isMiss()) {
+                    missCallback.onNoteMissed(n);
+                }
+            }
+
             return shouldRemove;
         });
     }

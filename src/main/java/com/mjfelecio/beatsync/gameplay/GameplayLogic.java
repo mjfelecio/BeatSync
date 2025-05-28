@@ -23,8 +23,12 @@ public class GameplayLogic {
 
     public void update(long currentTime, long deltaTime) {
         noteManager.updateNotesPosition(currentTime);
-        // Remove notes that are too far past
         noteManager.cullExpiredNotes(currentTime);
+        noteManager.setMissCallback(this::handleMissedNote);
+    }
+
+    private void handleMissedNote(Note note) {
+        processJudgement(JudgementResult.MISS);
     }
 
     public void handleLanePress(int laneNumber, long currentTime) {
