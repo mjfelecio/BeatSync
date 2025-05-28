@@ -58,6 +58,19 @@ public class Note {
         return progress * GameConfig.HIT_LINE_Y;
     }
 
+    // Gets the y of the end of the hold note
+    public double calculateHoldEndY() {
+        // Calculate how far through the approach time we are
+        double timeIntoApproach = currentTime - (endTime - GameConfig.NOTE_APPROACH_TIME);
+        double progress = timeIntoApproach / GameConfig.NOTE_APPROACH_TIME;
+
+        // Clamp progress to zero so that it doesn't generate far above the playfield
+        progress = Math.max(0, progress);
+
+        // Notes start at y=0 and move to hitLineY
+        return progress * GameConfig.HIT_LINE_Y;
+    }
+
     public int getLaneNumber() {
         return laneNumber;
     }
