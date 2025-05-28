@@ -55,17 +55,31 @@ public class PlayfieldRenderer {
 
     public void drawNotes(GraphicsContext gc, List<Note> visibleNotes) {
         // Draw notes
-        gc.setFill(Color.BLUE);
         visibleNotes.forEach(n -> {
             if (!n.isHit()) {
-                double y = n.calculateY();
-                int x = calculateNoteX(n.getLaneNumber());
-                gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
+                if (n.isHold()) {
+                    drawHoldNotes(gc, n);
+                } else {
+                    drawRegularNotes(gc, n);
+                }
             }
         });
     }
 
+    public void drawRegularNotes(GraphicsContext gc, Note n) {
+        double y = n.calculateY();
+            int x = calculateNoteX(n.getLaneNumber());
+
+            gc.setFill(Color.BLUE);
+            gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
+    }
+
+    public void drawHoldNotes(GraphicsContext gc, Note n) {
+
+    }
+
     private void drawUI(GraphicsContext gc, GameState gameState) {
+        gc.setFill(Color.BLACK);
         gc.setFont(new Font(20));
         gc.fillText("Combo: " + gameState.getCombo(), 20, 50);
         gc.setFont(new Font(30));
