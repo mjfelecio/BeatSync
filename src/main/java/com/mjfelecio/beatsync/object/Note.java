@@ -9,7 +9,7 @@ public class Note {
     private final int startTime;
     public long currentTime = 0; // Tracks the current time in the map internally
     private final int endTime; // 0 for normal notes
-    private final boolean isHold;
+    private final boolean isHoldNote;
     private boolean hit = false;
     private boolean miss = false;
     private boolean isHeld = false;
@@ -23,7 +23,7 @@ public class Note {
         this.laneNumber = laneNumber;
         this.startTime = startTime;
         this.endTime = 0;
-        this.isHold = false;
+        this.isHoldNote = false;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Note {
         this.laneNumber = laneNumber;
         this.startTime = startTime;
         this.endTime = endTime;
-        this.isHold = endTime > startTime;
+        this.isHoldNote = endTime > startTime;
     }
 
     public void update(long timeElapsed) {
@@ -80,8 +80,8 @@ public class Note {
         return startTime;
     }
 
-    public boolean isHold() {
-        return isHold;
+    public boolean isHoldNote() {
+        return isHoldNote;
     }
 
     public long getEndTime() {
@@ -126,6 +126,6 @@ public class Note {
 
     @Override
     public String toString() {
-        return isHold ? laneNumber + "," + startTime + "," + endTime : laneNumber + "," + startTime;
+        return isHoldNote ? laneNumber + "," + startTime + "," + endTime : laneNumber + "," + startTime;
     }
 }

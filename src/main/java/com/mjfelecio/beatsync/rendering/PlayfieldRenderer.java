@@ -57,7 +57,7 @@ public class PlayfieldRenderer {
         // Draw notes
         visibleNotes.forEach(n -> {
             if (!n.isHit()) {
-                if (n.isHold()) {
+                if (n.isHoldNote()) {
                     drawHoldNotes(gc, n);
                 } else {
                     drawRegularNotes(gc, n);
