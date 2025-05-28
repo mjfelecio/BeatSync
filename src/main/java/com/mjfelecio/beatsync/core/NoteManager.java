@@ -12,6 +12,16 @@ public class NoteManager {
     private final List<Note> allNotes;
     private final List<Note> visibleNotes;
 
+    public interface MissCallback {
+        void onNoteMissed(Note note);
+    }
+
+    private MissCallback missCallback;
+
+    public void setMissCallback(MissCallback missCallback) {
+        this.missCallback = missCallback;
+    }
+
     public NoteManager(List<Note> allNotes) {
         this.allNotes = allNotes;
         this.visibleNotes = new ArrayList<>();
