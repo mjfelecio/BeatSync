@@ -67,15 +67,30 @@ public class PlayfieldRenderer {
     }
 
     public void drawRegularNotes(GraphicsContext gc, Note n) {
+        int x = calculateNoteX(n.getLaneNumber());
         double y = n.calculateY();
-            int x = calculateNoteX(n.getLaneNumber());
 
-            gc.setFill(Color.BLUE);
-            gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
+        gc.setFill(Color.BLUE);
+        gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
     }
 
     public void drawHoldNotes(GraphicsContext gc, Note n) {
+        double startY = n.calculateY();
+        double endY = n.calculateHoldEndY();
 
+        // Calculate the height of the long note (Idk if this method works lol)
+        // I'm just directly using the timeDiff in milliseconds as the pixel size
+        double noteHeight = Math.abs(endY - startY);
+
+        if (startY < GameConfig.PLAYFIELD_HEIGHT) {
+            int noteWidth = GameConfig.NOTE_DIAMETER;
+            int noteX = calculateNoteX(n.getLaneNumber());
+
+            gc.setFill(Color.CORNFLOWERBLUE);
+            gc.fillRoundRect(noteX, endY + noteWidth, noteWidth, noteHeight, noteWidth, noteWidth);
+            gc.setFill(Color.BLUE);
+            gc.fillOval(noteX, startY, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
+        }
     }
 
     private void drawUI(GraphicsContext gc, GameState gameState) {
