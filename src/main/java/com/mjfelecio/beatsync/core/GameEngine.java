@@ -29,7 +29,7 @@ public class GameEngine {
     public void initialize(String beatmapOszFolderPath) {
         try {
             // Load beatmap and audio
-            Beatmap beatmap = ManiaBeatmapParser.parse(new File("/home/kirbysmashyeet/IdeaProjects/School/BeatSync/src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/TrySail - Utsuroi (Short Ver.) (Scotty) [Easy].osu"));
+            Beatmap beatmap = ManiaBeatmapParser.parse(new File("/home/kirbysmashyeet/IdeaProjects/School/BeatSync/src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/TrySail - Utsuroi (Short Ver.) (Scotty) [Normal].osu"));
             gameplayLogic.loadBeatmap(beatmap);
 
             String audio = new File("/home/kirbysmashyeet/IdeaProjects/School/BeatSync/src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/audio.mp3").toURI().toString();
