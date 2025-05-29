@@ -39,8 +39,7 @@ public class NoteManager {
         for (Note note : allNotes) {
             if (   !note.isMiss()
                 && !note.isHit()
-                && (timeElapsed >= note.getStartTime() - GameConfig.NOTE_APPROACH_TIME - DELAY_MS
-                || timeElapsed >= note.getEndTime() - GameConfig.NOTE_APPROACH_TIME - DELAY_MS)
+                && timeElapsed >= note.getStartTime() - GameConfig.NOTE_APPROACH_TIME - DELAY_MS
                 && !visibleNotes.contains(note))
             {
                 visibleNotes.add(note);
