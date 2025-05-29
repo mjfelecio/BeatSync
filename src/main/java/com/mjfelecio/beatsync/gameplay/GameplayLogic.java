@@ -34,10 +34,22 @@ public class GameplayLogic {
     public void handleLanePress(int laneNumber, long currentTime) {
         Note hitNote = noteManager.getHittableNote(laneNumber, currentTime);
         if (hitNote != null) {
-            JudgementResult judgement = JudgementProcessor.judge(hitNote, currentTime);
-            processJudgement(judgement);
-            hitNote.setHit(true);
+            if (hitNote.isHoldNote()) {
+                handleNotePress(hitNote, currentTime); // Temporary
+            } else {
+                handleNotePress(hitNote, currentTime);
+            }
         }
+    }
+
+    private void handleNotePress(Note note, long currentTime) {
+        JudgementResult judgement = JudgementProcessor.judge(note, currentTime);
+        processJudgement(judgement);
+        note.setHit(true);
+    }
+
+    private void handleHoldNotePress(Note note, long currentTime) {
+
     }
 
     private void processJudgement(JudgementResult judgementResult) {
