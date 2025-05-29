@@ -22,7 +22,7 @@ public class GameplayLogic {
     }
 
     public void update(long currentTime, long deltaTime) {
-        noteManager.updateNotesPosition(currentTime);
+        noteManager.updateVisibleNotes(currentTime);
         noteManager.cullExpiredNotes(currentTime);
         noteManager.setMissCallback(this::handleMissedNote);
     }

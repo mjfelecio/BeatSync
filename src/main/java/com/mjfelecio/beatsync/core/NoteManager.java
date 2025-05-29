@@ -27,7 +27,7 @@ public class NoteManager {
         this.visibleNotes = new ArrayList<>();
     }
 
-    public void updateNotesPosition(long timeElapsed) {
+    public void updateVisibleNotes(long timeElapsed) {
         allNotes.forEach(n -> n.update(timeElapsed));
 
         // Add newly visible notes based on currentTime
