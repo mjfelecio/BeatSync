@@ -84,13 +84,24 @@ public class PlayfieldRenderer {
             int noteWidth = GameConfig.NOTE_DIAMETER;
             int noteX = calculateNoteX(n.getLaneNumber());
 
-            gc.setFill(n.isHeld() ? Color.CADETBLUE : Color.CORNFLOWERBLUE);
+            Color holdColor = n.isHeld() ? Color.CADETBLUE : Color.CORNFLOWERBLUE;
+            Color noteColor = n.isHeld() ? Color.CORNFLOWERBLUE : Color.BLUE;
 
-            gc.fillRoundRect(noteX, endY + noteWidth, noteWidth, noteHeight, noteWidth, noteWidth);
+            if (!n.isHeld()) {
+                gc.setFill(holdColor);
+                gc.fillRoundRect(noteX, endY + noteWidth, noteWidth, noteHeight, noteWidth, noteWidth);
+                gc.setFill(noteColor);
+                gc.fillOval(noteX, startY, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
+            } else {
+                // This makes it so that if the note is held, it doesn't extend beyond the hitline
+                double noteHeightTillHitLine = GameConfig.HIT_LINE_Y - endY;
 
-            gc.setFill(n.isHeld() ? Color.CORNFLOWERBLUE : Color.BLUE);
+                gc.setFill(holdColor);
+                gc.fillRoundRect(noteX, endY + noteWidth, noteWidth, noteHeightTillHitLine, noteWidth, noteWidth);
+                gc.setFill(noteColor);
+                gc.fillOval(noteX, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
+            }
 
-            gc.fillOval(noteX, startY, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
         }
     }
 
