@@ -1,7 +1,9 @@
 package com.mjfelecio.beatsync.gameplay;
 
+import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.GameState;
 import com.mjfelecio.beatsync.judgement.JudgementProcessor;
+import com.mjfelecio.beatsync.judgement.JudgementWindow;
 import com.mjfelecio.beatsync.object.Note;
 import com.mjfelecio.beatsync.core.NoteManager;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
@@ -33,23 +35,35 @@ public class GameplayLogic {
 
     public void handleLanePress(int laneNumber, long currentTime) {
         Note hitNote = noteManager.getHittableNote(laneNumber, currentTime);
+
         if (hitNote != null) {
-            if (hitNote.isHoldNote()) {
-                handleNotePress(hitNote, currentTime); // Temporary
+            JudgementResult judgement = JudgementProcessor.judge(hitNote.getStartTime(), currentTime);
+            processJudgement(judgement);
+
+            if (judgement == JudgementResult.MISS) {
+                hitNote.setMiss(true);
+            } else if (hitNote.isHoldNote()) {
+                hitNote.setHeld(true);
             } else {
-                handleNotePress(hitNote, currentTime);
+                hitNote.setHit(true);
             }
         }
     }
 
-    private void handleNotePress(Note note, long currentTime) {
-        JudgementResult judgement = JudgementProcessor.judge(note, currentTime);
-        processJudgement(judgement);
-        note.setHit(true);
-    }
+    public void handleLaneRelease(int laneNumber, long currentTime) {
+        Note note = noteManager.getHittableHeldNote(laneNumber, currentTime);
 
-    private void handleHoldNotePress(Note note, long currentTime) {
+        if (note != null && note.isHeld()) {
+            note.setHeld(false);
+            JudgementResult tailJudgement = JudgementProcessor.judge(note.getEndTime(), currentTime);
+            processJudgement(tailJudgement);
 
+            if (tailJudgement == JudgementResult.MISS) {
+                note.setMiss(true);
+            } else {
+                note.setHit(true);
+            }
+        }
     }
 
     private void processJudgement(JudgementResult judgementResult) {
