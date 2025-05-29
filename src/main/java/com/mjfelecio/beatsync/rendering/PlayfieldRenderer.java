@@ -84,9 +84,12 @@ public class PlayfieldRenderer {
             int noteWidth = GameConfig.NOTE_DIAMETER;
             int noteX = calculateNoteX(n.getLaneNumber());
 
-            gc.setFill(Color.CORNFLOWERBLUE);
+            gc.setFill(n.isHeld() ? Color.CADETBLUE : Color.CORNFLOWERBLUE);
+
             gc.fillRoundRect(noteX, endY + noteWidth, noteWidth, noteHeight, noteWidth, noteWidth);
-            gc.setFill(Color.BLUE);
+
+            gc.setFill(n.isHeld() ? Color.CORNFLOWERBLUE : Color.BLUE);
+
             gc.fillOval(noteX, startY, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
         }
     }
