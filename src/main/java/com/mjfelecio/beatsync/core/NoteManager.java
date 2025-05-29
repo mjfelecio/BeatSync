@@ -49,6 +49,10 @@ public class NoteManager {
 
     public void cullExpiredNotes(long currentTime) {
         visibleNotes.removeIf(n -> {
+            if (n.isMiss()) {
+                return true;
+            }
+
             final int MISS_WINDOW_MS = JudgementWindow.MISS.getMillis();
             // Arbitrary delay to allow the note to move below the playfield before removing it
             final int REMOVAL_DELAY_MS = 100;
@@ -59,19 +63,22 @@ public class NoteManager {
             long timeSinceNote = currentTime - noteTime;
             boolean shouldRemove = timeSinceNote > (MISS_WINDOW_MS + REMOVAL_DELAY_MS);
 
-            if (shouldRemove && !n.isHit()) {
-                n.setMiss(true);
+            // For hold notes, if the player is still holding, we don't want to cull yet
+            if (n.isHoldNote() && n.isHeld()) {
+                return false;
             }
 
-            // Sends a callback to an outside class that can listen if a note was missed
-            // due to the note being beyond the hitZone
-            if (missCallback != null && shouldRemove) {
-                if (n.isMiss()) {
+            // If it's time to remove it, and it hasn't been hit/held, mark a miss
+            if (shouldRemove && !n.isHit() && !n.isHeld()) {
+                n.setMiss(true);
+                if (missCallback != null) {
                     missCallback.onNoteMissed(n);
                 }
+                return true;
             }
 
-            return shouldRemove;
+            // Otherwise, only remove it if we've already judged it (hit or miss) and we're past the window
+            return shouldRemove && (n.isHit() || n.isMiss());
         });
     }
 
@@ -87,6 +94,14 @@ public class NoteManager {
     private boolean isWithinHitWindow(Note note, long currentTime) {
         long timeDiff = Math.abs(currentTime - note.getStartTime());
         return timeDiff <= JudgementWindow.MISS.getMillis();
+    }
+
+    public Note getHittableHeldNote(int laneNumber, long currentTime) {
+        return visibleNotes.stream()
+                .filter(n -> n.getLaneNumber() == laneNumber)
+                .filter(Note::isHeld)
+                .min(Comparator.comparingLong(n -> Math.abs(currentTime - n.getEndTime())))
+                .orElse(null);
     }
 
     public List<Note> getVisibleNotes() {
