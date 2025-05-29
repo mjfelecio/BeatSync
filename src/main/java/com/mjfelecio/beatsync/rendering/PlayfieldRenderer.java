@@ -80,7 +80,7 @@ public class PlayfieldRenderer {
 
         double noteHeight = Math.abs(endY - startY);
 
-        if (startY < GameConfig.PLAYFIELD_HEIGHT) {
+        if (endY < GameConfig.PLAYFIELD_HEIGHT) {
             int noteWidth = GameConfig.NOTE_DIAMETER;
             int noteX = calculateNoteX(n.getLaneNumber());
 
