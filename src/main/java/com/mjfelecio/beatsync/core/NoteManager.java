@@ -30,11 +30,16 @@ public class NoteManager {
     public void updateVisibleNotes(long timeElapsed) {
         allNotes.forEach(n -> n.update(timeElapsed));
 
+        // Delay to make sure that the notes get added to the visibleNotes earlier.
+        // This makes sure that they don't suddenly pop out at y = 0 and actually
+        // fall from above the playfield
+        int DELAY_MS = 100;
+
         // Add newly visible notes based on currentTime
         for (Note note : allNotes) {
             if (   !note.isMiss()
                 && !note.isHit()
-                && timeElapsed >= note.getStartTime() - GameConfig.NOTE_APPROACH_TIME
+                && timeElapsed >= note.getStartTime() - GameConfig.NOTE_APPROACH_TIME - DELAY_MS
                 && !visibleNotes.contains(note))
             {
                 visibleNotes.add(note);
