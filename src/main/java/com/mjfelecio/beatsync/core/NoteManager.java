@@ -53,7 +53,10 @@ public class NoteManager {
             // Arbitrary delay to allow the note to move below the playfield before removing it
             final int REMOVAL_DELAY_MS = 100;
 
-            long timeSinceNote = currentTime - n.getStartTime();
+            // If it's a hold note, we should only cull it if the tail of the note has passed the playfield
+            long noteTime = n.isHoldNote() ? n.getEndTime() : n.getStartTime();
+
+            long timeSinceNote = currentTime - noteTime;
             boolean shouldRemove = timeSinceNote > (MISS_WINDOW_MS + REMOVAL_DELAY_MS);
 
             if (shouldRemove && !n.isHit()) {
