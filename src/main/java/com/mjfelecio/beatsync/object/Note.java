@@ -52,8 +52,9 @@ public class Note {
         double timeIntoApproach = currentTime - (startTime - GameConfig.NOTE_APPROACH_TIME);
         double progress = timeIntoApproach / GameConfig.NOTE_APPROACH_TIME;
 
-        // Clamp progress to zero so that it doesn't generate far above the playfield
-        progress = Math.max(0, progress);
+        // Clamp progress to -GameConfig.NOTE_DIAMETER so that it looks like it came from above
+        // and not just pop out of nowhere
+        progress = Math.max(-GameConfig.NOTE_DIAMETER, progress);
 
         // Notes start at y=0 and move to hitLineY
         return progress * GameConfig.HIT_LINE_Y;
@@ -65,8 +66,9 @@ public class Note {
         double timeIntoApproach = currentTime - (endTime - GameConfig.NOTE_APPROACH_TIME);
         double progress = timeIntoApproach / GameConfig.NOTE_APPROACH_TIME;
 
-        // Clamp progress to zero so that it doesn't generate far above the playfield
-        progress = Math.max(-50, progress);
+        // Clamp progress to -GameConfig.NOTE_DIAMETER so that it looks like it came from above
+        // and not just pop out of nowhere
+        progress = Math.max(-GameConfig.NOTE_DIAMETER, progress);
 
         // Notes start at y=0 and move to hitLineY
         return progress * GameConfig.HIT_LINE_Y;
