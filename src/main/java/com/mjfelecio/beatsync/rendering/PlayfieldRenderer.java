@@ -78,8 +78,6 @@ public class PlayfieldRenderer {
         double startY = n.calculateY();
         double endY = n.calculateHoldEndY();
 
-        // Calculate the height of the long note (Idk if this method works lol)
-        // I'm just directly using the timeDiff in milliseconds as the pixel size
         double noteHeight = Math.abs(endY - startY);
 
         if (startY < GameConfig.PLAYFIELD_HEIGHT) {
