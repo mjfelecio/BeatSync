@@ -55,7 +55,7 @@ public class GameplayLogic {
 
         if (note != null && note.isHeld()) {
             note.setHeld(false);
-            JudgementResult tailJudgement = JudgementProcessor.judge(note.getEndTime(), currentTime);
+            JudgementResult tailJudgement = JudgementProcessor.judgeTail(note.getEndTime(), currentTime);
             processJudgement(tailJudgement);
 
             if (tailJudgement == JudgementResult.MISS) {

@@ -18,4 +18,15 @@ public class JudgementProcessor {
 
         return judgementResult;
     }
+
+    public static JudgementResult judgeTail(long noteTime, long currentTime) {
+        JudgementResult judgementResult;
+        long deltaTime = Math.abs(currentTime - noteTime);
+
+        if (deltaTime <= JudgementWindow.PERFECT_TAIL.getMillis()) judgementResult = JudgementResult.PERFECT;
+        else if (deltaTime <= JudgementWindow.GOOD_TAIL.getMillis()) judgementResult = JudgementResult.GOOD ;
+        else judgementResult = JudgementResult.MISS;
+
+        return judgementResult;
+    }
 }
