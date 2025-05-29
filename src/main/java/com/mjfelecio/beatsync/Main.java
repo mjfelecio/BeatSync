@@ -43,7 +43,7 @@ public class Main extends Application {
         scene.setOnKeyPressed(event ->
                 inputHandler.handleKeyPress(event.getCode(), gameEngine.getCurrentTime()));
         scene.setOnKeyReleased(event ->
-                inputHandler.handleKeyRelease(event.getCode()));
+                inputHandler.handleKeyRelease(event.getCode(), gameEngine.getCurrentTime()));
 
         // Game Loop
         new AnimationTimer() {

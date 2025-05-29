@@ -25,10 +25,11 @@ public class InputHandler {
         }
     }
 
-    public void handleKeyRelease(KeyCode keyCode) {
+    public void handleKeyRelease(KeyCode keyCode, long currentTime) {
         Integer lane = keyToLaneMap.get(keyCode);
         if (lane != null) {
             inputState.releaseLane(lane);
+            gameplayLogic.handleLaneRelease(lane, currentTime);
         }
     }
 
