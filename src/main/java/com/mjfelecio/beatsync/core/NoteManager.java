@@ -49,10 +49,6 @@ public class NoteManager {
 
     public void cullExpiredNotes(long currentTime) {
         visibleNotes.removeIf(n -> {
-            if (n.isMiss()) {
-                return true;
-            }
-
             final int MISS_WINDOW_MS = JudgementWindow.MISS.getMillis();
             // Arbitrary delay to allow the note to move below the playfield before removing it
             final int REMOVAL_DELAY_MS = 100;
