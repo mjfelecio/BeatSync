@@ -1,24 +1,13 @@
 package com.mjfelecio.beatsync;
 
 import com.mjfelecio.beatsync.config.GameConfig;
-import com.mjfelecio.beatsync.core.GameEngine;
 import com.mjfelecio.beatsync.state.GameState;
-import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.core.SceneManager;
-import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
-import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
-import java.io.File;
-import java.io.IOException;
-
 public class Main extends Application {
-    private GameEngine gameEngine;
 
     @Override
     public void start(Stage stage) throws IOException {
