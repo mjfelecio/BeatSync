@@ -5,17 +5,22 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class SceneManager {
+public class SceneManager implements SceneChangeListener {
     private static SceneManager instance;
     private final int width;
     private final int height;
     private final GameState gameState;
+    private final Stage primaryStage; // This contains the original stage (window) for the game
     private Scene currentScene;
 
     private SceneManager(int width, int height, Stage primaryStage) {
         this.width = width;
         this.height = height;
+        this.primaryStage = primaryStage;
         this.gameState = GameState.getInstance();
+
+        // Register this SceneManager as a listener to GameState changes
+        this.gameState.addSceneChangeListener(this);
     }
 
     public static void initialize(int width, int height, Stage primaryStage) {
@@ -35,8 +40,17 @@ public class SceneManager {
         return currentScene;
     }
 
-    public void setCurrentScene(GameScene gameScene) {
-        this.currentScene = getSceneFromGameScene(gameScene);
+    @Override
+    public void onSceneChange(GameScene oldScene, GameScene newScene) {
+        if (newScene != null) {
+            Scene scene = getSceneFromGameScene(newScene);
+            this.currentScene = scene;
+
+            // Automatically update the primary stage with the new scene
+            if (primaryStage != null) {
+                primaryStage.setScene(scene);
+            }
+        }
     }
 
     public Scene getSceneFromGameScene(GameScene gameScene) {
@@ -59,6 +73,10 @@ public class SceneManager {
                 case RESULT_SCREEN -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/result_screen.fxml"));
                     return new Scene(loader.load(), width, height);
+                }
+                default -> {
+                    System.out.println("Unknown scene: " + gameScene + ". Returning current scene.");
+                    return getCurrentScene();
                 }
             }
         } catch (Exception e) {
