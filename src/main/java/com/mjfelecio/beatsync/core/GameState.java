@@ -1,10 +1,15 @@
 package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.rendering.GameScene;
+import com.mjfelecio.beatsync.rendering.SceneChangeListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameState {
     private static final GameState instance = new GameState();
     private GameScene currentScene;
+    private List<SceneChangeListener> listeners = new ArrayList<>();
 
     private GameState() {}
 
@@ -17,8 +22,26 @@ public class GameState {
     }
 
     public void setCurrentScene(GameScene currentScene) {
+        GameScene oldScene = this.currentScene;
         this.currentScene = currentScene;
 
+        // Notify all listeners about the scene change
+        notifySceneChange(oldScene, currentScene);
+    }
+
+    // Method to register listeners
+    public void addSceneChangeListener(SceneChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeSceneChangeListener(SceneChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifySceneChange(GameScene oldScene, GameScene newScene) {
+        for (SceneChangeListener listener : listeners) {
+            listener.onSceneChange(oldScene, newScene);
+        }
     }
 
     private int combo = 0;
