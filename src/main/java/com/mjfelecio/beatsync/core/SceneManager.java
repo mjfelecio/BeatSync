@@ -1,6 +1,8 @@
-package com.mjfelecio.beatsync.rendering;
+package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.core.GameState;
+import com.mjfelecio.beatsync.rendering.GameScene;
+import com.mjfelecio.beatsync.rendering.SceneChangeListener;
+import com.mjfelecio.beatsync.state.GameState;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

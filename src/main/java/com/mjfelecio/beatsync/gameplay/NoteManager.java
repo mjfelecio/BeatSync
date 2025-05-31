@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.core;
+package com.mjfelecio.beatsync.gameplay;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.judgement.JudgementWindow;

@@ -2,13 +2,12 @@ package com.mjfelecio.beatsync;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.GameEngine;
-import com.mjfelecio.beatsync.core.GameState;
+import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.rendering.GameScene;
-import com.mjfelecio.beatsync.rendering.SceneManager;
+import com.mjfelecio.beatsync.core.SceneManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;

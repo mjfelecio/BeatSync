@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.core;
+package com.mjfelecio.beatsync.parser;
 
 import com.mjfelecio.beatsync.object.Beatmap;
 

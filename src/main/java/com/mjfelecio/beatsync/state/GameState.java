@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.core;
+package com.mjfelecio.beatsync.state;
 
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.SceneChangeListener;

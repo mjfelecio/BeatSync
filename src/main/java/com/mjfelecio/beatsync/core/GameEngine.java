@@ -5,6 +5,7 @@ import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.parser.ManiaBeatmapParser;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
+import com.mjfelecio.beatsync.state.GameState;
 import javafx.scene.canvas.GraphicsContext;
 
 import java.io.File;

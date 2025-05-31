@@ -10,4 +10,7 @@ module com.mjfelecio.beatsync {
     exports com.mjfelecio.beatsync.input;
     exports com.mjfelecio.beatsync.gameplay;
     exports com.mjfelecio.beatsync.object;
+    exports com.mjfelecio.beatsync.parser;
+    exports com.mjfelecio.beatsync.state;
+    exports com.mjfelecio.beatsync.rendering;
 }
