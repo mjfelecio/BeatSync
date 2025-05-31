@@ -1,6 +1,14 @@
 package com.mjfelecio.beatsync.core;
 
 public class GameState {
+    private static final GameState instance = new GameState();
+
+    private GameState() {}
+
+    public static GameState getInstance() {
+        return instance;
+    }
+
     private int combo = 0;
     private long score = 0;
     private String lastJudgement = "";
