@@ -7,6 +7,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.File;
+
 public class SceneManager implements SceneChangeListener {
     private static SceneManager instance;
     private final int width;
@@ -71,6 +73,18 @@ public class SceneManager implements SceneChangeListener {
                 case SETTINGS -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/settings.fxml"));
                     return new Scene(loader.load(), width, height);
+                }
+                case GAMEPLAY -> {
+                    GameplayManager gameplayManager = GameplayManager.getInstance();
+                    String beatmapPath = "/home/kirbysmashyeet/IdeaProjects/School/BeatSync/src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/TrySail - Utsuroi (Short Ver.) (Scotty) [Easy].osu";
+                    String audioPath = new File("/home/kirbysmashyeet/IdeaProjects/School/BeatSync/src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/audio.mp3").toURI().toString();
+
+                    gameplayManager.loadBeatmap(beatmapPath, audioPath);
+
+                    gameplayManager.initializeGameplay();
+                    gameplayManager.startGameplay();
+
+                    return gameplayManager.getGameplayScene();
                 }
                 case RESULT_SCREEN -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/result_screen.fxml"));
