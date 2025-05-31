@@ -11,6 +11,8 @@ import javafx.scene.canvas.GraphicsContext;
 import java.io.File;
 
 public class GameEngine {
+    private static GameEngine instance;
+
     private final GameState gameState;
     private final GameClock gameClock;
     private final AudioManager audioManager;
@@ -18,13 +20,20 @@ public class GameEngine {
     private final GameplayLogic gameplayLogic;
     private final InputHandler inputHandler;
 
-    public GameEngine() {
+    private GameEngine() {
         this.gameState = GameState.getInstance();
         this.gameClock = new GameClock();
         this.audioManager = new AudioManager();
         this.renderer = new PlayfieldRenderer();
         this.gameplayLogic = new GameplayLogic(gameState);
         this.inputHandler = new InputHandler(gameplayLogic);
+    }
+
+    public static GameEngine getInstance() {
+        if (instance == null) {
+            instance = new GameEngine();
+        }
+        return instance;
     }
 
     public void initialize(String beatmapOszFolderPath) {
