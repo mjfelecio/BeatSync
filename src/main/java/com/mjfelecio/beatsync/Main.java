@@ -2,9 +2,13 @@ package com.mjfelecio.beatsync;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.GameEngine;
+import com.mjfelecio.beatsync.core.GameState;
 import com.mjfelecio.beatsync.input.InputHandler;
+import com.mjfelecio.beatsync.rendering.GameScene;
+import com.mjfelecio.beatsync.rendering.SceneManager;
 import javafx.animation.AnimationTimer;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -12,18 +16,23 @@ import javafx.scene.layout.StackPane;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Main extends Application {
     private GameEngine gameEngine;
 
     @Override
-    public void start(Stage stage) {
+    public void start(Stage stage) throws IOException {
         // UI setup
         Canvas canvas = new Canvas(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
         GraphicsContext gc = canvas.getGraphicsContext2D();
 
+        SceneManager.initialize(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT, stage);
+
+        GameState.getInstance().setCurrentScene(GameScene.TITLE_SCREEN);
+
         Scene scene = new Scene(new StackPane(canvas), GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
-        stage.setScene(scene);
+
         stage.setTitle("Beat Sync: VSRG made with Java");
         stage.show();
 
