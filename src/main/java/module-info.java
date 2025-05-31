@@ -1,7 +1,6 @@
 module com.mjfelecio.beatsync {
     requires javafx.controls;
     requires javafx.media;
-    requires OsuBeatmapStudio;
     requires javafx.fxml;
 
     exports com.mjfelecio.beatsync;
