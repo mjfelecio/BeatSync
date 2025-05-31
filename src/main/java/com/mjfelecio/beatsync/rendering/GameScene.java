@@ -4,5 +4,7 @@ public enum GameScene {
     TITLE_SCREEN,
     SONG_SELECT,
     SETTINGS,
+    GAMEPLAY,
+    PAUSE_OVERLAY,
     RESULT_SCREEN
 }
