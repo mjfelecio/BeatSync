@@ -1,12 +1,24 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.rendering.GameScene;
+
 public class GameState {
     private static final GameState instance = new GameState();
+    private GameScene currentScene;
 
     private GameState() {}
 
     public static GameState getInstance() {
         return instance;
+    }
+
+    public GameScene getCurrentScene() {
+        return currentScene;
+    }
+
+    public void setCurrentScene(GameScene currentScene) {
+        this.currentScene = currentScene;
+
     }
 
     private int combo = 0;
