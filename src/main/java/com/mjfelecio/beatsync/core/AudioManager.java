@@ -27,6 +27,10 @@ public class AudioManager {
         }
     }
 
+    public void resume() {
+        play();
+    }
+
     public void pause() {
         if (player != null) {
             player.pause();
