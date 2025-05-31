@@ -84,8 +84,10 @@ public class PlayfieldRenderer {
             int noteWidth = GameConfig.NOTE_DIAMETER;
             int noteX = calculateNoteX(n.getLaneNumber());
 
-            Color holdColor = n.isHeld() ? Color.CADETBLUE : Color.CORNFLOWERBLUE;
-            Color noteColor = n.isHeld() ? Color.CORNFLOWERBLUE : Color.BLUE;
+            // If the note has been missed already, color it differently
+            // (This applies more to hold notes so it doesn't just flash colors)
+            Color holdColor = n.isHeld() || n.isMiss() ? Color.CADETBLUE : Color.CORNFLOWERBLUE;
+            Color noteColor = n.isHeld() || n.isMiss() ? Color.CORNFLOWERBLUE : Color.BLUE;
 
             if (!n.isHeld()) {
                 gc.setFill(holdColor);
