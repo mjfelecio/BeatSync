@@ -1,6 +1,8 @@
 package com.mjfelecio.beatsync.parser;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,7 +19,7 @@ public class BeatmapParser {
      *  - audioPath (first .mp3 found)
      *  - imagePath (first .jpg/.png/.jpeg found)
      *  - a List<Difficulty> (one Difficulty per .osu file, via DifficultyParser.parse)
-     *  - title, artist, creator (placeholder stubs for now)
+     *  - title, artist, creator (from the first .osu file’s [Metadata] section)
      *
      * @param beatmapFolder directory corresponding to an extracted .osz archive
      * @return Beatmap
@@ -58,11 +60,11 @@ public class BeatmapParser {
                     Difficulty diff = DifficultyParser.parse(f);
                     difficulties.add(diff);
 
-                    // For now, just pick up placeholder metadata from the first .osu file seen
+                    // Extract metadata (title, artist, creator) from the first .osu we encounter
                     if (beatmap.getTitle() == null) {
-                        beatmap.setTitle(extractTitlePlaceholder(f));
-                        beatmap.setArtist(extractArtistPlaceholder(f));
-                        beatmap.setCreator(extractCreatorPlaceholder(f));
+                        beatmap.setTitle(extractMetadataField(f, "Title"));
+                        beatmap.setArtist(extractMetadataField(f, "Artist"));
+                        beatmap.setCreator(extractMetadataField(f, "Creator"));
                     }
                 }
             }
@@ -74,18 +76,45 @@ public class BeatmapParser {
         return beatmap;
     }
 
-    private static String extractTitlePlaceholder(File osuFile) {
-        // TODO: open osuFile, read “[Metadata]” section, extract “Title: …”
-        return "";
-    }
+    /**
+     * Reads the given .osu file and returns the value of the specified metadata key
+     * (e.g., "Title", "Artist", or "Creator") from its [Metadata] section.
+     *
+     * @param osuFile   the .osu file to read
+     * @param fieldName the metadata key to extract (exactly as it appears, e.g., "Title")
+     * @return the metadata value, or an empty string if not found
+     * @throws IOException if reading the file fails
+     */
+    private static String extractMetadataField(File osuFile, String fieldName) throws IOException {
+        try (BufferedReader reader = new BufferedReader(new FileReader(osuFile))) {
+            String line;
+            boolean inMetadataSection = false;
+            String prefix = fieldName + ":";
 
-    private static String extractArtistPlaceholder(File osuFile) {
-        // TODO: open osuFile, read “[Metadata]” section, extract “Artist: …”
-        return "";
-    }
+            while ((line = reader.readLine()) != null) {
+                line = line.trim();
 
-    private static String extractCreatorPlaceholder(File osuFile) {
-        // TODO: open osuFile, read “[Metadata]” section, extract “Creator: …”
+                if (!inMetadataSection) {
+                    if (line.equalsIgnoreCase("[Metadata]")) {
+                        inMetadataSection = true;
+                    }
+                    continue;
+                }
+
+                // If we've reached another section, stop looking
+                if (line.startsWith("[") && line.endsWith("]") && !line.equalsIgnoreCase("[Metadata]")) {
+                    break;
+                }
+
+                if (line.startsWith(prefix)) {
+                    // Extract everything after "FieldName:" (skip any leading whitespace)
+                    String value = line.substring(prefix.length()).trim();
+                    return value;
+                }
+            }
+        }
+
+        // Return empty if the field wasn't found
         return "";
     }
 }
