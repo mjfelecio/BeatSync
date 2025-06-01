@@ -1,7 +1,7 @@
 package com.mjfelecio.beatsync.parser;
 
+import com.mjfelecio.beatsync.object.Difficulty;
 import com.mjfelecio.beatsync.object.Note;
-import com.mjfelecio.beatsync.object.Beatmap;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -46,8 +46,8 @@ public class DifficultyParser {
         HIT_OBJECTS
     }
 
-    public static Beatmap parse(File file) throws IOException {
-        Beatmap beatmap = new Beatmap();
+    public static Difficulty parse(File file) throws IOException {
+        Difficulty difficulty = new Difficulty();
         Section section = Section.NONE;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -60,44 +60,34 @@ public class DifficultyParser {
 
                 // Section headers
                 if (line.startsWith("[") && line.endsWith("]")) {
-                    switch (line) {
-                        case "[General]": section = Section.GENERAL; break;
-                        case "[Metadata]": section = Section.METADATA; break;
-                        case "[Difficulty]": section = Section.DIFFICULTY; break;
-                        case "[Events]": section = Section.EVENTS; break;
-                        case "[TimingPoints]": section = Section.TIMING_POINTS; break;
-                        case "[HitObjects]": section = Section.HIT_OBJECTS; break;
-                        default: section = Section.NONE;
-                    }
+                    section = switch (line) {
+                        case "[General]" -> Section.GENERAL;
+                        case "[Metadata]" -> Section.METADATA;
+                        case "[Difficulty]" -> Section.DIFFICULTY;
+                        case "[Events]" -> Section.EVENTS;
+                        case "[TimingPoints]" -> Section.TIMING_POINTS;
+                        case "[HitObjects]" -> Section.HIT_OBJECTS;
+                        default -> Section.NONE;
+                    };
                     continue;
                 }
 
-                // General
-                if (section == Section.GENERAL) parseGeneral(beatmap, line);
-
                 // Metadata
-                if (section == Section.METADATA) parseMetaData(beatmap, line);
+                if (section == Section.METADATA) parseMetaData(difficulty, line);
 
                 // HitObjects
-                if (section == Section.HIT_OBJECTS) parseHitObjects(beatmap, line);
+                if (section == Section.HIT_OBJECTS) parseHitObjects(difficulty, line);
             }
         }
 
-        return beatmap;
+        return difficulty;
     }
 
-    private static void parseGeneral(Beatmap beatmap, String line) {
-        if (line.startsWith("AudioFilename:")) beatmap.setAudioPath(line.substring(14).trim());
+    private static void parseMetaData(Difficulty difficulty, String line) {
+        if (line.startsWith("Title:")) difficulty.setTitle(line.substring(6).trim());
     }
 
-    private static void parseMetaData(Beatmap beatmap, String line) {
-        if (line.startsWith("Title:")) beatmap.setTitle(line.substring(6).trim());
-        if (line.startsWith("Artist:")) beatmap.setArtist(line.substring(7).trim());
-        if (line.startsWith("Version:")) beatmap.setVersion(line.substring(8).trim());
-        if (line.startsWith("Creator:")) beatmap.setCreator(line.substring(8).trim());
-    }
-
-    private static void parseHitObjects(Beatmap beatmap, String line) {
+    private static void parseHitObjects(Difficulty difficulty, String line) {
         String[] parts = line.split(",");
         if (parts.length < 5) return;
 
@@ -111,7 +101,7 @@ public class DifficultyParser {
             int laneNumber = getLaneNumber(x);
             Integer endTime = getEndTime(type, parts);
 
-            beatmap.addNote(endTime == null ? new Note(laneNumber, time) : new Note(laneNumber, time, endTime));
+            difficulty.addNote(endTime == null ? new Note(laneNumber, time) : new Note(laneNumber, time, endTime));
         } catch (NumberFormatException e) {
             System.err.println("Invalid number: " + e.getMessage());
         }
