@@ -35,7 +35,7 @@ import java.io.IOException;
     [HitObjects] - ALL
     * */
 
-public class ManiaBeatmapParser {
+public class DifficultyParser {
     private enum Section {
         NONE,
         GENERAL,
