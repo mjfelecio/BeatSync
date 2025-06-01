@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.gameplay;
 
+import com.mjfelecio.beatsync.object.Difficulty;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.judgement.JudgementProcessor;
 import com.mjfelecio.beatsync.object.Note;
@@ -16,8 +17,8 @@ public class GameplayLogic {
         this.gameState = gameState;
     }
 
-    public void loadBeatmap(Beatmap beatmap) {
-        this.noteManager = new NoteManager(beatmap.getNotes());
+    public void loadBeatmap(Difficulty difficulty) {
+        this.noteManager = new NoteManager(difficulty.getNotes());
     }
 
     public void update(long currentTime, long deltaTime) {
