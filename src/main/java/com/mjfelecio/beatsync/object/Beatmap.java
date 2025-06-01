@@ -1,15 +1,17 @@
 package com.mjfelecio.beatsync.object;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Beatmap {
     private String title;
     private String artist;
-    private String version;
     private String creator;
+    // I'm gonna assume that image and audio is the same for all difficulties for now
+    // Handling edge cases will be difficult, so I'mma be handpicking maps to present
+    // in order to not show those edge cases lol
+    private String imagePath;
     private String audioPath;
-    private List<Note> notes = new ArrayList<>();
+    private List<Difficulty> difficulties;
 
     public String getTitle() {
         return title;
@@ -19,16 +21,12 @@ public class Beatmap {
         return artist;
     }
 
-    public String getVersion() {
-        return version;
-    }
-
     public String getCreator() {
         return creator;
     }
 
-    public List<Note> getNotes() {
-        return notes;
+    public String getImagePath() {
+        return imagePath;
     }
 
     public String getAudioPath() {
@@ -43,25 +41,20 @@ public class Beatmap {
         this.artist = artist;
     }
 
-    public void setVersion(String version) {
-        this.version = version;
-    }
-
     public void setCreator(String creator) {
         this.creator = creator;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
     }
 
-    public void addNote(Note note) {
-        this.notes.add(note);
-    }
-
     @Override
     public String toString() {
-        return String.format("Title: %s, Artist: %s, Version: %s, Creator: %s, Notes: %d",
-                title, artist, version, creator, notes.size());
+        return String.format("Title: %s, Artist: %s, Creator: %s", title, artist, creator);
     }
 }
