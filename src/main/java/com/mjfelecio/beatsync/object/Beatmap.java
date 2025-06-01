@@ -33,6 +33,10 @@ public class Beatmap {
         return audioPath;
     }
 
+    public List<Difficulty> getDifficulties() {
+        return difficulties;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
@@ -51,6 +55,10 @@ public class Beatmap {
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
+    }
+
+    public void setDifficulties(List<Difficulty> difficulties) {
+        this.difficulties = difficulties;
     }
 
     @Override
