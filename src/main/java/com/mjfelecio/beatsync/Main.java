@@ -15,7 +15,7 @@ public class Main extends Application {
     public void start(Stage stage) {
         SceneManager.initialize(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT, stage);
 
-        GameState.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+        GameState.getInstance().setCurrentScene(GameScene.TITLE_SCREEN);
 
         stage.setTitle("Beat Sync: VSRG made with Java");
         stage.show();

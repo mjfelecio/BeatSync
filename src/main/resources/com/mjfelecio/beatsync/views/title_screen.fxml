@@ -7,7 +7,7 @@
 <?import javafx.scene.text.Text?>
 
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="title-pane" stylesheets="@../styles/title_screen.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:controller="com.mjfelecio.beatsync.controller.TitleScreenController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="1080.0" prefWidth="1920.0" styleClass="title-pane" stylesheets="@../styles/title_screen.css" xmlns="http://javafx.com/javafx/22" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <Text fill="#1deb02" strokeType="OUTSIDE" strokeWidth="0.0" text="Beat Sync" textAlignment="CENTER" translateY="-120.0" wrappingWidth="527.6293954849243">
          <font>
@@ -17,12 +17,12 @@
             <Insets />
          </VBox.margin>
       </Text>
-      <Button alignment="TOP_CENTER" mnemonicParsing="false" styleClass="start-button" stylesheets="@../styles/title_screen.css" text="Start" textFill="#fefb34">
+      <Button onAction="#onStartButtonClick" alignment="TOP_CENTER" mnemonicParsing="false" styleClass="start-button" stylesheets="@../styles/title_screen.css" text="Start" textFill="#fefb34">
          <font>
             <Font name="System Bold" size="48.0" />
          </font>
       </Button>
-      <Button mnemonicParsing="false" styleClass="setting-button" text="Settings" textAlignment="CENTER" textFill="#fce536" translateY="48.0">
+      <Button onAction="#onSettingButtonClick" mnemonicParsing="false" styleClass="setting-button" text="Settings" textAlignment="CENTER" textFill="#fce536" translateY="48.0">
          <VBox.margin>
             <Insets />
          </VBox.margin>
