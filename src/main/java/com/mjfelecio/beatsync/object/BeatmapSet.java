@@ -6,6 +6,7 @@ public class BeatmapSet {
     private String title;
     private String artist;
     private String creator;
+    private int beatmapSetID;
     // I'm gonna assume that image and audio is the same for all difficulties for now
     // Handling edge cases will be difficult, so I'mma be handpicking maps to present
     // in order to not show those edge cases lol
@@ -59,6 +60,14 @@ public class BeatmapSet {
 
     public void setDifficulties(List<Beatmap> difficulties) {
         this.difficulties = difficulties;
+    }
+
+    public int getBeatmapSetID() {
+        return beatmapSetID;
+    }
+
+    public void setBeatmapSetID(int beatmapSetID) {
+        this.beatmapSetID = beatmapSetID;
     }
 
     @Override

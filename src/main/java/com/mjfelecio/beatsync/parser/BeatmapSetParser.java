@@ -64,6 +64,7 @@ public class BeatmapSetParser {
                         beatmapSet.setTitle(extractMetadataField(f, "Title"));
                         beatmapSet.setArtist(extractMetadataField(f, "Artist"));
                         beatmapSet.setCreator(extractMetadataField(f, "Creator"));
+                        beatmapSet.setBeatmapSetID(Integer.parseInt(extractMetadataField(f, "BeatmapSetID")));
                     }
                 }
             }
