@@ -75,8 +75,8 @@ public class BeatmapLoader {
 
         for (File folder : loader.beatmapFiles) {
             try {
-                // Use BeatmapParser.parse(...) to convert a folder → BeatmapSet
-                BeatmapSet bm = BeatmapParser.parse(folder);
+                // Use BeatmapSetParser.parse(...) to convert a folder → BeatmapSet
+                BeatmapSet bm = BeatmapSetParser.parse(folder);
                 loader.beatmapSets.add(bm);
             } catch (IOException e) {
                 // If any folder fails to parse, print a stack trace and continue with others

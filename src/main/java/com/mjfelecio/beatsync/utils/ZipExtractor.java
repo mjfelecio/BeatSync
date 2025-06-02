@@ -100,14 +100,14 @@ public class ZipExtractor {
     // WTF I spent so long on this and I just realized I don't even need it
 //    /**
 //     * Renames the extracted beatmap folder to it's beatmap title
-//     * using BeatmapParser.parse(file).getTitle()
+//     * using BeatmapSetParser.parse(file).getTitle()
 //     *
 //     * @param file the extracted .osz file that we want to give a name
 //     * @throws IOException if operation was unsuccessful
 //     */
 //    private static void renameBeatmapFolder(File file) throws IOException {
 //        Path source = Path.of(file.getAbsolutePath());
-//        String newName = BeatmapParser.parse(file).getTitle();
+//        String newName = BeatmapSetParser.parse(file).getTitle();
 //        Files.move(source, source.resolveSibling(newName));
 //    }
 

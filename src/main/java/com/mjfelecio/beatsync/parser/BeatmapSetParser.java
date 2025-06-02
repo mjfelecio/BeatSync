@@ -11,7 +11,7 @@ import java.util.List;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
 
-public class BeatmapParser {
+public class BeatmapSetParser {
 
     /**
      * Parses an extracted .osz folder and returns a BeatmapSet object populated with:
@@ -20,20 +20,20 @@ public class BeatmapParser {
      *  - a List<Beatmap> (one Beatmap per .osu file, via DifficultyParser.parse)
      *  - title, artist, creator (from the first .osu file’s [Metadata] section)
      *
-     * @param beatmapFolder directory corresponding to an extracted .osz archive
+     * @param beatmapSetFolder directory corresponding to an extracted .osz archive
      * @return BeatmapSet
      * @throws IOException if any file‐IO operation fails
      */
-    public static BeatmapSet parse(File beatmapFolder) throws IOException {
-        if (beatmapFolder == null || !beatmapFolder.isDirectory()) {
-            throw new IllegalArgumentException("beatmapFolder must be a valid directory");
+    public static BeatmapSet parse(File beatmapSetFolder) throws IOException {
+        if (beatmapSetFolder == null || !beatmapSetFolder.isDirectory()) {
+            throw new IllegalArgumentException("beatmapSetFolder must be a valid directory");
         }
 
         BeatmapSet beatmapSet = new BeatmapSet();
         List<Beatmap> difficulties = new ArrayList<>();
 
         // Iterate over every file in the folder
-        File[] files = beatmapFolder.listFiles();
+        File[] files = beatmapSetFolder.listFiles();
         if (files != null) {
             for (File f : files) {
                 if (!f.isFile()) {
