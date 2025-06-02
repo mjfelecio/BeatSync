@@ -17,6 +17,8 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.util.Comparator;
+import java.util.List;
 
 public class SongSelectController extends Application {
     private ListView<BeatmapSet> songListView = new ListView<>();
@@ -106,7 +108,14 @@ public class SongSelectController extends Application {
     private ListView<Beatmap> createDifficultyListView(BeatmapSet beatmapSet) {
         ListView<Beatmap> diffListView = new ListView<>();
         diffListView.setPrefHeight(120);
-        diffListView.setItems(FXCollections.observableArrayList(beatmapSet.getDifficulties()));
+
+        // Sort difficulties by note count ascending (more notes = higher diff)
+        // This is a temporary workaround until I get to implement star rating calculation
+        List<Beatmap> sortedDiffs = beatmapSet.getDifficulties().stream()
+                .sorted(Comparator.comparingInt(a -> a.getNotes().size()))
+                .toList();
+
+        diffListView.setItems(FXCollections.observableArrayList(sortedDiffs));
         diffListView.setCellFactory(lv -> new ListCell<>() {
             @Override
             protected void updateItem(Beatmap diff, boolean empty) {
