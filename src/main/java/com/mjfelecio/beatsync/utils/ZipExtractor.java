@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -133,6 +134,9 @@ public class ZipExtractor {
 
         for (File file : oszFiles) {
             ZipExtractor.extractZipFile(file.getAbsolutePath(), destinationFilePath);
+
+            // Remove the archive once it has been extracted
+            System.out.println("Archive extracted: " + file.delete());
         }
     }
 }
