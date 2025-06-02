@@ -7,6 +7,7 @@ import java.util.List;
 public class Beatmap {
     private String title;
     private String diffName;
+    private int beatmapID;
     private final List<Note> notes = new ArrayList<>();
 
     public String getTitle() {
@@ -31,6 +32,14 @@ public class Beatmap {
 
     public void setDiffName(String diffName) {
         this.diffName = diffName;
+    }
+
+    public int getBeatmapID() {
+        return beatmapID;
+    }
+
+    public void setBeatmapID(int beatmapID) {
+        this.beatmapID = beatmapID;
     }
 
     @Override
