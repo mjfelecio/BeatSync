@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.controller;
 
-import com.mjfelecio.beatsync.object.Beatmap;
+import com.mjfelecio.beatsync.object.BeatmapSet;
 import com.mjfelecio.beatsync.object.Difficulty;
 import com.mjfelecio.beatsync.parser.BeatmapLoader;
 import javafx.application.Application;
@@ -12,20 +12,18 @@ import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 import java.io.File;
-import java.util.List;
 
 public class SongSelectController extends Application {
-    private ListView<Beatmap> songListView = new ListView<>();
+    private ListView<BeatmapSet> songListView = new ListView<>();
     private ListView<Difficulty> diffListView = new ListView<>();
     private VBox difficultyListViewWrapper;
 
-    private Beatmap selectedBeatmap;
+    private BeatmapSet selectedBeatmapSet;
     private Difficulty selectedDifficulty;
 
     @Override
@@ -58,12 +56,12 @@ public class SongSelectController extends Application {
         stage.show();
     }
 
-    public ListView<Beatmap> createSongListView() {
+    public ListView<BeatmapSet> createSongListView() {
         BeatmapLoader.load();
-        ObservableList<Beatmap> songs = FXCollections.observableArrayList(BeatmapLoader.getInstance().getAllBeatmaps());
+        ObservableList<BeatmapSet> songs = FXCollections.observableArrayList(BeatmapLoader.getInstance().getAllBeatmaps());
         songListView.setItems(songs);
 
-        songListView.setCellFactory(listView -> new ListCell<Beatmap>() {
+        songListView.setCellFactory(listView -> new ListCell<BeatmapSet>() {
             private final HBox content;
             private final ImageView thumbnail;
             private final Label title;
@@ -79,25 +77,25 @@ public class SongSelectController extends Application {
             }
 
             @Override
-            protected void updateItem(Beatmap beatmap, boolean empty) {
-                super.updateItem(beatmap, empty);
-                if (empty || beatmap == null) {
+            protected void updateItem(BeatmapSet beatmapSet, boolean empty) {
+                super.updateItem(beatmapSet, empty);
+                if (empty || beatmapSet == null) {
                     setGraphic(null);
                 } else {
-                    String imagePath = new File(beatmap.getImagePath()).toURI().toString();
+                    String imagePath = new File(beatmapSet.getImagePath()).toURI().toString();
                     thumbnail.setImage(new Image(imagePath));
-                    title.setText(beatmap.getTitle());
+                    title.setText(beatmapSet.getTitle());
                     setGraphic(content);
                 }
             }
         });
 
         songListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            selectedBeatmap = newVal;
-            if (selectedBeatmap != null) {
+            selectedBeatmapSet = newVal;
+            if (selectedBeatmapSet != null) {
                 difficultyListViewWrapper.getChildren().remove(diffListView);
 
-                diffListView = createDifficultyListView(selectedBeatmap);
+                diffListView = createDifficultyListView(selectedBeatmapSet);
                 difficultyListViewWrapper.getChildren().add(diffListView);
             }
         });
@@ -105,7 +103,7 @@ public class SongSelectController extends Application {
         return songListView;
     }
 
-    private ListView<Difficulty> createDifficultyListView(Beatmap beatmapSet) {
+    private ListView<Difficulty> createDifficultyListView(BeatmapSet beatmapSet) {
         ListView<Difficulty> diffListView = new ListView<>();
         diffListView.setPrefHeight(120);
         diffListView.setItems(FXCollections.observableArrayList(beatmapSet.getDifficulties()));

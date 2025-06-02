@@ -1,7 +1,7 @@
 package com.mjfelecio.beatsync.parser;
 
 import com.mjfelecio.beatsync.config.GameConfig;
-import com.mjfelecio.beatsync.object.Beatmap;
+import com.mjfelecio.beatsync.object.BeatmapSet;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +11,7 @@ import java.util.List;
 public class BeatmapLoader {
     private static BeatmapLoader instance = new BeatmapLoader(GameConfig.BEATMAP_DIRECTORY);
 
-    private List<Beatmap> beatmaps;       // Parsed Beatmap objects
+    private List<BeatmapSet> beatmapSets;       // Parsed BeatmapSet objects
     private List<File> beatmapFiles;      // Each File is a folder extracted from a .osz
 
     /**
@@ -23,7 +23,7 @@ public class BeatmapLoader {
         } catch (IOException e) {
             throw new RuntimeException("Failed to list beatmap folders in: " + beatmapsDirectoryPath, e);
         }
-        this.beatmaps = new ArrayList<>();
+        this.beatmapSets = new ArrayList<>();
     }
 
     /**
@@ -59,25 +59,25 @@ public class BeatmapLoader {
                 throw new IOException("No files found in beatmap directory: " + beatmapsDirectoryPath);
             }
         } else {
-            throw new IOException("Beatmap directory does not exist or is not a directory: " + beatmapsDirectoryPath);
+            throw new IOException("BeatmapSet directory does not exist or is not a directory: " + beatmapsDirectoryPath);
         }
 
         return beatmapFiles;
     }
 
     /**
-     * Loads (parses) all beatmap folders into Beatmap objects and stores them in an internal list.
+     * Loads (parses) all beatmap folders into BeatmapSet objects and stores them in an internal list.
      * Should be called once at startup (or whenever we want to refresh the library, like if importing is implemented).
      */
     public static void load() {
         BeatmapLoader loader = getInstance();
-        loader.beatmaps.clear();
+        loader.beatmapSets.clear();
 
         for (File folder : loader.beatmapFiles) {
             try {
-                // Use BeatmapParser.parse(...) to convert a folder → Beatmap
-                Beatmap bm = BeatmapParser.parse(folder);
-                loader.beatmaps.add(bm);
+                // Use BeatmapParser.parse(...) to convert a folder → BeatmapSet
+                BeatmapSet bm = BeatmapParser.parse(folder);
+                loader.beatmapSets.add(bm);
             } catch (IOException e) {
                 // If any folder fails to parse, print a stack trace and continue with others
                 System.err.println("Failed to parse beatmap folder: " + folder.getName());
@@ -87,20 +87,20 @@ public class BeatmapLoader {
     }
 
     /**
-     * Returns the full list of loaded Beatmap objects.
+     * Returns the full list of loaded BeatmapSet objects.
      * Call load() first to populate this list.
      */
-    public List<Beatmap> getAllBeatmaps() {
-        return new ArrayList<>(beatmaps);
+    public List<BeatmapSet> getAllBeatmaps() {
+        return new ArrayList<>(beatmapSets);
     }
 
     /**
-     * Returns a Beatmap by its title (first match). Titles are retrieved from metadata.
+     * Returns a BeatmapSet by its title (first match). Titles are retrieved from metadata.
      * Returns null if none matches.
      */
-    public Beatmap getBeatmapByTitle(String title) {
+    public BeatmapSet getBeatmapByTitle(String title) {
         if (title == null) return null;
-        for (Beatmap bm : beatmaps) {
+        for (BeatmapSet bm : beatmapSets) {
             if (title.equalsIgnoreCase(bm.getTitle())) {
                 return bm;
             }
@@ -109,11 +109,11 @@ public class BeatmapLoader {
     }
 
     /**
-     * Returns a Beatmap by its zero-based index in the internal list.
+     * Returns a BeatmapSet by its zero-based index in the internal list.
      * Throws IndexOutOfBoundsException if idx is invalid.
      */
-    public Beatmap getBeatmapByIndex(int idx) {
-        return beatmaps.get(idx);
+    public BeatmapSet getBeatmapByIndex(int idx) {
+        return beatmapSets.get(idx);
     }
 
     // ────────────────────────────────────────────────────────────────────────────────
@@ -135,10 +135,10 @@ public class BeatmapLoader {
     /**
      * (Experimental) Finds all Beatmaps whose artist matches the given name (case‐insensitive).
      */
-    public List<Beatmap> getBeatmapsByArtist(String artist) {
-        List<Beatmap> matches = new ArrayList<>();
+    public List<BeatmapSet> getBeatmapsByArtist(String artist) {
+        List<BeatmapSet> matches = new ArrayList<>();
         if (artist == null) return matches;
-        for (Beatmap bm : beatmaps) {
+        for (BeatmapSet bm : beatmapSets) {
             if (artist.equalsIgnoreCase(bm.getArtist())) {
                 matches.add(bm);
             }
@@ -147,10 +147,10 @@ public class BeatmapLoader {
     }
 
     /**
-     * (Experimental) Returns the total number of loaded beatmaps.
+     * (Experimental) Returns the total number of loaded beatmapSets.
      */
     public int getTotalBeatmapCount() {
-        return beatmaps.size();
+        return beatmapSets.size();
     }
 
     // ────────────────────────────────────────────────────────────────────────────────
@@ -161,17 +161,17 @@ public class BeatmapLoader {
      * Optional main method for testing the loader in isolation.
      */
     public static void main(String[] args) {
-        // Ensure we load all beatmaps before querying
+        // Ensure we load all beatmapSets before querying
         BeatmapLoader.load();
 
-        System.out.println("Total beatmaps loaded: " + getInstance().getTotalBeatmapCount());
+        System.out.println("Total beatmapSets loaded: " + getInstance().getTotalBeatmapCount());
         System.out.println("All beatmap titles:");
-        for (Beatmap bm : getInstance().getAllBeatmaps()) {
+        for (BeatmapSet bm : getInstance().getAllBeatmaps()) {
             System.out.println(" - " + bm.getTitle());
         }
 
         String sampleTitle = "My Song Title";
-        Beatmap found = getInstance().getBeatmapByTitle(sampleTitle);
+        BeatmapSet found = getInstance().getBeatmapByTitle(sampleTitle);
         if (found != null) {
             System.out.println("Found beatmap: " + found.getTitle() + " by " + found.getArtist());
         } else {

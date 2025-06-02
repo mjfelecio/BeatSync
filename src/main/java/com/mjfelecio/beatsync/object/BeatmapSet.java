@@ -2,7 +2,7 @@ package com.mjfelecio.beatsync.object;
 
 import java.util.List;
 
-public class Beatmap {
+public class BeatmapSet {
     private String title;
     private String artist;
     private String creator;

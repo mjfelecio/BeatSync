@@ -8,29 +8,28 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Make sure these classes exist in your project:
-import com.mjfelecio.beatsync.object.Beatmap;
+import com.mjfelecio.beatsync.object.BeatmapSet;
 import com.mjfelecio.beatsync.object.Difficulty;
-import com.mjfelecio.beatsync.parser.DifficultyParser; // Will work on this later, but I am just assuming that it exists
 
 public class BeatmapParser {
 
     /**
-     * Parses an extracted .osz folder and returns a Beatmap object populated with:
+     * Parses an extracted .osz folder and returns a BeatmapSet object populated with:
      *  - audioPath (first .mp3 found)
      *  - imagePath (first .jpg/.png/.jpeg found)
      *  - a List<Difficulty> (one Difficulty per .osu file, via DifficultyParser.parse)
      *  - title, artist, creator (from the first .osu file’s [Metadata] section)
      *
      * @param beatmapFolder directory corresponding to an extracted .osz archive
-     * @return Beatmap
+     * @return BeatmapSet
      * @throws IOException if any file‐IO operation fails
      */
-    public static Beatmap parse(File beatmapFolder) throws IOException {
+    public static BeatmapSet parse(File beatmapFolder) throws IOException {
         if (beatmapFolder == null || !beatmapFolder.isDirectory()) {
             throw new IllegalArgumentException("beatmapFolder must be a valid directory");
         }
 
-        Beatmap beatmap = new Beatmap();
+        BeatmapSet beatmapSet = new BeatmapSet();
         List<Difficulty> difficulties = new ArrayList<>();
 
         // Iterate over every file in the folder
@@ -45,13 +44,13 @@ public class BeatmapParser {
 
                 // If it's an .mp3 → audioPath
                 if (nameLower.endsWith(".mp3")) {
-                    beatmap.setAudioPath(f.getAbsolutePath());
+                    beatmapSet.setAudioPath(f.getAbsolutePath());
                     continue;
                 }
 
                 // If it's an image (.jpg/.jpeg/.png) → imagePath
                 if (nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg") || nameLower.endsWith(".png")) {
-                    beatmap.setImagePath(f.getAbsolutePath());
+                    beatmapSet.setImagePath(f.getAbsolutePath());
                     continue;
                 }
 
@@ -61,19 +60,19 @@ public class BeatmapParser {
                     difficulties.add(diff);
 
                     // Extract metadata (title, artist, creator) from the first .osu we encounter
-                    if (beatmap.getTitle() == null) {
-                        beatmap.setTitle(extractMetadataField(f, "Title"));
-                        beatmap.setArtist(extractMetadataField(f, "Artist"));
-                        beatmap.setCreator(extractMetadataField(f, "Creator"));
+                    if (beatmapSet.getTitle() == null) {
+                        beatmapSet.setTitle(extractMetadataField(f, "Title"));
+                        beatmapSet.setArtist(extractMetadataField(f, "Artist"));
+                        beatmapSet.setCreator(extractMetadataField(f, "Creator"));
                     }
                 }
             }
         }
 
         // Attach the list of parsed difficulties (could be empty if no .osu files found)
-        beatmap.setDifficulties(difficulties);
+        beatmapSet.setDifficulties(difficulties);
 
-        return beatmap;
+        return beatmapSet;
     }
 
     /**

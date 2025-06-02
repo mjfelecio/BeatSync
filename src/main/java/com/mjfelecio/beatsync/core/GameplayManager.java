@@ -3,7 +3,6 @@ package com.mjfelecio.beatsync.core;
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import com.mjfelecio.beatsync.input.InputHandler;
-import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Difficulty;
 import com.mjfelecio.beatsync.parser.DifficultyParser;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
