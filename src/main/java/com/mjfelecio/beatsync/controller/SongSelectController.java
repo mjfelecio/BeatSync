@@ -111,7 +111,7 @@ public class SongSelectController extends Application {
             @Override
             protected void updateItem(Beatmap diff, boolean empty) {
                 super.updateItem(diff, empty);
-                setText((diff == null || empty) ? null : diff.getTitle());
+                setText((diff == null || empty) ? null : diff.getTitle() + " - " + diff.getDiffName());
             }
         });
 
