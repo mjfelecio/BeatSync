@@ -1,0 +1,61 @@
+osu file format v14
+
+[General]
+AudioFilename: audio.mp3
+AudioLeadIn: 0
+PreviewTime: 81441
+Countdown: 0
+SampleSet: Normal
+StackLeniency: 0.7
+Mode: 3
+LetterboxInBreaks: 0
+SpecialStyle: 0
+WidescreenStoryboard: 1
+
+[Editor]
+DistanceSpacing: 0.8
+BeatDivisor: 4
+GridSize: 4
+TimelineZoom: 1.6
+
+[Metadata]
+Title:Zia's 4K Stream Training Pack
+TitleUnicode:Zia's 4K Stream Training Pack
+Artist:Various Artists
+ArtistUnicode:Various Artists
+Creator:Zia
+Version:Delete This.
+Source:
+Tags:jumpstream handstream js hs training pack LaoXiao- nonamed1464 Oceanus [Rweiru] R1w1 11bit DJ Noriken La'qryma of the Wasteland laqryma lacryma ナナヲアカリ ナユタン星人 Nanawo Akari Meruheru Shouwakusei YUC'e MUDPIE YUCe cillia FIRST t+pazolite Electric "Sister" Bitch little butterfly Slax- Lolitonic NATURE You'll Be Mine (Slax Remix) Helblinde Finality Getty vs. DJ DiA Fox4 Raize AKI feat. Ramakun Stay Alive (Funkot Remix) Camellia かめりあ Fastest Crash NUCLEAR-STAR cut ver. かたぎり 片桐きゃっちぼーる katagiri Katagiri Catch Ball 鹿乃 スキスキ絶頂症 Kano Sukisuki Zecchoushou ZxNX vs. HyuN Nemesis Kobaryo Invisible Frenzy
+BeatmapID:3188408
+BeatmapSetID:1561185
+
+[Difficulty]
+HPDrainRate:8
+CircleSize:4
+OverallDifficulty:8
+ApproachRate:5
+SliderMultiplier:1.4
+SliderTickRate:1
+
+[Events]
+//Background and Video events
+0,0,"BG.jpg",0,0
+//Break Periods
+2,570,3020241
+//Storyboard Layer 0 (Background)
+//Storyboard Layer 1 (Fail)
+//Storyboard Layer 2 (Pass)
+//Storyboard Layer 3 (Foreground)
+//Storyboard Layer 4 (Overlay)
+//Storyboard Sound Samples
+
+[TimingPoints]
+13,357.142857142857,4,1,0,15,1,0
+
+
+[HitObjects]
+448,192,370,5,0,0:0:0:0:
+320,192,3021441,5,0,0:0:0:0:
+448,192,3024498,5,0,0:0:0:0:
+320,192,3024498,1,0,0:0:0:0:
