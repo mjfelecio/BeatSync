@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.parser;
 
-import com.mjfelecio.beatsync.object.Difficulty;
+import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Note;
 
 import java.io.BufferedReader;
@@ -24,7 +24,7 @@ import java.io.IOException;
         BeatmapID
         BeatmapSetID
 
-    [Difficulty]
+    [Beatmap]
         Approach Rate (Maybe, needs more research)
 
     [Events]
@@ -46,8 +46,8 @@ public class DifficultyParser {
         HIT_OBJECTS
     }
 
-    public static Difficulty parse(File file) throws IOException {
-        Difficulty difficulty = new Difficulty();
+    public static Beatmap parse(File file) throws IOException {
+        Beatmap beatmap = new Beatmap();
         Section section = Section.NONE;
 
         try (BufferedReader reader = new BufferedReader(new FileReader(file))) {
@@ -63,7 +63,7 @@ public class DifficultyParser {
                     section = switch (line) {
                         case "[General]" -> Section.GENERAL;
                         case "[Metadata]" -> Section.METADATA;
-                        case "[Difficulty]" -> Section.DIFFICULTY;
+                        case "[Beatmap]" -> Section.DIFFICULTY;
                         case "[Events]" -> Section.EVENTS;
                         case "[TimingPoints]" -> Section.TIMING_POINTS;
                         case "[HitObjects]" -> Section.HIT_OBJECTS;
@@ -73,21 +73,21 @@ public class DifficultyParser {
                 }
 
                 // Metadata
-                if (section == Section.METADATA) parseMetaData(difficulty, line);
+                if (section == Section.METADATA) parseMetaData(beatmap, line);
 
                 // HitObjects
-                if (section == Section.HIT_OBJECTS) parseHitObjects(difficulty, line);
+                if (section == Section.HIT_OBJECTS) parseHitObjects(beatmap, line);
             }
         }
 
-        return difficulty;
+        return beatmap;
     }
 
-    private static void parseMetaData(Difficulty difficulty, String line) {
-        if (line.startsWith("Title:")) difficulty.setTitle(line.substring(6).trim());
+    private static void parseMetaData(Beatmap beatmap, String line) {
+        if (line.startsWith("Title:")) beatmap.setTitle(line.substring(6).trim());
     }
 
-    private static void parseHitObjects(Difficulty difficulty, String line) {
+    private static void parseHitObjects(Beatmap beatmap, String line) {
         String[] parts = line.split(",");
         if (parts.length < 5) return;
 
@@ -101,7 +101,7 @@ public class DifficultyParser {
             int laneNumber = getLaneNumber(x);
             Integer endTime = getEndTime(type, parts);
 
-            difficulty.addNote(endTime == null ? new Note(laneNumber, time) : new Note(laneNumber, time, endTime));
+            beatmap.addNote(endTime == null ? new Note(laneNumber, time) : new Note(laneNumber, time, endTime));
         } catch (NumberFormatException e) {
             System.err.println("Invalid number: " + e.getMessage());
         }

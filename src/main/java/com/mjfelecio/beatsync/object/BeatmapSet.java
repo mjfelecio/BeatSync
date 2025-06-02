@@ -11,7 +11,7 @@ public class BeatmapSet {
     // in order to not show those edge cases lol
     private String imagePath;
     private String audioPath;
-    private List<Difficulty> difficulties;
+    private List<Beatmap> difficulties;
 
     public String getTitle() {
         return title;
@@ -33,7 +33,7 @@ public class BeatmapSet {
         return audioPath;
     }
 
-    public List<Difficulty> getDifficulties() {
+    public List<Beatmap> getDifficulties() {
         return difficulties;
     }
 
@@ -57,7 +57,7 @@ public class BeatmapSet {
         this.audioPath = audioPath;
     }
 
-    public void setDifficulties(List<Difficulty> difficulties) {
+    public void setDifficulties(List<Beatmap> difficulties) {
         this.difficulties = difficulties;
     }
 

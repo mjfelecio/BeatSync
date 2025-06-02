@@ -8,8 +8,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Make sure these classes exist in your project:
+import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
-import com.mjfelecio.beatsync.object.Difficulty;
 
 public class BeatmapParser {
 
@@ -17,7 +17,7 @@ public class BeatmapParser {
      * Parses an extracted .osz folder and returns a BeatmapSet object populated with:
      *  - audioPath (first .mp3 found)
      *  - imagePath (first .jpg/.png/.jpeg found)
-     *  - a List<Difficulty> (one Difficulty per .osu file, via DifficultyParser.parse)
+     *  - a List<Beatmap> (one Beatmap per .osu file, via DifficultyParser.parse)
      *  - title, artist, creator (from the first .osu file’s [Metadata] section)
      *
      * @param beatmapFolder directory corresponding to an extracted .osz archive
@@ -30,7 +30,7 @@ public class BeatmapParser {
         }
 
         BeatmapSet beatmapSet = new BeatmapSet();
-        List<Difficulty> difficulties = new ArrayList<>();
+        List<Beatmap> difficulties = new ArrayList<>();
 
         // Iterate over every file in the folder
         File[] files = beatmapFolder.listFiles();
@@ -54,9 +54,9 @@ public class BeatmapParser {
                     continue;
                 }
 
-                // If it's a .osu file → parse to Difficulty and add to list
+                // If it's a .osu file → parse to Beatmap and add to list
                 if (nameLower.endsWith(".osu")) {
-                    Difficulty diff = DifficultyParser.parse(f);
+                    Beatmap diff = DifficultyParser.parse(f);
                     difficulties.add(diff);
 
                     // Extract metadata (title, artist, creator) from the first .osu we encounter

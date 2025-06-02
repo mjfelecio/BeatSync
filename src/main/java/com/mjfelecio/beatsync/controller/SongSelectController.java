@@ -1,7 +1,7 @@
 package com.mjfelecio.beatsync.controller;
 
+import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
-import com.mjfelecio.beatsync.object.Difficulty;
 import com.mjfelecio.beatsync.parser.BeatmapLoader;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
@@ -20,11 +20,11 @@ import java.io.File;
 
 public class SongSelectController extends Application {
     private ListView<BeatmapSet> songListView = new ListView<>();
-    private ListView<Difficulty> diffListView = new ListView<>();
+    private ListView<Beatmap> diffListView = new ListView<>();
     private VBox difficultyListViewWrapper;
 
     private BeatmapSet selectedBeatmapSet;
-    private Difficulty selectedDifficulty;
+    private Beatmap selectedBeatmap;
 
     @Override
     public void start(Stage stage) throws Exception {
@@ -103,21 +103,21 @@ public class SongSelectController extends Application {
         return songListView;
     }
 
-    private ListView<Difficulty> createDifficultyListView(BeatmapSet beatmapSet) {
-        ListView<Difficulty> diffListView = new ListView<>();
+    private ListView<Beatmap> createDifficultyListView(BeatmapSet beatmapSet) {
+        ListView<Beatmap> diffListView = new ListView<>();
         diffListView.setPrefHeight(120);
         diffListView.setItems(FXCollections.observableArrayList(beatmapSet.getDifficulties()));
         diffListView.setCellFactory(lv -> new ListCell<>() {
             @Override
-            protected void updateItem(Difficulty diff, boolean empty) {
+            protected void updateItem(Beatmap diff, boolean empty) {
                 super.updateItem(diff, empty);
                 setText((diff == null || empty) ? null : diff.getTitle());
             }
         });
 
         diffListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
-            selectedDifficulty = newVal;
-            System.out.println("Selected difficulty: " + selectedDifficulty);
+            selectedBeatmap = newVal;
+            System.out.println("Selected difficulty: " + selectedBeatmap);
         });
 
         return diffListView;

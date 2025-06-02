@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 // Represents a diff in a single beatmap such as Easy, Normal, etc.
-public class Difficulty {
+public class Beatmap {
     private String title;
     private final List<Note> notes = new ArrayList<>();
 
