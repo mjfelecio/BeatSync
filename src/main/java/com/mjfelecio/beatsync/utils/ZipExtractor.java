@@ -1,9 +1,13 @@
 package com.mjfelecio.beatsync.utils;
 
+import com.mjfelecio.beatsync.config.GameConfig;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -90,5 +94,45 @@ public class ZipExtractor {
         }
 
         return destFile;
+    }
+
+    // WTF I spent so long on this and I just realized I don't even need it
+//    /**
+//     * Renames the extracted beatmap folder to it's beatmap title
+//     * using BeatmapParser.parse(file).getTitle()
+//     *
+//     * @param file the extracted .osz file that we want to give a name
+//     * @throws IOException if operation was unsuccessful
+//     */
+//    private static void renameBeatmapFolder(File file) throws IOException {
+//        Path source = Path.of(file.getAbsolutePath());
+//        String newName = BeatmapParser.parse(file).getTitle();
+//        Files.move(source, source.resolveSibling(newName));
+//    }
+
+    private static boolean checkIfOsz(File file) {
+        String fileName = file.getName();
+        int lastDotIndex = fileName.lastIndexOf('.');
+        String fileExtension = "";
+
+        if (lastDotIndex != -1) {
+            fileExtension = fileName.substring(lastDotIndex).trim();
+        }
+
+        return fileExtension.equals(".osz");
+    }
+
+    // I just run this in case I need to import new maps
+    public static void main(String[] args) throws IOException {
+        String oszToImportFilePath = GameConfig.BEATMAP_DIRECTORY;
+        String destinationFilePath = GameConfig.BEATMAP_DIRECTORY;
+
+        File[] oszFiles = Arrays.stream(Objects.requireNonNull(new File(oszToImportFilePath).listFiles()))
+                .filter(ZipExtractor::checkIfOsz)
+                .toList().toArray(new File[0]);
+
+        for (File file : oszFiles) {
+            ZipExtractor.extractZipFile(file.getAbsolutePath(), destinationFilePath);
+        }
     }
 }
