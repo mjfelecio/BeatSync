@@ -17,7 +17,7 @@ public class BeatmapSetParser {
      * Parses an extracted .osz folder and returns a BeatmapSet object populated with:
      *  - audioPath (first .mp3 found)
      *  - imagePath (first .jpg/.png/.jpeg found)
-     *  - a List<Beatmap> (one Beatmap per .osu file, via DifficultyParser.parse)
+     *  - a List<Beatmap> (one Beatmap per .osu file, via BeatmapParser.parse)
      *  - title, artist, creator (from the first .osu file’s [Metadata] section)
      *
      * @param beatmapSetFolder directory corresponding to an extracted .osz archive
@@ -56,7 +56,7 @@ public class BeatmapSetParser {
 
                 // If it's a .osu file → parse to Beatmap and add to list
                 if (nameLower.endsWith(".osu")) {
-                    Beatmap diff = DifficultyParser.parse(f);
+                    Beatmap diff = BeatmapParser.parse(f);
                     difficulties.add(diff);
 
                     // Extract metadata (title, artist, creator) from the first .osu we encounter

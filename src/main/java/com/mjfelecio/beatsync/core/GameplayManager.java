@@ -4,7 +4,7 @@ import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.object.Beatmap;
-import com.mjfelecio.beatsync.parser.DifficultyParser;
+import com.mjfelecio.beatsync.parser.BeatmapParser;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
@@ -82,7 +82,7 @@ public class GameplayManager {
 
     public void loadBeatmap(String beatmapPath, String audioPath) {
         try {
-            Beatmap beatmap = DifficultyParser.parse(new File(beatmapPath));
+            Beatmap beatmap = BeatmapParser.parse(new File(beatmapPath));
             gameplayLogic.loadBeatmap(beatmap);
             gameEngine.getAudioManager().loadMusic(audioPath);
         } catch (Exception e) {

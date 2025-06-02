@@ -35,7 +35,7 @@ import java.io.IOException;
     [HitObjects] - ALL
     * */
 
-public class DifficultyParser {
+public class BeatmapParser {
     private enum Section {
         NONE,
         GENERAL,
