@@ -13,11 +13,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) {
-        SceneManager.initialize(GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT, stage);
+        // Add -1 as a hacky way to not shift the scenes to the top right of the screen when switching scenes
+        SceneManager.initialize(GameConfig.SCREEN_WIDTH - 1 , GameConfig.SCREEN_HEIGHT - 1, stage);
 
         GameState.getInstance().setCurrentScene(GameScene.TITLE_SCREEN);
 
         stage.setTitle("Beat Sync: VSRG made with Java");
+        stage.setMaximized(true);
         stage.show();
     }
 
