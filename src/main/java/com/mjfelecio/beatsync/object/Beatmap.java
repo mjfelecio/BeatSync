@@ -8,6 +8,8 @@ public class Beatmap {
     private String title;
     private String diffName;
     private int beatmapID;
+    private String audioPath;
+    private String folderPath;
     private final List<Note> notes = new ArrayList<>();
 
     public String getTitle() {
@@ -40,6 +42,22 @@ public class Beatmap {
 
     public void setBeatmapID(int beatmapID) {
         this.beatmapID = beatmapID;
+    }
+
+    public String getAudioPath() {
+        return audioPath;
+    }
+
+    public void setAudioPath(String audioPath) {
+        this.audioPath = audioPath;
+    }
+
+    public String getFolderPath() {
+        return folderPath;
+    }
+
+    public void setFolderPath(String folderPath) {
+        this.folderPath = folderPath;
     }
 
     @Override
