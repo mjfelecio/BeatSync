@@ -10,6 +10,7 @@ import java.util.List;
 public class GameState {
     private static final GameState instance = new GameState();
     private GameScene currentScene;
+    private boolean isPlaying = false;
     private List<SceneChangeListener> listeners = new ArrayList<>();
     private Beatmap currentBeatmap;
 
@@ -46,26 +47,13 @@ public class GameState {
         }
     }
 
-    private int combo = 0;
-    private long score = 0;
-    private long maxScore = 0;
-    private String lastJudgement = "";
-    private boolean isPlaying = false;
-
-    public void incrementCombo() { combo++; }
-    public void resetCombo() { combo = 0; }
-    public void setJudgement(String judgement) { this.lastJudgement = judgement; }
-    public void setPlaying(boolean b) { this.isPlaying = b; }
-
-    public int getCombo() {
-        return combo;
+    public boolean isPlaying() {
+        return isPlaying;
     }
 
-    public String getLastJudgement() {
-        return lastJudgement;
+    public void setPlaying(boolean playing) {
+        isPlaying = playing;
     }
-
-    public boolean isPlaying() { return isPlaying; }
 
     public Beatmap getCurrentBeatmap() {
         return currentBeatmap;
@@ -73,21 +61,5 @@ public class GameState {
 
     public void setCurrentBeatmap(Beatmap currentBeatmap) {
         this.currentBeatmap = currentBeatmap;
-    }
-
-    public long getScore() {
-        return score;
-    }
-
-    public void setScore(long score) {
-        this.score = score;
-    }
-
-    public long getMaxScore() {
-        return maxScore;
-    }
-
-    public void setMaxScore(long maxScore) {
-        this.maxScore = maxScore;
     }
 }
