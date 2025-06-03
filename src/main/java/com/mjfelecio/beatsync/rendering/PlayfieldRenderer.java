@@ -1,6 +1,7 @@
 package com.mjfelecio.beatsync.rendering;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.object.Note;
 import com.mjfelecio.beatsync.input.InputState;
@@ -11,20 +12,20 @@ import javafx.scene.text.Font;
 import java.util.List;
 
 public class PlayfieldRenderer {
-    public void render(GraphicsContext gc, GameState gameState,
+    public void render(GraphicsContext gc, GameSession gameSession,
                        List<Note> visibleNotes, InputState inputState) {
         clearScreen(gc);
         drawPlayfieldBorders(gc);
         drawLanes(gc, inputState);
         drawNotes(gc, visibleNotes);
-        drawUI(gc, gameState);
+        drawUI(gc, gameSession);
     }
 
-    public void renderEmptyPlayfield(GraphicsContext gc, GameState gameState) {
+    public void renderEmptyPlayfield(GraphicsContext gc, GameSession gameSession) {
         clearScreen(gc);
         drawPlayfieldBorders(gc);
         drawLanes(gc, new InputState());
-        drawUI(gc, gameState);
+        drawUI(gc, gameSession);
     }
 
     public void clearScreen(GraphicsContext gc) {
@@ -114,16 +115,16 @@ public class PlayfieldRenderer {
         }
     }
 
-    private void drawUI(GraphicsContext gc, GameState gameState) {
+    private void drawUI(GraphicsContext gc, GameSession gameSession) {
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(20));
         // These are just temporary
-        gc.fillText("Combo: " + gameState.getCombo(), 20, 50);
-        gc.fillText("Score: " + gameState.getScore(), 20, 80);
-        gc.fillText("Max Score: " + gameState.getMaxScore(), 20, 100);
+        gc.fillText("Combo: " + gameSession.getCombo(), 20, 50);
+        gc.fillText("Score: " + gameSession.getScore(), 20, 80);
+        gc.fillText("Accuracy: " + gameSession.getAccuracy(), 20, 100);
 
         gc.setFont(new Font(30));
-        gc.fillText(gameState.getLastJudgement(),
+        gc.fillText(gameSession.getLastJudgement(),
                 (GameConfig.PLAYFIELD_WIDTH / 2.0) - 50,
                 GameConfig.PLAYFIELD_HEIGHT - 250);
     }

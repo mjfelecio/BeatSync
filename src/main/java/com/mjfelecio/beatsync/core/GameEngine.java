@@ -1,16 +1,16 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.state.GameState;
+import com.mjfelecio.beatsync.gameplay.GameSession;
 
 public class GameEngine {
     private static GameEngine instance;
 
-    private final GameState gameState;
+    private final GameSession gameSession;
     private final GameClock gameClock;
     private final AudioManager audioManager;
 
     private GameEngine() {
-        this.gameState = GameState.getInstance();
+        this.gameSession = new GameSession();
         this.gameClock = new GameClock();
         this.audioManager = new AudioManager();
     }
@@ -25,5 +25,5 @@ public class GameEngine {
     // Provide services to managers
     public GameClock getGameClock() { return gameClock; }
     public AudioManager getAudioManager() { return audioManager; }
-    public GameState getGameState() { return gameState; }
+    public GameSession getGameSession() { return gameSession; }
 }

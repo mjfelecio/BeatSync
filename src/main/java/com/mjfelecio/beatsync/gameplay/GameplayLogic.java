@@ -10,12 +10,12 @@ import com.mjfelecio.beatsync.judgement.JudgementResult;
 import java.util.List;
 
 public class GameplayLogic {
-    private final GameState gameState;
+    private final GameSession gameSession;
     private NoteManager noteManager;
     private ScoreManager scoreManager;
 
-    public GameplayLogic(GameState gameState) {
-        this.gameState = gameState;
+    public GameplayLogic(GameSession gameSession) {
+        this.gameSession = gameSession;
     }
 
     public void loadBeatmap(Beatmap beatmap) {
@@ -69,17 +69,17 @@ public class GameplayLogic {
     private void processJudgement(JudgementResult judgementResult) {
         switch (judgementResult) {
             case JudgementResult.PERFECT, JudgementResult.GOOD -> {
-                gameState.incrementCombo();
+                gameSession.incrementCombo();
 //                gameState.addScore(100); // will think about the scoring system later
             }
             case JudgementResult.MISS -> {
-                gameState.resetCombo();
+                gameSession.resetCombo();
             }
         }
         scoreManager.registerJudgement(judgementResult);
-        gameState.setScore(scoreManager.getScore());
-        gameState.setMaxScore(scoreManager.getMaxScore());
-        gameState.setJudgement(judgementResult.toString());
+        gameSession.setScore(scoreManager.getScore());
+        gameSession.setAccuracy(scoreManager.getAccuracy());
+        gameSession.setJudgement(judgementResult.toString());
     }
 
     public List<Note> getVisibleNotes() {

@@ -4,16 +4,14 @@ import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.object.Beatmap;
-import com.mjfelecio.beatsync.parser.BeatmapParser;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
+import com.mjfelecio.beatsync.state.GameState;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
-
-import java.io.File;
 
 public class GameplayManager {
     private static GameplayManager instance;
@@ -36,7 +34,7 @@ public class GameplayManager {
     private GameplayManager() {
         this.gameEngine = GameEngine.getInstance();
         this.renderer = new PlayfieldRenderer();
-        this.gameplayLogic = new GameplayLogic(gameEngine.getGameState());
+        this.gameplayLogic = new GameplayLogic(gameEngine.getGameSession());
     }
 
     public static GameplayManager getInstance() {
@@ -112,7 +110,7 @@ public class GameplayManager {
         isPaused = false;
         gameEngine.getAudioManager().play();
         gameEngine.getGameClock().start();
-        gameEngine.getGameState().setPlaying(true);
+        GameState.getInstance().setPlaying(true);
 
         if (gameLoop != null) {
             gameLoop.start();
@@ -122,13 +120,13 @@ public class GameplayManager {
     public void pauseGameplay() {
         isPaused = true;
         gameEngine.getAudioManager().pause();
-        gameEngine.getGameState().setPlaying(false);
+        GameState.getInstance().setPlaying(false);
     }
 
     public void resumeGameplay() {
         isPaused = false;
         gameEngine.getAudioManager().resume();
-        gameEngine.getGameState().setPlaying(true);
+        GameState.getInstance().setPlaying(true);
     }
 
     public void stopGameplay() {
@@ -137,14 +135,14 @@ public class GameplayManager {
         }
 
         gameEngine.getAudioManager().stop();
-        gameEngine.getGameState().setPlaying(false);
+        GameState.getInstance().setPlaying(false);
 
         // Clean up resources
         cleanupResources();
     }
 
     private void update(long deltaTime) {
-        if (!gameEngine.getGameState().isPlaying()) return;
+        if (!GameState.getInstance().isPlaying()) return;
 
         long currentAudioTime = gameEngine.getAudioManager().getCurrentTime();
         gameEngine.getGameClock().syncToAudioTime(currentAudioTime);
@@ -152,7 +150,7 @@ public class GameplayManager {
     }
 
     private void render() {
-        renderer.render(gc, gameEngine.getGameState(), gameplayLogic.getVisibleNotes(),
+        renderer.render(gc, gameEngine.getGameSession(), gameplayLogic.getVisibleNotes(),
                 inputHandler.getCurrentInput());
     }
 
