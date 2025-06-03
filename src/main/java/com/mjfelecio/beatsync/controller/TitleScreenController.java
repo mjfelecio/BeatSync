@@ -8,7 +8,7 @@ public class TitleScreenController {
 
     @FXML
     protected void onStartButtonClick() {
-        GameState.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+        GameState.getInstance().setCurrentScene(GameScene.SONG_SELECT);
     }
 
     @FXML
