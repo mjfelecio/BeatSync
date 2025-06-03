@@ -131,7 +131,6 @@ public class SongSelectController {
 
         diffListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedBeatmap = newVal;
-            System.out.println("Selected difficulty: " + selectedBeatmap);
         });
 
         return diffListView;
