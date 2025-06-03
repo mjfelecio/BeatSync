@@ -20,6 +20,13 @@ public class PlayfieldRenderer {
         drawUI(gc, gameState);
     }
 
+    public void renderEmptyPlayfield(GraphicsContext gc, GameState gameState) {
+        clearScreen(gc);
+        drawPlayfieldBorders(gc);
+        drawLanes(gc, new InputState());
+        drawUI(gc, gameState);
+    }
+
     public void clearScreen(GraphicsContext gc) {
         gc.clearRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
     }
