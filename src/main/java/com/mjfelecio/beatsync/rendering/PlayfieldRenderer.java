@@ -117,7 +117,11 @@ public class PlayfieldRenderer {
     private void drawUI(GraphicsContext gc, GameState gameState) {
         gc.setFill(Color.BLACK);
         gc.setFont(new Font(20));
+        // These are just temporary
         gc.fillText("Combo: " + gameState.getCombo(), 20, 50);
+        gc.fillText("Score: " + gameState.getScore(), 20, 80);
+        gc.fillText("Max Score: " + gameState.getMaxScore(), 20, 100);
+
         gc.setFont(new Font(30));
         gc.fillText(gameState.getLastJudgement(),
                 (GameConfig.PLAYFIELD_WIDTH / 2.0) - 50,

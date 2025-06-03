@@ -48,6 +48,7 @@ public class GameState {
 
     private int combo = 0;
     private long score = 0;
+    private long maxScore = 0;
     private String lastJudgement = "";
     private boolean isPlaying = false;
 
@@ -72,5 +73,21 @@ public class GameState {
 
     public void setCurrentBeatmap(Beatmap currentBeatmap) {
         this.currentBeatmap = currentBeatmap;
+    }
+
+    public long getScore() {
+        return score;
+    }
+
+    public void setScore(long score) {
+        this.score = score;
+    }
+
+    public long getMaxScore() {
+        return maxScore;
+    }
+
+    public void setMaxScore(long maxScore) {
+        this.maxScore = maxScore;
     }
 }

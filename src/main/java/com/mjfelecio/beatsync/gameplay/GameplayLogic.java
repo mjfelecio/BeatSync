@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.gameplay;
 
+import com.mjfelecio.beatsync.judgement.ScoreManager;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.judgement.JudgementProcessor;
@@ -11,6 +12,7 @@ import java.util.List;
 public class GameplayLogic {
     private final GameState gameState;
     private NoteManager noteManager;
+    private ScoreManager scoreManager;
 
     public GameplayLogic(GameState gameState) {
         this.gameState = gameState;
@@ -18,6 +20,7 @@ public class GameplayLogic {
 
     public void loadBeatmap(Beatmap beatmap) {
         this.noteManager = new NoteManager(beatmap.getNotes());
+        this.scoreManager = new ScoreManager(beatmap.getRegularNoteCount(), beatmap.getHoldNoteCount());
     }
 
     public void update(long currentTime, long deltaTime) {
@@ -73,6 +76,9 @@ public class GameplayLogic {
                 gameState.resetCombo();
             }
         }
+        scoreManager.registerJudgement(judgementResult);
+        gameState.setScore(scoreManager.getScore());
+        gameState.setMaxScore(scoreManager.getMaxScore());
         gameState.setJudgement(judgementResult.toString());
     }
 
