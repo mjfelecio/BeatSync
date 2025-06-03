@@ -60,20 +60,21 @@ public class SceneManager implements SceneChangeListener {
 
     public Scene getSceneFromGameScene(GameScene gameScene) {
         FXMLLoader loader;
+        Scene scene = null;
 
         try {
             switch (gameScene) {
                 case TITLE_SCREEN -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/title_screen.fxml"));
-                    return new Scene(loader.load(), width, height);
+                    scene = new Scene(loader.load(), width, height);
                 }
                 case SONG_SELECT -> {
 //                    loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/song_select.fxml"));
-                    return new SongSelectController().getSongSelectScene();
+                    scene = new SongSelectController().getSongSelectScene();
                 }
                 case SETTINGS -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/settings.fxml"));
-                    return new Scene(loader.load(), width, height);
+                    scene = new Scene(loader.load(), width, height);
                 }
                 case GAMEPLAY -> {
                     GameplayManager gameplayManager = GameplayManager.getInstance();
@@ -81,15 +82,16 @@ public class SceneManager implements SceneChangeListener {
                     gameplayManager.initializeGameplay();
                     gameplayManager.startGameplay();
 
-                    return gameplayManager.getGameplayScene();
+                    scene = gameplayManager.getGameplayScene();
                 }
                 case RESULT_SCREEN -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/result_screen.fxml"));
-                    return new Scene(loader.load(), width, height);
+                    scene = new Scene(loader.load(), width, height);
                 }
                 default -> {
+                    // Just return the current scene if the scene isn't found
                     System.out.println("Unknown scene: " + gameScene + ". Returning current scene.");
-                    return getCurrentScene();
+                    scene = getCurrentScene();
                 }
             }
         } catch (Exception e) {
@@ -97,7 +99,6 @@ public class SceneManager implements SceneChangeListener {
             e.printStackTrace();
         }
 
-        // Just return the current scene if the scene isn't found
-        return getCurrentScene();
+        return scene;
     }
 }
