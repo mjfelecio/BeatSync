@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.controller.SongSelectController;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.SceneChangeListener;
 import com.mjfelecio.beatsync.state.GameState;
@@ -67,8 +68,8 @@ public class SceneManager implements SceneChangeListener {
                     return new Scene(loader.load(), width, height);
                 }
                 case SONG_SELECT -> {
-                    loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/song_select.fxml"));
-                    return new Scene(loader.load(), width, height);
+//                    loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/song_select.fxml"));
+                    return new SongSelectController().getSongSelectScene();
                 }
                 case SETTINGS -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/settings.fxml"));
@@ -76,11 +77,7 @@ public class SceneManager implements SceneChangeListener {
                 }
                 case GAMEPLAY -> {
                     GameplayManager gameplayManager = GameplayManager.getInstance();
-                    String beatmapPath = "/home/kirbysmashyeet/IdeaProjects/School/BeatSync/src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/TrySail - Utsuroi (Short Ver.) (Scotty) [Easy].osu";
-                    String audioPath = new File("/home/kirbysmashyeet/IdeaProjects/School/BeatSync/src/main/resources/com/mjfelecio/beatsync/beatmaps/1301440 TrySail - Utsuroi (Short Ver.) (another copy).osz_FILES/audio.mp3").toURI().toString();
-
-                    gameplayManager.loadBeatmap(beatmapPath, audioPath);
-
+                    gameplayManager.loadBeatmap(GameState.getInstance().getCurrentBeatmap());
                     gameplayManager.initializeGameplay();
                     gameplayManager.startGameplay();
 
