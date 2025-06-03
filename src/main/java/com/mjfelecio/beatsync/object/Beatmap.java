@@ -9,7 +9,6 @@ public class Beatmap {
     private String diffName;
     private int beatmapID;
     private String audioPath;
-    private String folderPath;
     private final List<Note> notes = new ArrayList<>();
 
     public String getTitle() {
@@ -50,14 +49,6 @@ public class Beatmap {
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
-    }
-
-    public String getFolderPath() {
-        return folderPath;
-    }
-
-    public void setFolderPath(String folderPath) {
-        this.folderPath = folderPath;
     }
 
     @Override

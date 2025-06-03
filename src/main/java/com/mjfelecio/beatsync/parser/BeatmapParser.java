@@ -7,6 +7,8 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
  /* See: https://osu.ppy.sh/wiki/en/Client/File_formats/osu_(file_format)
      I probably need:
@@ -73,24 +75,25 @@ public class BeatmapParser {
                 }
 
                 // General
-                if (section == Section.GENERAL) parseGeneral(beatmap, line);
+                if (section == Section.GENERAL) parseGeneral(beatmap, line, file);
 
                 // Metadata
                 if (section == Section.METADATA) parseMetaData(beatmap, line);
 
                 // HitObjects
                 if (section == Section.HIT_OBJECTS) parseHitObjects(beatmap, line);
-
-                // Extract filePath
-                beatmap.setFolderPath(file.getParentFile().toURI().toString());
             }
         }
 
         return beatmap;
     }
 
-    private static void parseGeneral(Beatmap beatmap, String line) {
-        if (line.startsWith("AudioFilename:")) beatmap.setAudioPath(line.substring(14).trim());
+    private static void parseGeneral(Beatmap beatmap, String line, File file) {
+        if (line.startsWith("AudioFilename:")) {
+            String audioFileName = line.substring(14).trim();
+            Path audioPath = Paths.get(file.getParent(), audioFileName);
+            beatmap.setAudioPath(audioPath.toUri().toASCIIString());
+        }
     }
 
     private static void parseMetaData(Beatmap beatmap, String line) {
