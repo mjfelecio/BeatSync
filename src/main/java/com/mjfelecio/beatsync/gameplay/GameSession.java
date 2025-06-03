@@ -3,7 +3,7 @@ package com.mjfelecio.beatsync.gameplay;
 public class GameSession {
     private int combo = 0;
     private long score = 0;
-    private long accuracy = 100;
+    private double accuracy = 100;
     private String lastJudgement = "";
 
     public void incrementCombo() { combo++; }
@@ -24,10 +24,10 @@ public class GameSession {
         this.score = score;
     }
 
-    public long getAccuracy() {
+    public double getAccuracy() {
         return accuracy;
     }
-    public void setAccuracy(int accuracy) {
+    public void setAccuracy(double accuracy) {
         this.accuracy = accuracy;
     }
 
