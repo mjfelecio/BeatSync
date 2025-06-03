@@ -1,5 +1,8 @@
 package com.mjfelecio.beatsync.judgement;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+
 public class ScoreManager {
     private int currentScore = 0;
     private final int maxScore;
@@ -17,7 +20,9 @@ public class ScoreManager {
     }
 
     public double getAccuracy() {
-        return totalHits == 0 ? 100.0 : (currentScore * 100.0 / (totalHits * 300));
+        double accuracy = totalHits == 0 ? 100.0 : (currentScore * 100.0 / (totalHits * 300));
+        // Round to the 2 decimal digits
+        return new BigDecimal(accuracy).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
     public String getRank() {
