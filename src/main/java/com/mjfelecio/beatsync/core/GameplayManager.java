@@ -80,11 +80,10 @@ public class GameplayManager {
         };
     }
 
-    public void loadBeatmap(String beatmapPath, String audioPath) {
+    public void loadBeatmap(Beatmap beatmap) {
         try {
-            Beatmap beatmap = BeatmapParser.parse(new File(beatmapPath));
             gameplayLogic.loadBeatmap(beatmap);
-            gameEngine.getAudioManager().loadMusic(audioPath);
+            gameEngine.getAudioManager().loadMusic(beatmap.getAudioPath());
         } catch (Exception e) {
             throw new RuntimeException("Failed to load beatmap", e);
         }
