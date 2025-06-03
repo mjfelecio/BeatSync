@@ -10,6 +10,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.input.KeyCode;
 import javafx.scene.layout.StackPane;
 
 import java.io.File;
@@ -58,8 +59,19 @@ public class GameplayManager {
         inputHandler = new InputHandler(gameplayLogic);
 
         // Setup input handling for this scene only
-        gameplayScene.setOnKeyPressed(event ->
-                inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentTime()));
+        gameplayScene.setOnKeyPressed(event -> {
+            // Move this to another class maybe? But I don't care for now
+            // Pauses or unpauses the game
+            if (event.getCode() == KeyCode.ESCAPE) {
+                if (isPaused) {
+                    resumeGameplay();
+                } else {
+                    pauseGameplay();
+                }
+            }
+
+            inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentTime());
+        });
         gameplayScene.setOnKeyReleased(event ->
                 inputHandler.handleKeyRelease(event.getCode(), gameEngine.getGameClock().getCurrentTime()));
 
