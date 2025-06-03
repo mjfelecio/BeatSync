@@ -9,6 +9,8 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Map;
+import java.util.stream.Collectors;
 
  /* See: https://osu.ppy.sh/wiki/en/Client/File_formats/osu_(file_format)
      I probably need:
@@ -83,6 +85,15 @@ public class BeatmapParser {
                 // HitObjects
                 if (section == Section.HIT_OBJECTS) parseHitObjects(beatmap, line);
             }
+
+            // Get note count
+            Map<Boolean, Long> noteCounts = beatmap.getNotes().stream()
+                    .collect(Collectors.groupingBy(
+                            Note::isHoldNote,
+                            Collectors.counting()
+                    ));
+            beatmap.setHoldNoteCount(Math.toIntExact(noteCounts.getOrDefault(true, 0L)));
+            beatmap.setRegularNoteCount(Math.toIntExact(noteCounts.getOrDefault(false, 0L)));
         }
 
         return beatmap;

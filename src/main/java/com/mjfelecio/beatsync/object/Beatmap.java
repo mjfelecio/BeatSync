@@ -10,6 +10,8 @@ public class Beatmap {
     private int beatmapID;
     private String audioPath;
     private final List<Note> notes = new ArrayList<>();
+    private int regularNoteCount;
+    private int holdNoteCount;
 
     public String getTitle() {
         return title;
@@ -49,6 +51,22 @@ public class Beatmap {
 
     public void setAudioPath(String audioPath) {
         this.audioPath = audioPath;
+    }
+
+    public int getRegularNoteCount() {
+        return regularNoteCount;
+    }
+
+    public int getHoldNoteCount() {
+        return holdNoteCount;
+    }
+
+    public void setRegularNoteCount(int regularNoteCount) {
+        this.regularNoteCount = regularNoteCount;
+    }
+
+    public void setHoldNoteCount(int holdNoteCount) {
+        this.holdNoteCount = holdNoteCount;
     }
 
     @Override
