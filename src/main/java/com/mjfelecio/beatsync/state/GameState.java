@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.state;
 
+import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.SceneChangeListener;
 
@@ -10,6 +11,7 @@ public class GameState {
     private static final GameState instance = new GameState();
     private GameScene currentScene;
     private List<SceneChangeListener> listeners = new ArrayList<>();
+    private Beatmap currentBeatmap;
 
     private GameState() {}
 
@@ -63,4 +65,12 @@ public class GameState {
     }
 
     public boolean isPlaying() { return isPlaying; }
+
+    public Beatmap getCurrentBeatmap() {
+        return currentBeatmap;
+    }
+
+    public void setCurrentBeatmap(Beatmap currentBeatmap) {
+        this.currentBeatmap = currentBeatmap;
+    }
 }
