@@ -3,7 +3,8 @@ package com.mjfelecio.beatsync.controller;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
 import com.mjfelecio.beatsync.parser.BeatmapLoader;
-import javafx.application.Application;
+import com.mjfelecio.beatsync.rendering.GameScene;
+import com.mjfelecio.beatsync.state.GameState;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
@@ -14,13 +15,12 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
-import javafx.stage.Stage;
 
 import java.io.File;
 import java.util.Comparator;
 import java.util.List;
 
-public class SongSelectController extends Application {
+public class SongSelectController {
     private ListView<BeatmapSet> songListView = new ListView<>();
     private ListView<Beatmap> diffListView = new ListView<>();
     private VBox difficultyListViewWrapper;
@@ -28,34 +28,39 @@ public class SongSelectController extends Application {
     private BeatmapSet selectedBeatmapSet;
     private Beatmap selectedBeatmap;
 
-    @Override
-    public void start(Stage stage) throws Exception {
-        VBox root = new VBox();
-        root.setPrefSize(600, 800);
-        root.setAlignment(Pos.CENTER);
-        root.setStyle("-fx-padding: 20;");
+    public Scene getSongSelectScene() {
+            VBox root = new VBox();
+            root.setPrefSize(600, 800);
+            root.setAlignment(Pos.CENTER);
+            root.setStyle("-fx-padding: 20;");
 
-        Label songSelectLabel = new Label("Song Select");
-        songSelectLabel.setFont(new Font("Verdana", 25));
+            Label songSelectLabel = new Label("Song Select");
+            songSelectLabel.setFont(new Font("Verdana", 25));
 
-        songListView = createSongListView();
-        songListView.setPrefSize(400, 300);
+            songListView = createSongListView();
+            songListView.setPrefWidth(400);
 
-        difficultyListViewWrapper = new VBox(5);
-        difficultyListViewWrapper.setAlignment(Pos.CENTER);
-        difficultyListViewWrapper.setPrefHeight(150);
+            difficultyListViewWrapper = new VBox(5);
+            difficultyListViewWrapper.setAlignment(Pos.CENTER);
+            difficultyListViewWrapper.setPrefHeight(150);
 
-        HBox buttonContainer = new HBox(10);
-        Button backButton = new Button("Back");
-        Button playButton = new Button("Play");
-        buttonContainer.getChildren().addAll(backButton, playButton);
-        buttonContainer.setAlignment(Pos.CENTER);
+            HBox buttonContainer = new HBox(10);
 
-        root.getChildren().addAll(songSelectLabel, songListView, new Label("Difficulties"), difficultyListViewWrapper, buttonContainer);
+            Button backButton = new Button("Back");
+            backButton.setOnAction(e -> GameState.getInstance().setCurrentScene(GameScene.TITLE_SCREEN));
 
-        Scene songSelectScene = new Scene(root, 1920, 1080);
-        stage.setScene(songSelectScene);
-        stage.show();
+            Button playButton = new Button("Play");
+            playButton.setOnAction(e -> {
+                GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
+                GameState.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+            });
+
+            buttonContainer.getChildren().addAll(backButton, playButton);
+            buttonContainer.setAlignment(Pos.CENTER);
+
+            root.getChildren().addAll(songSelectLabel, songListView, new Label("Difficulties"), difficultyListViewWrapper, buttonContainer);
+
+        return new Scene(root, 1920, 1080);
     }
 
     public ListView<BeatmapSet> createSongListView() {
@@ -63,7 +68,7 @@ public class SongSelectController extends Application {
         ObservableList<BeatmapSet> songs = FXCollections.observableArrayList(BeatmapLoader.getInstance().getAllBeatmaps());
         songListView.setItems(songs);
 
-        songListView.setCellFactory(listView -> new ListCell<BeatmapSet>() {
+        songListView.setCellFactory(_ -> new ListCell<>() {
             private final HBox content;
             private final ImageView thumbnail;
             private final Label title;
@@ -84,7 +89,7 @@ public class SongSelectController extends Application {
                 if (empty || beatmapSet == null) {
                     setGraphic(null);
                 } else {
-                    String imagePath = new File(beatmapSet.getImagePath()).toURI().toString();
+                    String imagePath = new File(beatmapSet.getImagePath()).toURI().toASCIIString();
                     thumbnail.setImage(new Image(imagePath));
                     title.setText(beatmapSet.getTitle());
                     setGraphic(content);
@@ -130,9 +135,5 @@ public class SongSelectController extends Application {
         });
 
         return diffListView;
-    }
-
-    public static void main(String[] args) {
-        launch();
     }
 }
