@@ -8,24 +8,27 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SceneManager implements SceneChangeListener {
     private static SceneManager instance;
+    private final Stage primaryStage; // This contains the original stage (window) for the game
+
     private final int width;
     private final int height;
-    private final GameState gameState;
-    private final Stage primaryStage; // This contains the original stage (window) for the game
+
+    private final List<SceneChangeListener> listeners = new ArrayList<>();
+    private GameScene currentGameScene;
     private Scene currentScene;
 
     private SceneManager(int width, int height, Stage primaryStage) {
         this.width = width;
         this.height = height;
         this.primaryStage = primaryStage;
-        this.gameState = GameState.getInstance();
 
-        // Register this SceneManager as a listener to GameState changes
-        this.gameState.addSceneChangeListener(this);
+        // Register this SceneManager as a listener to Scene changes
+        addSceneChangeListener(this);
     }
 
     public static void initialize(int width, int height, Stage primaryStage) {
@@ -43,6 +46,29 @@ public class SceneManager implements SceneChangeListener {
 
     public Scene getCurrentScene() {
         return currentScene;
+    }
+
+    public void setCurrentScene(GameScene currentGameScene) {
+        GameScene oldScene = this.currentGameScene;
+        this.currentGameScene = currentGameScene;
+
+        // Notify all listeners about the scene change
+        notifySceneChange(oldScene, currentGameScene);
+    }
+
+    // Method to register listeners
+    public void addSceneChangeListener(SceneChangeListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeSceneChangeListener(SceneChangeListener listener) {
+        listeners.remove(listener);
+    }
+
+    private void notifySceneChange(GameScene oldScene, GameScene newScene) {
+        for (SceneChangeListener listener : listeners) {
+            listener.onSceneChange(oldScene, newScene);
+        }
     }
 
     @Override

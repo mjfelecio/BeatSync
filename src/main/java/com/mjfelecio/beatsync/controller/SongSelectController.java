@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.controller;
 
+import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
 import com.mjfelecio.beatsync.parser.BeatmapLoader;
@@ -47,12 +48,12 @@ public class SongSelectController {
             HBox buttonContainer = new HBox(10);
 
             Button backButton = new Button("Back");
-            backButton.setOnAction(e -> GameState.getInstance().setCurrentScene(GameScene.TITLE_SCREEN));
+            backButton.setOnAction(e -> SceneManager.getInstance().setCurrentScene(GameScene.TITLE_SCREEN));
 
             Button playButton = new Button("Play");
             playButton.setOnAction(e -> {
                 GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
-                GameState.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+                SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
             });
 
             buttonContainer.getChildren().addAll(backButton, playButton);
