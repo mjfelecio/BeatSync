@@ -23,7 +23,10 @@ public class InputHandler {
         Integer lane = keyToLaneMap.get(keyCode);
         if (lane != null) {
             inputState.pressLane(lane);
-            SoundManager.getInstance().play(AudioType.HITSOUND);
+
+            // Play hit sound only once in a press (It shouldn't keep playing when holding)
+            if (inputState.isPressNotHold(lane)) SoundManager.getInstance().play(AudioType.HITSOUND);
+
             gameplayLogic.handleLanePress(lane, currentTime);
         }
     }
