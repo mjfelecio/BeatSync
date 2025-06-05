@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.audio.AudioManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 
 public class GameEngine {

@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.core;
+package com.mjfelecio.beatsync.audio;
 
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;

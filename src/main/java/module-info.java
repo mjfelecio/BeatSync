@@ -13,6 +13,7 @@ module com.mjfelecio.beatsync {
     exports com.mjfelecio.beatsync.state;
     exports com.mjfelecio.beatsync.rendering;
     exports com.mjfelecio.beatsync.controller;
+    exports com.mjfelecio.beatsync.audio;
 
     opens com.mjfelecio.beatsync.controller to javafx.fxml;
 }
