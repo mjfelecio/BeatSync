@@ -13,28 +13,21 @@ import java.util.List;
 public class PlayfieldRenderer {
     public void render(GraphicsContext gc, GameSession gameSession,
                        List<Note> visibleNotes, InputState inputState) {
-        clearScreen(gc);
-        drawPlayfieldBorders(gc);
+        clearCanvasToBlack(gc);
         drawHitZoneIndicators(gc, inputState);
         drawNotes(gc, visibleNotes);
         drawUI(gc, gameSession);
     }
 
     public void renderEmptyPlayfield(GraphicsContext gc, GameSession gameSession) {
-        clearScreen(gc);
-        drawPlayfieldBorders(gc);
+        clearCanvasToBlack(gc);
         drawHitZoneIndicators(gc, new InputState());
         drawUI(gc, gameSession);
     }
 
-    public void clearScreen(GraphicsContext gc) {
-        gc.clearRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
-    }
-
-    public void drawPlayfieldBorders(GraphicsContext gc) {
-        gc.setFill(Color.WHITE);
-        gc.setLineWidth(8);
-        gc.strokeRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
+    public void clearCanvasToBlack(GraphicsContext gc) {
+        gc.setFill(Color.BLACK);
+        gc.fillRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
     }
 
     public void drawHitZoneIndicators(GraphicsContext gc, InputState inputState) {
@@ -45,15 +38,14 @@ public class PlayfieldRenderer {
 
             // Draw hit zone indicators
             int centerX = (laneWidth * i) + (laneWidth - GameConfig.NOTE_DIAMETER) / 2;
+            gc.setStroke(Color.WHITE);
             gc.strokeOval(centerX, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
 
+            // Make the hit zone flash to white if the lane is pressed
             if (inputState.isLanePressed(i)) {
-                gc.setFill(Color.RED);
+                gc.setFill(Color.WHITE);
                 gc.fillOval(centerX, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
-                gc.setFill(Color.BLACK);
             }
-
-            gc.strokeOval(centerX, GameConfig.HIT_LINE_Y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
         }
     }
 
@@ -122,7 +114,7 @@ public class PlayfieldRenderer {
     }
 
     private void drawUI(GraphicsContext gc, GameSession gameSession) {
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.WHITE);
         gc.setFont(new Font(20));
         // These are just temporary
         gc.fillText("Combo: " + gameSession.getCombo(), 20, 50);
