@@ -15,7 +15,7 @@ public class PlayfieldRenderer {
                        List<Note> visibleNotes, InputState inputState) {
         clearScreen(gc);
         drawPlayfieldBorders(gc);
-        drawLanes(gc, inputState);
+        drawHitZoneIndicators(gc, inputState);
         drawNotes(gc, visibleNotes);
         drawUI(gc, gameSession);
     }
@@ -23,7 +23,7 @@ public class PlayfieldRenderer {
     public void renderEmptyPlayfield(GraphicsContext gc, GameSession gameSession) {
         clearScreen(gc);
         drawPlayfieldBorders(gc);
-        drawLanes(gc, new InputState());
+        drawHitZoneIndicators(gc, new InputState());
         drawUI(gc, gameSession);
     }
 
@@ -32,19 +32,16 @@ public class PlayfieldRenderer {
     }
 
     public void drawPlayfieldBorders(GraphicsContext gc) {
-        gc.setFill(Color.BLACK);
+        gc.setFill(Color.WHITE);
         gc.setLineWidth(8);
         gc.strokeRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
     }
 
-    public void drawLanes(GraphicsContext gc, InputState inputState) {
+    public void drawHitZoneIndicators(GraphicsContext gc, InputState inputState) {
         int laneWidth = GameConfig.PLAYFIELD_WIDTH / GameConfig.NUM_LANES;
 
         for (int i = 0; i < GameConfig.NUM_LANES; i++) {
-            // Draw lane separator
-            gc.setStroke(Color.BLACK);
             gc.setLineWidth(2);
-            gc.strokeLine(laneWidth * i, 0, laneWidth * i, GameConfig.PLAYFIELD_HEIGHT);
 
             // Draw hit zone indicators
             int centerX = (laneWidth * i) + (laneWidth - GameConfig.NOTE_DIAMETER) / 2;
