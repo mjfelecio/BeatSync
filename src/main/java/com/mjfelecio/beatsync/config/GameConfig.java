@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.config;
 
+import javafx.scene.paint.Color;
+
 public final class GameConfig {
     public static final int SCREEN_WIDTH = 1920;
     public static final int SCREEN_HEIGHT = 1080;
@@ -13,6 +15,10 @@ public final class GameConfig {
 
     public static final int HIT_LINE_Y = PLAYFIELD_HEIGHT - 150;
     public static final String BEATMAP_DIRECTORY = "src/main/resources/com/mjfelecio/beatsync/beatmaps";
+
+    // Note Colors
+    public static Color INNER_NOTE_COLOR = Color.valueOf("#11B6E4");
+    public static Color OUTER_NOTE_COLOR = Color.valueOf("#B885FF");
 
     private GameConfig() {} // Prevent instantiation
 }

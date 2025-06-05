@@ -2,7 +2,6 @@ package com.mjfelecio.beatsync.rendering;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.gameplay.GameSession;
-import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.object.Note;
 import com.mjfelecio.beatsync.input.InputState;
 import javafx.scene.canvas.GraphicsContext;
@@ -78,7 +77,15 @@ public class PlayfieldRenderer {
         int x = calculateNoteX(n.getLaneNumber());
         double y = n.calculateY();
 
-        gc.setFill(Color.BLUE);
+        Color color;
+
+        if (n.getLaneNumber() == 0 || n.getLaneNumber() == 3) {
+            color = GameConfig.OUTER_NOTE_COLOR;
+        } else {
+            color = GameConfig.INNER_NOTE_COLOR;
+        }
+
+        gc.setFill(color);
         gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
     }
 
@@ -91,12 +98,14 @@ public class PlayfieldRenderer {
         if (endY < GameConfig.PLAYFIELD_HEIGHT) {
             int noteWidth = GameConfig.NOTE_DIAMETER;
             int noteX = calculateNoteX(n.getLaneNumber());
+            Color noteColor = getLaneColor(n.getLaneNumber());
 
-            // If the note has been missed already, color it differently
-            // (This applies more to hold notes so it doesn't just flash colors)
-            Color holdColor = n.isHeld() || n.isMiss() ? Color.CADETBLUE : Color.CORNFLOWERBLUE;
-            Color noteColor = n.isHeld() || n.isMiss() ? Color.CORNFLOWERBLUE : Color.BLUE;
+            // Darken the color of the hold note if it is a miss or is being held
+            Color holdColor = n.isHeld() || n.isMiss() ?
+                    noteColor.darker() :
+                    noteColor.desaturate();
 
+            // TODO: Calculate the arc of the holdNote better so that it doesn't squish when it's height is absurdly small
             if (!n.isHeld()) {
                 gc.setFill(holdColor);
                 gc.fillRoundRect(noteX, endY + noteWidth, noteWidth, noteHeight, noteWidth, noteWidth);
@@ -132,5 +141,23 @@ public class PlayfieldRenderer {
     private int calculateNoteX(int laneNumber) {
         int laneWidth = GameConfig.PLAYFIELD_WIDTH / GameConfig.NUM_LANES;
         return (laneWidth * laneNumber) + (laneWidth - GameConfig.NOTE_DIAMETER) / 2;
+    }
+
+    /**
+     * Gets the color of the note based on its lane.
+     * If it's an outer lane, it uses the outer note color.
+     * If it's an inner lane, it uses the inner lane color.
+     *
+     * @param laneNumber the lane number of the note (zero-indexed)
+     * @return Color - the color of the laneNumber
+    * */
+    private Color getLaneColor(int laneNumber) {
+        Color color = null;
+        if (laneNumber == 0 || laneNumber == 3) {
+            color = GameConfig.OUTER_NOTE_COLOR;
+        } else if (laneNumber == 1 || laneNumber == 2) {
+            color = GameConfig.INNER_NOTE_COLOR;
+        }
+        return color;
     }
 }
