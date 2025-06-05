@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.input;
 
+import com.mjfelecio.beatsync.audio.AudioType;
+import com.mjfelecio.beatsync.audio.SoundManager;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import javafx.scene.input.KeyCode;
 
@@ -21,6 +23,7 @@ public class InputHandler {
         Integer lane = keyToLaneMap.get(keyCode);
         if (lane != null) {
             inputState.pressLane(lane);
+            SoundManager.getInstance().play(AudioType.HITSOUND);
             gameplayLogic.handleLanePress(lane, currentTime);
         }
     }
