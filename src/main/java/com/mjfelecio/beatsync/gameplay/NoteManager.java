@@ -81,7 +81,7 @@ public class NoteManager {
     public Note getHittableNote(int laneNumber, long currentTime) {
         return visibleNotes.stream()
                            .filter(n -> n.getLaneNumber() == laneNumber)
-                           .filter(n -> !n.isHit())
+                           .filter(n -> !n.isHit() && !n.isMiss())
                            .filter(n -> isWithinHitWindow(n, currentTime))
                            .min(Comparator.comparingLong(n -> Math.abs(currentTime - n.getStartTime())))
                            .orElse(null);
