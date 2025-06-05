@@ -4,21 +4,15 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 
 public class AudioManager {
-    private Media currentMusic;
     private MediaPlayer player;
-
-    public void setCurrentMusic(Media newMusic) {
-        this.currentMusic = newMusic;
-        this.player = new MediaPlayer(this.currentMusic);
-    }
 
     public MediaPlayer getPlayer() {
         return player;
     }
 
     public void loadMusic(String audioPath) {
-        Media media = new Media(audioPath);
-        setCurrentMusic(media);
+        Media music = new Media(audioPath);
+        this.player = new MediaPlayer(music);
     }
 
     public void play() {
