@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.object.Beatmap;
@@ -19,6 +20,7 @@ public class GameplayManager {
     private Canvas gameCanvas;
     private GraphicsContext gc;
     private Scene gameplayScene;
+    private GameplayUI gameplayUI;
 
     // Game Loop
     private AnimationTimer gameLoop;
@@ -45,7 +47,7 @@ public class GameplayManager {
 
     public void initializeGameplay() {
         // This is the ui, the view itself (I'm not using fxml because it's annoying)
-        GameplayUI gameplayUI = new GameplayUI(); // Initialize the UI
+        gameplayUI = new GameplayUI(); // Initialize the UI
         gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
         gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
 
@@ -143,6 +145,12 @@ public class GameplayManager {
         long currentAudioTime = gameEngine.getAudioManager().getCurrentTime();
         gameEngine.getGameClock().syncToAudioTime(currentAudioTime);
         gameplayLogic.update(currentAudioTime, deltaTime);
+
+        // Update the UI
+        GameSession gameSession = gameEngine.getGameSession();
+        gameplayUI.setScore(gameSession.getScore());
+        gameplayUI.setAccuracy(gameSession.getAccuracy());
+        gameplayUI.setCombo(gameSession.getCombo());
     }
 
     private void render() {

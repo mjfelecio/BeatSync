@@ -2,8 +2,7 @@ package com.mjfelecio.beatsync.views;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.utils.FontProvider;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,8 +17,8 @@ import java.util.Objects;
 
 public class GameplayUI {
     // Write-only properties
-    private final IntegerProperty score = new SimpleIntegerProperty();
-    private final IntegerProperty accuracy = new SimpleIntegerProperty();
+    private final LongProperty score = new SimpleLongProperty();
+    private final DoubleProperty accuracy = new SimpleDoubleProperty();
     private final IntegerProperty combo = new SimpleIntegerProperty();
 
     // UI Config
@@ -163,11 +162,11 @@ public class GameplayUI {
         return gameplayCanvas;
     }
 
-    public void setScore(int value) {
+    public void setScore(long value) {
         score.set(value);
     }
 
-    public void setAccuracy(int value) {
+    public void setAccuracy(double value) {
         accuracy.set(value);
     }
 
