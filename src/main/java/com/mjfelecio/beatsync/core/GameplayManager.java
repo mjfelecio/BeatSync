@@ -1,17 +1,16 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
 import com.mjfelecio.beatsync.state.GameState;
+import com.mjfelecio.beatsync.views.GameplayScene;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
-import javafx.scene.layout.StackPane;
 
 public class GameplayManager {
     private static GameplayManager instance;
@@ -45,13 +44,10 @@ public class GameplayManager {
     }
 
     public void initializeGameplay() {
-        // Create canvas and graphics context
-        gameCanvas = new Canvas(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
-        gc = gameCanvas.getGraphicsContext2D();
-
-        // Create scene
-        gameplayScene = new Scene(new StackPane(gameCanvas),
-                GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
+        // This is the ui, the view itself (I'm not using fxml because it's annoying)
+        GameplayScene gameplayUI = new GameplayScene(); // Initialize the UI
+        gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
+        gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
 
         // Initialize input handler
         inputHandler = new InputHandler(gameplayLogic);

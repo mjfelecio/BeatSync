@@ -13,7 +13,6 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.text.Font;
 
 import java.util.Objects;
 
@@ -26,6 +25,7 @@ public class GameplayScene {
     // UI Config
 
     // UI Elements
+    private Canvas gameplayCanvas;
     private final Label scoreValueLabel = new Label("0");
     private final Label accuracyValueLabel = new Label("100%");
     private final HBox root = new HBox();
@@ -60,18 +60,18 @@ public class GameplayScene {
         scoreWrapper.setPadding(new Insets(0, 0, 60, 0));
 
         // Canvas (Center)
-        Canvas canvas = new Canvas(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT); // fits in center, adjust if needed
-        canvas.setStyle(
+        gameplayCanvas = new Canvas(GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
+        gameplayCanvas.setStyle(
                 "-fx-border-color: #27fa00; " +
                 "-fx-border-width: 2; "
         );
 
-        GraphicsContext gc = canvas.getGraphicsContext2D();
+        GraphicsContext gc = gameplayCanvas.getGraphicsContext2D();
         gc.setFill(Color.BLACK);
-        gc.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
+        gc.fillRect(0, 0, gameplayCanvas.getWidth(), gameplayCanvas.getHeight());
 
         // Wrap in a StackPane
-        StackPane canvasWrapper = new StackPane(canvas);
+        StackPane canvasWrapper = new StackPane(gameplayCanvas);
         canvasWrapper.setBorder(new Border(new BorderStroke(
                 Color.web("#27fa00"),
                 BorderStrokeStyle.SOLID,
@@ -156,7 +156,11 @@ public class GameplayScene {
     }
 
     public Scene getGamePlayScene() {
-        return new Scene(root, 1920, 1080);
+        return new Scene(root, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
+    }
+
+    public Canvas getGameplayCanvas() {
+        return gameplayCanvas;
     }
 
     public void setScore(int value) {
