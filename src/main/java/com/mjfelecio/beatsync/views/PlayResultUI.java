@@ -78,6 +78,12 @@ public class PlayResultUI {
         );
 
         ImageView rankImage = new ImageView(getRankImage(rank));
+        // The rank image now displays a different border color depending on the
+        // rank being displayed! Yahooo
+        String borderColor = getRankColor(rank);
+        rankImage.setStyle(String.format(
+                "-fx-effect: dropshadow(gaussian, %s, 30, 0.3, 0, 0);", borderColor
+        ));
         VBox.setVgrow(rankImage, Priority.ALWAYS);
 
         VBox statsBox = createStatsBox();
@@ -186,6 +192,17 @@ public class PlayResultUI {
         }
 
         return image;
+    }
+
+    public String getRankColor(Rank rank) {
+        return switch (rank) {
+            case SS -> "#FFD700";  // Gold
+            case S  -> "#C0C0C0";  // Silver
+            case A  -> "#00CCFF";  // Aqua Blue
+            case B  -> "#AA88FF";  // Soft Purple
+            case C  -> "#FF00FF";  // Magenta
+            case D  -> "#FF4444";  // Red
+        };
     }
 
     private String buttonStyle() {
