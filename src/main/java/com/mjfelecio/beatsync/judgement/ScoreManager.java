@@ -26,14 +26,14 @@ public class ScoreManager {
         return new BigDecimal(accuracy).setScale(2, RoundingMode.HALF_UP).doubleValue();
     }
 
-    public String getRank() {
+    public Rank getRank() {
         double percent = (currentScore * 100.0 / maxScore);
-        if (percent >= 90) return "S";
-        if (percent >= 70) return "A";
-        if (percent >= 50) return "B";
-        if (percent >= 40) return "C";
-        if (percent >= 30) return "D";
-        return "F";
+        if (percent >= 98) return Rank.SS;
+        if (percent >= 90) return Rank.S;
+        if (percent >= 80) return Rank.A;
+        if (percent >= 60) return Rank.B;
+        if (percent >= 40) return Rank.C;
+        return Rank.D;
     }
 
     public int getScore() {
