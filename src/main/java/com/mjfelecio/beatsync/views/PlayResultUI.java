@@ -94,25 +94,31 @@ public class PlayResultUI {
     }
 
     public VBox createStatsBox() {
-        VBox statsBox = new VBox(15);
+        VBox statsBox = new VBox(20);
         statsBox.setAlignment(Pos.CENTER);
-        statsBox.setPadding(new Insets(10, 0, 0, 0));
+        statsBox.setPadding(new Insets(40, 0, 0, 0));
 
         HBox scoreBox = createScoreBox();
         HBox accAndComboBox = createAccAndComboBox();
 
-
         statsBox.getChildren().addAll(scoreBox, accAndComboBox);
-
         return statsBox;
     }
 
     private HBox createScoreBox() {
         HBox scoreBox = new HBox();
-        scoreBox.setAlignment(Pos.CENTER_LEFT);
+        scoreBox.setAlignment(Pos.CENTER);
+        scoreBox.setStyle(
+                """
+                -fx-background-color: #00FFAA33;
+                -fx-background-radius: 8;
+                -fx-padding: 10 20;
+                """
+        );
 
         scoreLabel = new Label("Score: 999999");
-        scoreLabel.setFont(FontProvider.ARCADE_R.getFont(24));
+        scoreLabel.setFont(FontProvider.ARCADE_R.getFont(22));
+        scoreLabel.setStyle("-fx-text-fill: #00FFAA;");
 
         scoreBox.getChildren().addAll(scoreLabel);
 
@@ -121,14 +127,17 @@ public class PlayResultUI {
 
     private HBox createAccAndComboBox() {
         HBox accAndComboBox = new HBox(10);
+
         accuracyLabel = new Label("Acc: 0.00%");
         accuracyLabel.setFont(FontProvider.ARCADE_R.getFont(14));
+        accuracyLabel.setStyle("-fx-text-fill: #CCCCFF;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
         maxComboLabel = new Label("Max Combo: 0");
         maxComboLabel.setFont(FontProvider.ARCADE_R.getFont(14));
+        maxComboLabel.setStyle("-fx-text-fill: #CCCCFF;");
 
         accAndComboBox.getChildren().addAll(accuracyLabel, spacer, maxComboLabel);
         return accAndComboBox;
