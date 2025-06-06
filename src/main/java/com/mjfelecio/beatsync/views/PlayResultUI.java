@@ -73,7 +73,7 @@ public class PlayResultUI {
                -fx-border-width: 2;
                -fx-border-radius: 12;
                -fx-background-radius: 12;
-               -fx-effect: dropshadow(gaussian, #00FFCC, 15, 0.2, 0, 0);
+               -fx-effect: dropshadow(gaussian, #00FFAA, 15, 0.2, 0, 0);
             """
         );
 
