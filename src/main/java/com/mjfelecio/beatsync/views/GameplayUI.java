@@ -29,7 +29,7 @@ public class GameplayUI {
     private final Label accuracyValueLabel = new Label("100%");
     private final HBox root = new HBox();
     private final Image backgroundImage = new Image(
-            Objects.requireNonNull(getClass().getResource("/com/mjfelecio/beatsync/images/gameplay_bg.jpg")).toExternalForm()
+            Objects.requireNonNull(getClass().getResource("/com/mjfelecio/beatsync/assets/images/gameplay_bg.jpg")).toExternalForm()
     );
     private final BackgroundImage bgImage = new BackgroundImage(
             backgroundImage,
