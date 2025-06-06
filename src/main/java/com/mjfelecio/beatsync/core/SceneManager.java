@@ -127,4 +127,16 @@ public class SceneManager implements SceneChangeListener {
 
         return scene;
     }
+
+    // This is more manual approach in case we want to show a different scene not defined in GameScene
+    public void changeSceneTo(Scene newScene) {
+        if (newScene != null) {
+            this.currentScene = newScene;
+
+            // Update the window with the new scene
+            if (primaryStage != null) {
+                primaryStage.setScene(newScene);
+            }
+        }
+    }
 }
