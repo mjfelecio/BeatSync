@@ -1,6 +1,8 @@
 package com.mjfelecio.beatsync.views;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.gameplay.GameSession;
+import com.mjfelecio.beatsync.judgement.JudgementResult;
 import com.mjfelecio.beatsync.judgement.Rank;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
@@ -14,18 +16,42 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.util.EnumMap;
+import java.util.Map;
+
 public class PlayResultUI {
-    // Gameplay values
-    private Rank rank = Rank.S; // For now, we set it to S, but this will be made dynamic based on the play result later
+    private Scene scene;
 
-    // UI elements
-    private Label accuracyLabel;
-    private Label scoreLabel;
-    private Label maxComboLabel;
-
-    private final Scene scene;
+    // Gameplay values (defaults for testing)
+    private Rank rank = Rank.S;
+    private long score = 0;
+    private double accuracy = 0;
+    private int maxCombo = 0;
+    private final Map<JudgementResult, Integer> judgementCounts;
 
     public PlayResultUI() {
+        // initialize judgementCounts with default values
+        judgementCounts = new EnumMap<>(JudgementResult.class);
+        for (JudgementResult result : JudgementResult.values()) {
+            judgementCounts.put(result, 0);
+        }
+    }
+
+    public void initializeValues(GameSession gameSession) {
+        rank = gameSession.getRank();
+        score = gameSession.getScore();
+        accuracy = gameSession.getAccuracy();
+        maxCombo = gameSession.getMaxCombo();
+        judgementCounts.put(JudgementResult.PERFECT, gameSession.getPerfectCount());
+        judgementCounts.put(JudgementResult.GREAT, gameSession.getGreatCount());
+        judgementCounts.put(JudgementResult.MEH, gameSession.getMehCount());
+        judgementCounts.put(JudgementResult.MISS, gameSession.getMissCount());
+
+        // Create the scene once the values has been filled in
+        createScene();
+    }
+
+    private void createScene() {
         VBox root = new VBox(40);
         root.setPadding(new Insets(40));
         root.setAlignment(Pos.TOP_CENTER);
@@ -85,11 +111,9 @@ public class PlayResultUI {
                 "-fx-effect: dropshadow(gaussian, %s, 30, 0.3, 0, 0);", borderColor
         ));
         VBox.setVgrow(rankImage, Priority.ALWAYS);
-
         VBox statsBox = createStatsBox();
 
         card.getChildren().addAll(rankImage, statsBox);
-
         return card;
     }
 
@@ -116,7 +140,7 @@ public class PlayResultUI {
                 """
         );
 
-        scoreLabel = new Label("Score: 999999");
+        Label scoreLabel = new Label(String.format("Score: %d", score)); // Scoooore
         scoreLabel.setFont(FontProvider.ARCADE_R.getFont(22));
         scoreLabel.setStyle("-fx-text-fill: #00FFAA;");
 
@@ -128,15 +152,16 @@ public class PlayResultUI {
     private HBox createAccAndComboBox() {
         HBox accAndComboBox = new HBox(10);
 
-        accuracyLabel = new Label("Acc: 0.00%");
-        accuracyLabel.setFont(FontProvider.ARCADE_R.getFont(14));
+        // UI elements
+        Label accuracyLabel = new Label(String.format("Acc: %.2f%%", accuracy)); // Format the accuracy before displaying it
+        accuracyLabel.setFont(FontProvider.ARCADE_R.getFont(12));
         accuracyLabel.setStyle("-fx-text-fill: #CCCCFF;");
 
         Region spacer = new Region();
         HBox.setHgrow(spacer, Priority.ALWAYS);
 
-        maxComboLabel = new Label("Max Combo: 0");
-        maxComboLabel.setFont(FontProvider.ARCADE_R.getFont(14));
+        Label maxComboLabel = new Label(String.format("Max Combo: %d", maxCombo)); // Append the max combo
+        maxComboLabel.setFont(FontProvider.ARCADE_R.getFont(12));
         maxComboLabel.setStyle("-fx-text-fill: #CCCCFF;");
 
         accAndComboBox.getChildren().addAll(accuracyLabel, spacer, maxComboLabel);
@@ -173,7 +198,16 @@ public class PlayResultUI {
             label.setFont(FontProvider.ARCADE_R.getFont(24));
             label.setStyle(String.format("-fx-fill: %s;", color));
 
-            Text count = new Text("0");
+            // Gets the values on the judgementCounts EnumMap
+            int countValue = switch (judgementData[0]) {
+                case "Perfect" -> judgementCounts.get(JudgementResult.PERFECT);
+                case "Great" -> judgementCounts.get(JudgementResult.GREAT);
+                case "Meh" -> judgementCounts.get(JudgementResult.MEH);
+                case "Miss" -> judgementCounts.get(JudgementResult.MISS);
+                default -> throw new IllegalStateException("Unexpected value: " + judgementData[0]);
+            };
+
+            Text count = new Text(String.valueOf(countValue));
             count.setFont(FontProvider.ARCADE_R.getFont(24));
             count.setStyle(String.format("-fx-fill: %s;", color));
 
@@ -203,7 +237,7 @@ public class PlayResultUI {
         return buttonGroup;
     }
 
-    public Image getRankImage(Rank rank) {
+    private Image getRankImage(Rank rank) {
         Image image = null;
         final int RANK_WIDTH = 250;
         final int RANK_HEIGHT = 0; // We can just set this to 0 since we want to preserve the ration
@@ -220,7 +254,7 @@ public class PlayResultUI {
         return image;
     }
 
-    public String getRankColor(Rank rank) {
+    private String getRankColor(Rank rank) {
         return switch (rank) {
             case SS -> "#FFD700";  // Gold
             case S  -> "#C0C0C0";  // Silver
@@ -245,6 +279,7 @@ public class PlayResultUI {
     }
 
     public Scene getScene() {
+        createScene();
         return scene;
     }
 }
