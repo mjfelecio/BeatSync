@@ -90,9 +90,13 @@ public class GameplayLogic {
         }
 
         scoreManager.registerJudgement(judgementResult);
+
+        // Store the results in the current session
         gameSession.setScore(scoreManager.getScore());
         gameSession.setAccuracy(scoreManager.getAccuracy());
         gameSession.setJudgement(judgementResult.toString());
+        gameSession.setMaxCombo(scoreManager.getMaxScore());
+        gameSession.setRank(scoreManager.getRank());
     }
 
     public List<Note> getVisibleNotes() {
