@@ -78,37 +78,54 @@ public class PlayResultUI {
         );
 
         ImageView rankImage = new ImageView(getRankImage(rank));
+        VBox.setVgrow(rankImage, Priority.ALWAYS);
 
-//        rankLabel = new Label("S");
-//        rankLabel.setFont(FontProvider.ARCADE_R.getFont(120));
-//        rankLabel.setAlignment(Pos.CENTER);
-//        rankLabel.setMaxHeight(Double.MAX_VALUE);
-//        VBox.setVgrow(rankLabel, Priority.ALWAYS);
-
-        HBox statsBox = createStatsBox();
+        VBox statsBox = createStatsBox();
 
         card.getChildren().addAll(rankImage, statsBox);
 
         return card;
     }
 
-    public HBox createStatsBox() {
-        HBox statsBox = new HBox(15);
+    public VBox createStatsBox() {
+        VBox statsBox = new VBox(15);
         statsBox.setAlignment(Pos.CENTER);
         statsBox.setPadding(new Insets(10, 0, 0, 0));
 
+        HBox scoreBox = createScoreBox();
+        HBox accAndComboBox = createAccAndComboBox();
+
+
+        statsBox.getChildren().addAll(scoreBox, accAndComboBox);
+
+        return statsBox;
+    }
+
+    private HBox createScoreBox() {
+        HBox scoreBox = new HBox();
+        scoreBox.setAlignment(Pos.CENTER_LEFT);
+
+        scoreLabel = new Label("Score: 999999");
+        scoreLabel.setFont(FontProvider.ARCADE_R.getFont(24));
+
+        scoreBox.getChildren().addAll(scoreLabel);
+
+        return scoreBox;
+    }
+
+    private HBox createAccAndComboBox() {
+        HBox accAndComboBox = new HBox(10);
         accuracyLabel = new Label("Acc: 0.00%");
         accuracyLabel.setFont(FontProvider.ARCADE_R.getFont(14));
 
-        scoreLabel = new Label("Score: 0");
-        scoreLabel.setFont(FontProvider.ARCADE_R.getFont(14));
+        Region spacer = new Region();
+        HBox.setHgrow(spacer, Priority.ALWAYS);
 
         maxComboLabel = new Label("Max Combo: 0");
         maxComboLabel.setFont(FontProvider.ARCADE_R.getFont(14));
 
-        statsBox.getChildren().addAll(accuracyLabel, scoreLabel, maxComboLabel);
-
-        return statsBox;
+        accAndComboBox.getChildren().addAll(accuracyLabel, spacer, maxComboLabel);
+        return accAndComboBox;
     }
 
     private VBox createJudgementsBox() {
@@ -156,14 +173,16 @@ public class PlayResultUI {
 
     public Image getRankImage(Rank rank) {
         Image image = null;
+        final int RANK_WIDTH = 250;
+        final int RANK_HEIGHT = 0; // We can just set this to 0 since we want to preserve the ration
 
         switch (rank) {
-            case SS -> image = ImageProvider.SS_RANK.getImage();
-            case S -> image = ImageProvider.S_RANK.getImage();
-            case A -> image = ImageProvider.A_RANK.getImage();
-            case B -> image = ImageProvider.B_RANK.getImage();
-            case C -> image = ImageProvider.C_RANK.getImage();
-            case D -> image = ImageProvider.D_RANK.getImage();
+            case SS -> image = ImageProvider.SS_RANK.getImage(RANK_WIDTH, RANK_HEIGHT, true, true);
+            case S -> image = ImageProvider.S_RANK.getImage(RANK_WIDTH, RANK_HEIGHT, true, true);
+            case A -> image = ImageProvider.A_RANK.getImage(RANK_WIDTH, RANK_HEIGHT, true, true);
+            case B -> image = ImageProvider.B_RANK.getImage(RANK_WIDTH, RANK_HEIGHT, true, true);
+            case C -> image = ImageProvider.C_RANK.getImage(RANK_WIDTH, RANK_HEIGHT, true, true);
+            case D -> image = ImageProvider.D_RANK.getImage(RANK_WIDTH, RANK_HEIGHT, true, true);
         }
 
         return image;
