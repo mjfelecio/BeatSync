@@ -7,11 +7,15 @@ import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.views.GameplayUI;
+import com.mjfelecio.beatsync.views.PlayResultUI;
 import javafx.animation.AnimationTimer;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
+import javafx.util.Duration;
 
 public class GameplayManager {
     private static GameplayManager instance;
@@ -50,6 +54,11 @@ public class GameplayManager {
         gameplayUI = new GameplayUI(); // Initialize the UI
         gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
         gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
+
+        // Once the music (aka the map) has ended, we navigate to the play result with the gameSession data
+        gameEngine.getAudioManager().getPlayer().setOnEndOfMedia(() -> {
+            navigateToPlayResult(gameEngine.getGameSession());
+        });
 
         // Initialize input handler
         inputHandler = new InputHandler(gameplayLogic);
@@ -137,6 +146,18 @@ public class GameplayManager {
 
         // Clean up resources
         cleanupResources();
+    }
+
+    private void navigateToPlayResult(GameSession gameSession) {
+        // We just navigate to the PlayResult from here instead of in the SceneManager because I'm lazy
+        // Delay for a sec
+        Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            PlayResultUI playResultUI = new PlayResultUI();
+            playResultUI.initializeValues(gameSession);
+            SceneManager.getInstance().changeSceneTo(playResultUI.getScene()); // Change the scene manually
+        }));
+        delayTimeline.setCycleCount(1);
+        delayTimeline.play();
     }
 
     private void update(long deltaTime) {
