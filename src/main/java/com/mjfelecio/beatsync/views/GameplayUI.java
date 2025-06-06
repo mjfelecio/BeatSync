@@ -2,18 +2,16 @@ package com.mjfelecio.beatsync.views;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.utils.FontProvider;
+import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Label;
-import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.canvas.GraphicsContext;
-
-import java.util.Objects;
 
 public class GameplayUI {
     // Write-only properties
@@ -21,25 +19,11 @@ public class GameplayUI {
     private final DoubleProperty accuracy = new SimpleDoubleProperty();
     private final IntegerProperty combo = new SimpleIntegerProperty();
 
-    // UI Config
-
     // UI Elements
     private Canvas gameplayCanvas;
     private final Label scoreValueLabel = new Label("0");
     private final Label accuracyValueLabel = new Label("100%");
     private final HBox root = new HBox();
-    private final Image backgroundImage = new Image(
-            Objects.requireNonNull(getClass().getResource("/com/mjfelecio/beatsync/assets/images/gameplay_bg.jpg")).toExternalForm()
-    );
-    private final BackgroundImage bgImage = new BackgroundImage(
-            backgroundImage,
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundRepeat.NO_REPEAT,
-            BackgroundPosition.DEFAULT,
-            new BackgroundSize(
-                    BackgroundSize.AUTO, BackgroundSize.AUTO, false, false, true, true
-            )
-    );
 
     public GameplayUI() {
         setupUI();
@@ -47,7 +31,7 @@ public class GameplayUI {
 
     private void setupUI() {
         root.setPadding(new Insets(20, 0, 37, 0));
-        root.setBackground(new Background(bgImage));
+        root.setBackground(ImageProvider.GAMEPLAY_BG.getImageAsBackground());
         root.setAlignment(Pos.BOTTOM_CENTER);
         root.setSpacing(20);
 
