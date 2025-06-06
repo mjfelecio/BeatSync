@@ -1,7 +1,5 @@
 package com.mjfelecio.beatsync.judgement;
 
-import com.mjfelecio.beatsync.object.Note;
-
 public class JudgementProcessor {
 
     // Judge the press of a note based on the noteTime and the current time
@@ -13,7 +11,8 @@ public class JudgementProcessor {
         long deltaTime = Math.abs(currentTime - noteTime);
 
         if (deltaTime <= JudgementWindow.PERFECT.getMillis()) judgementResult = JudgementResult.PERFECT;
-        else if (deltaTime <= JudgementWindow.GOOD.getMillis()) judgementResult = JudgementResult.GOOD ;
+        else if (deltaTime <= JudgementWindow.GREAT.getMillis()) judgementResult = JudgementResult.GREAT;
+        else if (deltaTime <= JudgementWindow.MEH.getMillis()) judgementResult = JudgementResult.MEH;
         else judgementResult = JudgementResult.MISS;
 
         return judgementResult;
@@ -24,7 +23,8 @@ public class JudgementProcessor {
         long deltaTime = Math.abs(currentTime - noteTime);
 
         if (deltaTime <= JudgementWindow.PERFECT_TAIL.getMillis()) judgementResult = JudgementResult.PERFECT;
-        else if (deltaTime <= JudgementWindow.GOOD_TAIL.getMillis()) judgementResult = JudgementResult.GOOD ;
+        else if (deltaTime <= JudgementWindow.GREAT_TAIL.getMillis()) judgementResult = JudgementResult.GREAT ;
+        else if (deltaTime <= JudgementWindow.MEH_TAIL.getMillis()) judgementResult = JudgementResult.MEH;
         else judgementResult = JudgementResult.MISS;
 
         return judgementResult;
