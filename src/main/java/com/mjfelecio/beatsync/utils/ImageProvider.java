@@ -8,7 +8,8 @@ import java.util.Objects;
 
 public enum ImageProvider {
     TITLE_SCREEN_BG("/com/mjfelecio/beatsync/assets/images/title_screen_bg.jpeg"),
-    GAMEPLAY_BG("/com/mjfelecio/beatsync/assets/images/gameplay_bg.jpg");
+    GAMEPLAY_BG("/com/mjfelecio/beatsync/assets/images/gameplay_bg.jpg"),
+    PLAY_RESULT_BG("/com/mjfelecio/beatsync/assets/images/play_result_bg.jpg");
 
     private final String imagePath;
 
