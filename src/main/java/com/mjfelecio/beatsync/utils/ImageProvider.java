@@ -12,12 +12,12 @@ public enum ImageProvider {
     PLAY_RESULT_BG("/com/mjfelecio/beatsync/assets/images/play_result_bg.jpg"),
 
     // Rank Images
-    SS_RANK("/com/mjfelecio/beatsync/assets/images/RANK/ss_rank.png"),
-    S_RANK("/com/mjfelecio/beatsync/assets/images/RANK/s_rank.png"),
-    A_RANK("/com/mjfelecio/beatsync/assets/images/RANK/a_rank.png"),
-    B_RANK("/com/mjfelecio/beatsync/assets/images/RANK/b_rank.png"),
-    C_RANK("/com/mjfelecio/beatsync/assets/images/RANK/c_rank.png"),
-    D_RANK("/com/mjfelecio/beatsync/assets/images/RANK/d_rank.png");
+    SS_RANK("/com/mjfelecio/beatsync/assets/images/rank/ss_rank.png"),
+    S_RANK("/com/mjfelecio/beatsync/assets/images/rank/s_rank.png"),
+    A_RANK("/com/mjfelecio/beatsync/assets/images/rank/a_rank.png"),
+    B_RANK("/com/mjfelecio/beatsync/assets/images/rank/b_rank.png"),
+    C_RANK("/com/mjfelecio/beatsync/assets/images/rank/c_rank.png"),
+    D_RANK("/com/mjfelecio/beatsync/assets/images/rank/d_rank.png");
 
     private final String imagePath;
 
