@@ -4,6 +4,7 @@ import com.mjfelecio.beatsync.controller.SongSelectController;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.SceneChangeListener;
 import com.mjfelecio.beatsync.state.GameState;
+import com.mjfelecio.beatsync.views.PlayResultUI;
 import com.mjfelecio.beatsync.views.TitleScreenUI;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -111,8 +112,7 @@ public class SceneManager implements SceneChangeListener {
                     scene = gameplayManager.getGameplayScene();
                 }
                 case RESULT_SCREEN -> {
-                    loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/result_screen.fxml"));
-                    scene = new Scene(loader.load(), width, height);
+                    scene = new PlayResultUI().getScene();
                 }
                 default -> {
                     // Just return the current scene if the scene isn't found
