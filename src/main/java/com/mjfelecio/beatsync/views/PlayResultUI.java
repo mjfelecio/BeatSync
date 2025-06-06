@@ -20,7 +20,7 @@ public class PlayResultUI {
     private final Scene scene;
 
     public PlayResultUI() {
-        VBox root = new VBox(20);
+        VBox root = new VBox(40);
         root.setPadding(new Insets(40));
         root.setAlignment(Pos.TOP_CENTER);
         root.setBackground(ImageProvider.PLAY_RESULT_BG.getImageAsBackground());
@@ -52,28 +52,37 @@ public class PlayResultUI {
 
     private VBox createCardPane() {
         VBox card = new VBox();
-        card.setPrefSize(300, 500);
+        card.setPrefSize(400, 500);
         card.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         card.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         card.setPadding(new Insets(15));
-        card.setSpacing(10);
+        card.setSpacing(20);
         card.setAlignment(Pos.TOP_CENTER);
-
         card.setStyle(
-                "-fx-background-color: white; " +
-                        "-fx-border-color: #CCCCCC; " +
-                        "-fx-border-width: 1; " +
-                        "-fx-border-radius: 8; " +
-                        "-fx-background-radius: 8; " +
-                        "-fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);"
+            """
+            -fx-background-color: white;
+            -fx-border-color: #CCCCCC;
+            -fx-border-width: 1;
+            -fx-border-radius: 8;
+            -fx-background-radius: 8;
+            -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+            """
         );
 
         rankLabel = new Label("S");
-        rankLabel.setFont(FontProvider.ARCADE_R.getFont(96));
+        rankLabel.setFont(FontProvider.ARCADE_R.getFont(120));
         rankLabel.setAlignment(Pos.CENTER);
-        rankLabel.setMaxWidth(Double.MAX_VALUE);
         rankLabel.setMaxHeight(Double.MAX_VALUE);
+        VBox.setVgrow(rankLabel, Priority.ALWAYS);
 
+        HBox statsBox = createStatsBox();
+
+        card.getChildren().addAll(rankLabel, statsBox);
+
+        return card;
+    }
+
+    public HBox createStatsBox() {
         HBox statsBox = new HBox(15);
         statsBox.setAlignment(Pos.CENTER);
         statsBox.setPadding(new Insets(10, 0, 0, 0));
@@ -88,9 +97,8 @@ public class PlayResultUI {
         maxComboLabel.setFont(FontProvider.ARCADE_R.getFont(14));
 
         statsBox.getChildren().addAll(accuracyLabel, scoreLabel, maxComboLabel);
-        card.getChildren().addAll(rankLabel, statsBox);
 
-        return card;
+        return statsBox;
     }
 
     private VBox createJudgementsBox() {
