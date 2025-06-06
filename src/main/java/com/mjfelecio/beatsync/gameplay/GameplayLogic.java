@@ -71,14 +71,24 @@ public class GameplayLogic {
 
     private void processJudgement(JudgementResult judgementResult) {
         switch (judgementResult) {
-            case JudgementResult.PERFECT, JudgementResult.GOOD -> {
+            case PERFECT -> {
                 gameSession.incrementCombo();
-//                gameState.addScore(100); // will think about the scoring system later
+                gameSession.incrementPerfectCount();
+            }
+            case GREAT -> {
+                gameSession.incrementCombo();
+                gameSession.incrementGreatCount();
+            }
+            case MEH -> {
+                gameSession.incrementCombo();
+                gameSession.incrementMehCount();
             }
             case JudgementResult.MISS -> {
                 gameSession.resetCombo();
+                gameSession.incrementMissCount();
             }
         }
+
         scoreManager.registerJudgement(judgementResult);
         gameSession.setScore(scoreManager.getScore());
         gameSession.setAccuracy(scoreManager.getAccuracy());
