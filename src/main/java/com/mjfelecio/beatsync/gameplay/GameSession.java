@@ -1,10 +1,14 @@
 package com.mjfelecio.beatsync.gameplay;
 
+import com.mjfelecio.beatsync.judgement.Rank;
+
 public class GameSession {
     private int combo = 0;
     private long score = 0;
     private double accuracy = 100;
     private String lastJudgement = "";
+    private int maxCombo = 0;
+    private Rank rank;
 
     // Judgement counts
     private int perfectCount = 0;
@@ -69,6 +73,22 @@ public class GameSession {
         this.missCount++;
     }
 
+    public int getMaxCombo() {
+        return maxCombo;
+    }
+
+    public void setMaxCombo(int maxCombo) {
+        this.maxCombo = maxCombo;
+    }
+
+    public Rank getRank() {
+        return rank;
+    }
+
+    public void setRank(Rank rank) {
+        this.rank = rank;
+    }
+
     public void reset() {
         this.score = 0;
         this.combo = 0;
@@ -78,5 +98,7 @@ public class GameSession {
         greatCount = 0;
         mehCount = 0;
         missCount = 0;
+        maxCombo = 0;
+        rank = null;
     }
 }
