@@ -1,6 +1,7 @@
 package com.mjfelecio.beatsync.views;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.judgement.Rank;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.geometry.Insets;
@@ -8,11 +9,16 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 public class PlayResultUI {
-    private Label rankLabel;
+    // Gameplay values
+    private Rank rank = Rank.S; // For now, we set it to S, but this will be made dynamic based on the play result later
+
+    // UI elements
     private Label accuracyLabel;
     private Label scoreLabel;
     private Label maxComboLabel;
@@ -71,15 +77,17 @@ public class PlayResultUI {
             """
         );
 
-        rankLabel = new Label("S");
-        rankLabel.setFont(FontProvider.ARCADE_R.getFont(120));
-        rankLabel.setAlignment(Pos.CENTER);
-        rankLabel.setMaxHeight(Double.MAX_VALUE);
-        VBox.setVgrow(rankLabel, Priority.ALWAYS);
+        ImageView rankImage = new ImageView(getRankImage(rank));
+
+//        rankLabel = new Label("S");
+//        rankLabel.setFont(FontProvider.ARCADE_R.getFont(120));
+//        rankLabel.setAlignment(Pos.CENTER);
+//        rankLabel.setMaxHeight(Double.MAX_VALUE);
+//        VBox.setVgrow(rankLabel, Priority.ALWAYS);
 
         HBox statsBox = createStatsBox();
 
-        card.getChildren().addAll(rankLabel, statsBox);
+        card.getChildren().addAll(rankImage, statsBox);
 
         return card;
     }
