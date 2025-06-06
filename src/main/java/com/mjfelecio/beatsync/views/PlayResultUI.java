@@ -63,17 +63,17 @@ public class PlayResultUI {
         card.setPrefSize(400, 500);
         card.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
         card.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
-        card.setPadding(new Insets(15));
-        card.setSpacing(20);
+        card.setPadding(new Insets(20));
+        card.setSpacing(30);
         card.setAlignment(Pos.TOP_CENTER);
         card.setStyle(
             """
-            -fx-background-color: white;
-            -fx-border-color: #CCCCCC;
-            -fx-border-width: 1;
-            -fx-border-radius: 8;
-            -fx-background-radius: 8;
-            -fx-effect: dropshadow(two-pass-box, rgba(0,0,0,0.1), 8, 0, 0, 2);
+               -fx-background-color: linear-gradient(to bottom, #111111, #1A1A1A);
+               -fx-border-color: #00FFCC;
+               -fx-border-width: 2;
+               -fx-border-radius: 12;
+               -fx-background-radius: 12;
+               -fx-effect: dropshadow(gaussian, #00FFCC, 15, 0.2, 0, 0);
             """
         );
 
