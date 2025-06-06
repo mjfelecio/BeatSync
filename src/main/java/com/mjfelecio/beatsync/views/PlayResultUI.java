@@ -31,7 +31,7 @@ public class PlayResultUI {
         title.setStyle("-fx-fill: #00FFAA;");
 
         // Main content HBox
-        HBox contentBox = new HBox(20);
+        HBox contentBox = new HBox(40);
         contentBox.setAlignment(Pos.CENTER);
 
         // Left: Card Pane
@@ -39,10 +39,12 @@ public class PlayResultUI {
 
         // Right: Judgements and Buttons
         VBox rightPane = new VBox(30);
-        rightPane.setAlignment(Pos.CENTER);
+        rightPane.setAlignment(Pos.TOP_CENTER);
         VBox judgementsBox = createJudgementsBox();
         HBox buttonBox = createButtonGroup();
         rightPane.getChildren().addAll(judgementsBox, buttonBox);
+
+        VBox.setVgrow(judgementsBox, Priority.ALWAYS);
 
         contentBox.getChildren().addAll(cardPane, rightPane);
         root.getChildren().addAll(title, contentBox);
@@ -102,8 +104,8 @@ public class PlayResultUI {
     }
 
     private VBox createJudgementsBox() {
-        VBox judgementsBox = new VBox();
-        judgementsBox.setAlignment(Pos.CENTER_LEFT);
+        VBox judgementsBox = new VBox(40);
+        judgementsBox.setAlignment(Pos.TOP_CENTER);
 
         // TODO: Add Great and Meh in JudgementResult and JudgementWindow enum
         String[] judgementTypes = { "Perfect", "Great", "Meh", "Miss" };
@@ -112,11 +114,11 @@ public class PlayResultUI {
             judgementRow.setAlignment(Pos.CENTER_LEFT);
 
             Text label = new Text(judgement);
-            label.setFont(FontProvider.ARCADE_R.getFont(20));
+            label.setFont(FontProvider.ARCADE_R.getFont(24));
             label.setStyle("-fx-fill: white;");
 
             Text count = new Text("0");
-            count.setFont(FontProvider.ARCADE_R.getFont(20));
+            count.setFont(FontProvider.ARCADE_R.getFont(24));
             count.setStyle("-fx-fill: white;");
 
             Region spacer = new Region();
