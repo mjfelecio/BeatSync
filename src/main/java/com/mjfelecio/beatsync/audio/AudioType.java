@@ -3,7 +3,8 @@ package com.mjfelecio.beatsync.audio;
 import java.util.Objects;
 
 public enum AudioType {
-    HITSOUND("/com/mjfelecio/beatsync/audio/hitsound.wav");
+    HITSOUND("/com/mjfelecio/beatsync/audio/hitsound.wav"),
+    HOLDBREAK("/com/mjfelecio/beatsync/audio/holdbreak.wav");
 
     private final String uri;
 
