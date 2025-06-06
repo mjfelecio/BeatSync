@@ -1,8 +1,9 @@
 package com.mjfelecio.beatsync.gameplay;
 
+import com.mjfelecio.beatsync.audio.AudioType;
+import com.mjfelecio.beatsync.audio.SoundManager;
 import com.mjfelecio.beatsync.judgement.ScoreManager;
 import com.mjfelecio.beatsync.object.Beatmap;
-import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.judgement.JudgementProcessor;
 import com.mjfelecio.beatsync.object.Note;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
@@ -60,6 +61,8 @@ public class GameplayLogic {
 
             if (tailJudgement == JudgementResult.MISS) {
                 note.setMiss(true);
+                // If a tail was missed, play this hold break sfx
+                SoundManager.getInstance().play(AudioType.HOLDBREAK);
             } else {
                 note.setHit(true);
             }
