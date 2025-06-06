@@ -1,6 +1,7 @@
 package com.mjfelecio.beatsync.views;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.utils.FontProvider;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.geometry.Insets;
@@ -23,7 +24,6 @@ public class GameplayScene {
     private final IntegerProperty combo = new SimpleIntegerProperty();
 
     // UI Config
-//    private final Font FONT = Font.font("Courier New", 20);
 
     // UI Elements
     private final Label scoreValueLabel = new Label("0");
@@ -98,12 +98,14 @@ public class GameplayScene {
         VBox scoreBox = new VBox();
 
         Label scoreLabel = new Label("Score");
-        scoreLabel.setFont(new Font(20));
 
-        scoreValueLabel.setFont(new Font(40));
+        scoreLabel.setFont(FontProvider.ARCADE_R.getFont(16));
+        scoreValueLabel.setFont(FontProvider.ARCADE_R.getFont(36));
+        scoreLabel.setTextFill(Color.WHITE);
+        scoreValueLabel.setTextFill(Color.WHITE);
 
         scoreBox.setSpacing(5);
-        scoreBox.setPadding(new Insets(5, 0, 0, 0)); // padding at the top
+        scoreBox.setPadding(new Insets(10, 0, 0, 0)); // padding at the top
         scoreBox.setAlignment(Pos.TOP_CENTER);
 
         scoreBox.setPrefSize(250, 100);
@@ -126,12 +128,14 @@ public class GameplayScene {
         VBox accuracyBox = new VBox();
 
         Label accuracyLabel = new Label("Accuracy");
-        accuracyLabel.setFont(new Font(20));
 
-        accuracyValueLabel.setFont(new Font(40));
+        accuracyLabel.setFont(FontProvider.ARCADE_R.getFont(16));
+        accuracyValueLabel.setFont(FontProvider.ARCADE_R.getFont(36));
+        accuracyLabel.setTextFill(Color.WHITE);
+        accuracyValueLabel.setTextFill(Color.WHITE);
 
         accuracyBox.setSpacing(5);
-        accuracyBox.setPadding(new Insets(5, 0, 0, 0)); // padding at the top
+        accuracyBox.setPadding(new Insets(10, 0, 0, 0)); // padding at the top
         accuracyBox.setAlignment(Pos.TOP_CENTER);
 
         accuracyBox.setPrefSize(250, 100);
@@ -155,7 +159,6 @@ public class GameplayScene {
         return new Scene(root, 1920, 1080);
     }
 
-    // Write-only setters
     public void setScore(int value) {
         score.set(value);
     }
