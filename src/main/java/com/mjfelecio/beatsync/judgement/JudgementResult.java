@@ -2,7 +2,8 @@ package com.mjfelecio.beatsync.judgement;
 
 public enum JudgementResult {
     PERFECT(300),
-    GOOD(200),
+    GREAT(200),
+    MEH(100),
     MISS(0);
 
     private final int score;
