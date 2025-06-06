@@ -33,7 +33,7 @@ public class PlayResultUI {
 
         // Title
         Text title = new Text("Play Result");
-        title.setFont(FontProvider.ARCADE_R.getFont(64));
+        title.setFont(FontProvider.ARCADE_R.getFont(60));
         title.setStyle("-fx-fill: #00FFAA;");
 
         // Main content HBox
@@ -144,22 +144,38 @@ public class PlayResultUI {
     }
 
     private VBox createJudgementsBox() {
-        VBox judgementsBox = new VBox(40);
+        VBox judgementsBox = new VBox(12);
         judgementsBox.setAlignment(Pos.TOP_CENTER);
+        judgementsBox.setPadding(new Insets(20));
 
-        // TODO: Add Great and Meh in JudgementResult and JudgementWindow enum
-        String[] judgementTypes = { "Perfect", "Great", "Meh", "Miss" };
-        for (String judgement : judgementTypes) {
+        String[][] judgementTypes = {
+                {"Perfect", "#00FFAA"},
+                {"Great", "#66CCFF"},
+                {"Meh", "#FFDD55"},
+                {"Miss", "#FF5555"}
+        };
+
+        for (String[] judgementData : judgementTypes) {
+            String labelText = judgementData[0];
+            String color = judgementData[1];
+
             HBox judgementRow = new HBox(20);
             judgementRow.setAlignment(Pos.CENTER_LEFT);
+            judgementRow.setStyle(
+                    """
+                    -fx-background-color: transparent;
+                    -fx-padding: 8 16;
+                    -fx-background-radius: 8;
+                    """
+            );
 
-            Text label = new Text(judgement);
+            Text label = new Text(labelText);
             label.setFont(FontProvider.ARCADE_R.getFont(24));
-            label.setStyle("-fx-fill: white;");
+            label.setStyle(String.format("-fx-fill: %s;", color));
 
             Text count = new Text("0");
             count.setFont(FontProvider.ARCADE_R.getFont(24));
-            count.setStyle("-fx-fill: white;");
+            count.setStyle(String.format("-fx-fill: %s;", color));
 
             Region spacer = new Region();
             HBox.setHgrow(spacer, Priority.ALWAYS);
@@ -167,6 +183,7 @@ public class PlayResultUI {
             judgementRow.getChildren().addAll(label, spacer, count);
             judgementsBox.getChildren().add(judgementRow);
         }
+
         return judgementsBox;
     }
 
