@@ -146,6 +146,21 @@ public class PlayResultUI {
         return buttonGroup;
     }
 
+    public Image getRankImage(Rank rank) {
+        Image image = null;
+
+        switch (rank) {
+            case SS -> image = ImageProvider.SS_RANK.getImage();
+            case S -> image = ImageProvider.S_RANK.getImage();
+            case A -> image = ImageProvider.A_RANK.getImage();
+            case B -> image = ImageProvider.B_RANK.getImage();
+            case C -> image = ImageProvider.C_RANK.getImage();
+            case D -> image = ImageProvider.D_RANK.getImage();
+        }
+
+        return image;
+    }
+
     private String buttonStyle() {
         return """
             -fx-text-fill: #CCCCCC;
