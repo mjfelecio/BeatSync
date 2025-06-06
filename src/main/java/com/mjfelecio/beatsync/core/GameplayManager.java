@@ -5,7 +5,7 @@ import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
 import com.mjfelecio.beatsync.state.GameState;
-import com.mjfelecio.beatsync.views.GameplayScene;
+import com.mjfelecio.beatsync.views.GameplayUI;
 import javafx.animation.AnimationTimer;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
@@ -45,7 +45,7 @@ public class GameplayManager {
 
     public void initializeGameplay() {
         // This is the ui, the view itself (I'm not using fxml because it's annoying)
-        GameplayScene gameplayUI = new GameplayScene(); // Initialize the UI
+        GameplayUI gameplayUI = new GameplayUI(); // Initialize the UI
         gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
         gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
 

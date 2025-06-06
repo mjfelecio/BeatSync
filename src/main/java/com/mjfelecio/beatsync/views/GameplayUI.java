@@ -16,7 +16,7 @@ import javafx.scene.canvas.GraphicsContext;
 
 import java.util.Objects;
 
-public class GameplayScene {
+public class GameplayUI {
     // Write-only properties
     private final IntegerProperty score = new SimpleIntegerProperty();
     private final IntegerProperty accuracy = new SimpleIntegerProperty();
@@ -42,7 +42,7 @@ public class GameplayScene {
             )
     );
 
-    public GameplayScene() {
+    public GameplayUI() {
         setupUI();
     }
 
