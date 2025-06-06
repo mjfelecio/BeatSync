@@ -6,6 +6,12 @@ public class GameSession {
     private double accuracy = 100;
     private String lastJudgement = "";
 
+    // Judgement counts
+    private int perfectCount = 0;
+    private int greatCount = 0;
+    private int mehCount = 0;
+    private int missCount = 0;
+
     public void incrementCombo() { combo++; }
     public void resetCombo() { combo = 0; }
     public int getCombo() {
@@ -31,10 +37,46 @@ public class GameSession {
         this.accuracy = accuracy;
     }
 
+    public int getPerfectCount() {
+        return perfectCount;
+    }
+
+    public void incrementPerfectCount() {
+        this.perfectCount++;
+    }
+
+    public int getGreatCount() {
+        return greatCount;
+    }
+
+    public void incrementGreatCount() {
+        this.greatCount++;
+    }
+
+    public int getMehCount() {
+        return mehCount;
+    }
+
+    public void incrementMehCount() {
+        this.mehCount++;
+    }
+
+    public int getMissCount() {
+        return missCount;
+    }
+
+    public void incrementMissCount() {
+        this.missCount++;
+    }
+
     public void reset() {
         this.score = 0;
         this.combo = 0;
         this.accuracy = 100;
         this.lastJudgement = "";
+        perfectCount = 0;
+        greatCount = 0;
+        mehCount = 0;
+        missCount = 0;
     }
 }
