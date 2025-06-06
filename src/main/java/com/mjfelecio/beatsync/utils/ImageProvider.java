@@ -9,7 +9,15 @@ import java.util.Objects;
 public enum ImageProvider {
     TITLE_SCREEN_BG("/com/mjfelecio/beatsync/assets/images/title_screen_bg.jpeg"),
     GAMEPLAY_BG("/com/mjfelecio/beatsync/assets/images/gameplay_bg.jpg"),
-    PLAY_RESULT_BG("/com/mjfelecio/beatsync/assets/images/play_result_bg.jpg");
+    PLAY_RESULT_BG("/com/mjfelecio/beatsync/assets/images/play_result_bg.jpg"),
+
+    // Rank Images
+    SS_RANK("/com/mjfelecio/beatsync/assets/images/RANK/ss_rank.png"),
+    S_RANK("/com/mjfelecio/beatsync/assets/images/RANK/s_rank.png"),
+    A_RANK("/com/mjfelecio/beatsync/assets/images/RANK/a_rank.png"),
+    B_RANK("/com/mjfelecio/beatsync/assets/images/RANK/b_rank.png"),
+    C_RANK("/com/mjfelecio/beatsync/assets/images/RANK/c_rank.png"),
+    D_RANK("/com/mjfelecio/beatsync/assets/images/RANK/d_rank.png");
 
     private final String imagePath;
 
