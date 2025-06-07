@@ -8,8 +8,11 @@ import java.util.Objects;
 
 public enum ImageProvider {
     TITLE_SCREEN_BG("/com/mjfelecio/beatsync/assets/images/title_screen_bg.jpeg"),
+    SONG_SELECT_BG("/com/mjfelecio/beatsync/assets/images/song_select_bg.png"),
+    SETTINGS_BG("/com/mjfelecio/beatsync/assets/images/settings_bg.png"),
     GAMEPLAY_BG("/com/mjfelecio/beatsync/assets/images/gameplay_bg.jpg"),
-    PLAY_RESULT_BG("/com/mjfelecio/beatsync/assets/images/play_result_bg.jpg"),
+    PAUSE_SCREEN_BG("/com/mjfelecio/beatsync/assets/images/pause_screen_bg.png"),
+    PLAY_RESULT_BG("/com/mjfelecio/beatsync/assets/images/play_result_bg.png"),
 
     // Rank Images
     SS_RANK("/com/mjfelecio/beatsync/assets/images/rank/ss-rank.png"),
