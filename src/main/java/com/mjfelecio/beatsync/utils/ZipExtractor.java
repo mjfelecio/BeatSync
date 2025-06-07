@@ -1,5 +1,9 @@
 package com.mjfelecio.beatsync.utils;
 
+//import com.github.kokorin.jaffree.StreamType;
+//import com.github.kokorin.jaffree.ffmpeg.FFmpeg;
+//import com.github.kokorin.jaffree.ffmpeg.UrlInput;
+//import com.github.kokorin.jaffree.ffmpeg.UrlOutput;
 import com.mjfelecio.beatsync.config.GameConfig;
 
 import java.io.File;
@@ -7,7 +11,6 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
@@ -87,6 +90,11 @@ public class ZipExtractor {
     private static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
         File destFile = new File(destinationDir, zipEntry.getName());
 
+        if (destFile.getName().endsWith(".ogg")) {
+//            destFile = convertOGGToMP3(destFile);
+            throw new IOException(".ogg file is not currently supported");
+        }
+
         String destDirPath = destinationDir.getCanonicalPath();
         String destFilePath = destFile.getCanonicalPath();
 
@@ -96,6 +104,21 @@ public class ZipExtractor {
 
         return destFile;
     }
+
+//    private static File convertOGGToMP3(File oggFile) {
+//        File mp3File = new File(oggFile.getParent(), oggFile.getName().replaceAll("\\.ogg$", ".mp3"));
+//
+//        FFmpeg.atPath() // assumes ffmpeg is in system PATH
+//                .addInput(UrlInput.fromPath(oggFile.toPath()))
+//                .addOutput(UrlOutput.toPath(mp3File.toPath())
+//                        .setCodec(StreamType.AUDIO, "libmp3lame"))
+//                .execute();
+//
+//        // Optionally delete the .ogg file after conversion
+//        oggFile.delete();
+//
+//        return mp3File;
+//    }
 
     // WTF I spent so long on this and I just realized I don't even need it
 //    /**

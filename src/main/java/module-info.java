@@ -2,6 +2,7 @@ module com.mjfelecio.beatsync {
     requires javafx.controls;
     requires javafx.media;
     requires javafx.fxml;
+//    requires com.github.kokorin.jaffree;
 
     exports com.mjfelecio.beatsync;
     exports com.mjfelecio.beatsync.core;
