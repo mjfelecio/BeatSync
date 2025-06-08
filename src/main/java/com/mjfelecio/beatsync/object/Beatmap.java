@@ -69,6 +69,14 @@ public class Beatmap {
         this.holdNoteCount = holdNoteCount;
     }
 
+    public void resetNotesState() {
+        notes.forEach(n -> {
+            n.setMiss(false);
+            n.setHit(false);
+            n.setHeld(false);
+        });
+    }
+
     @Override
     public String toString() {
         return String.format("Title: %s, DiffName: %s, Notes: %d", title, diffName, notes.size());
