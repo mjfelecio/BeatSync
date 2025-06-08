@@ -1,6 +1,8 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.judgement.JudgementMode;
+import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.beans.property.*;
@@ -41,12 +43,14 @@ public class SettingsUI {
         settingsContent.setMaxWidth(Region.USE_PREF_SIZE);
         settingsContent.setMinWidth(Region.USE_PREF_SIZE);
 
+        HBox navigationButtons = createNavigationButtons();
+
         settingsContent.getChildren().addAll(
                 createGameplaySettings(),
                 createAudioSettings()
         );
 
-        root.getChildren().addAll(title, settingsContent);
+        root.getChildren().addAll(title, settingsContent, navigationButtons);
     }
 
     private VBox createGameplaySettings() {
@@ -159,10 +163,47 @@ public class SettingsUI {
         return slider;
     }
 
+    private HBox createNavigationButtons() {
+        Button backButton = new Button("Back");
+        backButton.setFont(FontProvider.ARCADE_R.getFont(14));
+        backButton.setStyle("""
+            -fx-text-fill: #CCCCCC;
+            -fx-background-color: black;
+            -fx-border-color: #00FFAA;
+            -fx-border-width: 3px;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 20 8 20;
+            -fx-cursor: hand;
+        """);
+        backButton.setOnAction(e -> SceneManager.getInstance().setCurrentScene(GameScene.TITLE_SCREEN));
+
+        Button saveButton = new Button("Save");
+        saveButton.setFont(FontProvider.ARCADE_R.getFont(14));
+        saveButton.setStyle("""
+            -fx-text-fill: #CCCCCC;
+            -fx-background-color: black;
+            -fx-border-color: #00FFAA;
+            -fx-border-width: 3px;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 20 8 20;
+            -fx-cursor: hand;
+        """);
+        saveButton.setOnAction(e -> saveSettings());
+
+        HBox buttonBox = new HBox(20, backButton, saveButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        buttonBox.setPadding(new Insets(0, 0, 50, 0));
+        return buttonBox;
+    }
+
+    private void saveSettings() {
+    }
 
     // === Public API ===
     public Scene getScene() {
-        return new Scene(root, 1280, 720);
+        return new Scene(root, 1920, 1080);
     }
 
     public double getScrollSpeed() {
