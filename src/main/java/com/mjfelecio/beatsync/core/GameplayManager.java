@@ -4,6 +4,7 @@ import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.object.Beatmap;
+import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.ui.GameplayUI;
@@ -77,6 +78,8 @@ public class GameplayManager {
                 } else {
                     pauseGameplay();
                 }
+            } else if (event.getCode() == KeyCode.BACK_QUOTE) {
+                restartGameplay();
             }
 
             inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentTime());
@@ -128,13 +131,19 @@ public class GameplayManager {
         }
     }
 
+    public void restartGameplay() {
+        SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+    }
+
     public void pauseGameplay() {
         isPaused = true;
         gameEngine.getAudioManager().pause();
         GameState.getInstance().setPlaying(false);
+        gameplayUI.setPaused(true);
     }
 
     public void resumeGameplay() {
+        gameplayUI.setPaused(false);
         isPaused = false;
         gameEngine.getAudioManager().resume();
         GameState.getInstance().setPlaying(true);

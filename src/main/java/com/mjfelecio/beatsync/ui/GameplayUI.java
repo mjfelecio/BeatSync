@@ -24,6 +24,7 @@ public class GameplayUI {
     private final Label scoreValueLabel = new Label("0");
     private final Label accuracyValueLabel = new Label("100%");
     private final HBox root = new HBox();
+    private final Label pausedLabel = new Label("PAUSED");
 
     public GameplayUI() {
         setupUI();
@@ -53,14 +54,20 @@ public class GameplayUI {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, gameplayCanvas.getWidth(), gameplayCanvas.getHeight());
 
+        pausedLabel.setFont(FontProvider.ARCADE_R.getFont(48));
+        pausedLabel.setTextFill(Color.web("#0ff")); // neon cyan
+        pausedLabel.setStyle("-fx-effect: dropshadow(one-pass-box, #0ff, 10, 0.8, 0, 0);");
+        pausedLabel.setVisible(false);
+
         // Wrap in a StackPane
-        StackPane canvasWrapper = new StackPane(gameplayCanvas);
+        StackPane canvasWrapper = new StackPane(gameplayCanvas, pausedLabel);
         canvasWrapper.setBorder(new Border(new BorderStroke(
                 Color.web("#27fa00"),
                 BorderStrokeStyle.SOLID,
                 CornerRadii.EMPTY,
                 new BorderWidths(2)
         )));
+        canvasWrapper.setAlignment(Pos.CENTER);
 
         // Accuracy VBox (Right)
         VBox accuracyBox = setupAccuracyBox();
@@ -162,5 +169,9 @@ public class GameplayUI {
         setScore(0);
         setAccuracy(100);
         setCombo(0);
+    }
+
+    public void setPaused(boolean isPaused) {
+        pausedLabel.setVisible(isPaused);
     }
 }
