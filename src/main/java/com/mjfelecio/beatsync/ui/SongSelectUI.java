@@ -143,7 +143,7 @@ public class SongSelectUI {
     private Label createSectionLabel(String text) {
         Label label = new Label(text);
         label.setFont(FontProvider.ARCADE_R.getFont(16));
-        label.setStyle("-fx-text-fill: #0FF;");
+        label.setStyle("-fx-text-fill: #CCCCCC;");
         return label;
     }
 

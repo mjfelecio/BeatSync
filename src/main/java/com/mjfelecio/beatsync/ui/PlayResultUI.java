@@ -63,7 +63,7 @@ public class PlayResultUI {
         // Title
         Text title = new Text("Play Result");
         title.setFont(FontProvider.ARCADE_R.getFont(60));
-        title.setStyle("-fx-fill: #00FFAA;");
+        title.setStyle("-fx-fill: #0FF;");
 
         // Main content HBox
         HBox contentBox = new HBox(40);
@@ -98,11 +98,11 @@ public class PlayResultUI {
         card.setStyle(
             """
                -fx-background-color: linear-gradient(to bottom, #111111, #1A1A1A);
-               -fx-border-color: #00FFCC;
+               -fx-border-color: #0FF;
                -fx-border-width: 2;
                -fx-border-radius: 12;
                -fx-background-radius: 12;
-               -fx-effect: dropshadow(gaussian, #00FFAA, 15, 0.2, 0, 0);
+               -fx-effect: dropshadow(gaussian, #0FF, 15, 0.2, 0, 0);
             """
         );
 
@@ -145,7 +145,7 @@ public class PlayResultUI {
 
         Label scoreLabel = new Label(String.format("Score: %d", score)); // Scoooore
         scoreLabel.setFont(FontProvider.ARCADE_R.getFont(22));
-        scoreLabel.setStyle("-fx-text-fill: #00FFAA;");
+        scoreLabel.setStyle("-fx-text-fill: #0FF;");
 
         scoreBox.getChildren().addAll(scoreLabel);
 
@@ -177,7 +177,7 @@ public class PlayResultUI {
         judgementsBox.setPadding(new Insets(20));
 
         String[][] judgementTypes = {
-                {"Perfect", "#00FFAA"},
+                {"Perfect", "#0FF"},
                 {"Great", "#66CCFF"},
                 {"Meh", "#FFDD55"},
                 {"Miss", "#FF5555"}
@@ -274,7 +274,7 @@ public class PlayResultUI {
         return """
             -fx-text-fill: #CCCCCC;
             -fx-background-color: black;
-            -fx-border-color: #00FFAA;
+            -fx-border-color: #0FF;
             -fx-border-width: 3px;
             -fx-border-radius: 5px;
             -fx-background-radius: 5px;

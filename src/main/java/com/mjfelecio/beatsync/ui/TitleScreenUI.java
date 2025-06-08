@@ -23,7 +23,7 @@ public class TitleScreenUI {
         // Title Text
         Text titleText = new Text("Beat Sync");
         titleText.setFont(FontProvider.ARCADE_R.getFont(80));
-        titleText.setStyle("-fx-fill: #00FFAA;");
+        titleText.setStyle("-fx-fill: #0FF;");
         VBox.setMargin(titleText, new Insets(150, 0, 0, 0));
 
         // Start Button
@@ -32,7 +32,7 @@ public class TitleScreenUI {
         startButton.setStyle("""
             -fx-text-fill: #CCCCCC;
             -fx-background-color: black;
-            -fx-border-color: #00FFAA;
+            -fx-border-color: #0FF;
             -fx-border-width: 4px;
             -fx-border-radius: 5px;
             -fx-background-radius: 5px;
@@ -48,7 +48,7 @@ public class TitleScreenUI {
         settingsButton.setStyle("""
             -fx-text-fill: #CCCCCC;
             -fx-background-color: black;
-            -fx-border-color: #00FFAA;
+            -fx-border-color: #0FF;
             -fx-border-width: 3px;
             -fx-border-radius: 5px;
             -fx-background-radius: 5px;

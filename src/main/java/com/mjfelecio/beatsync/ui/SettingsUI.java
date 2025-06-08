@@ -35,7 +35,7 @@ public class SettingsUI {
         Label title = new Label("SETTINGS");
         title.setPadding(new Insets(50, 0, 0, 0));
         title.setFont(FontProvider.ARCADE_R.getFont(48));
-        title.setTextFill(Color.web("#00FFAA"));
+        title.setTextFill(Color.web("#0FF"));
 
         VBox settingsContent = new VBox(30);
         settingsContent.setAlignment(Pos.TOP_CENTER);
@@ -169,7 +169,7 @@ public class SettingsUI {
         backButton.setStyle("""
             -fx-text-fill: #CCCCCC;
             -fx-background-color: black;
-            -fx-border-color: #00FFAA;
+            -fx-border-color: #0FF;
             -fx-border-width: 3px;
             -fx-border-radius: 5px;
             -fx-background-radius: 5px;
@@ -183,7 +183,7 @@ public class SettingsUI {
         saveButton.setStyle("""
             -fx-text-fill: #CCCCCC;
             -fx-background-color: black;
-            -fx-border-color: #00FFAA;
+            -fx-border-color: #0FF;
             -fx-border-width: 3px;
             -fx-border-radius: 5px;
             -fx-background-radius: 5px;
