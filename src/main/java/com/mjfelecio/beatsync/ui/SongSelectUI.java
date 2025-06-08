@@ -132,8 +132,7 @@ public class SongSelectUI {
             -fx-cursor: hand;
         """);
         playButton.setOnAction(e -> {
-            GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
-            SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+            navigateToGameplay();
         });
 
         HBox buttonBox = new HBox(20, backButton, playButton);
@@ -269,4 +268,13 @@ public class SongSelectUI {
         return diffListView;
     }
 
+    public void navigateToGameplay() {
+        if (selectedBeatmap == null) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "No beatmap currently selected");
+            alert.show();
+            return;
+        }
+        GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
+        SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+    }
 }
