@@ -97,7 +97,7 @@ public class SceneManager implements SceneChangeListener {
                 }
                 case SONG_SELECT -> {
 //                    loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/song_select.fxml"));
-                    scene = new SongSelectUI().getSongSelectScene();
+                    scene = new SongSelectUI().getScene();
                 }
                 case SETTINGS -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/settings.fxml"));

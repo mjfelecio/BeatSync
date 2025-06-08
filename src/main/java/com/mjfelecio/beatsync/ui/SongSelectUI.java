@@ -31,7 +31,7 @@ public class SongSelectUI {
     private BeatmapSet selectedBeatmapSet;
     private Beatmap selectedBeatmap;
 
-    public Scene getSongSelectScene() {
+    public Scene getScene() {
         VBox root = createRootLayout();
         root.getChildren().addAll(
                 createTitleLabel(),
