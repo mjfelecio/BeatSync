@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.controller.SongSelectController;
+import com.mjfelecio.beatsync.controller.SongSelectUI;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.SceneChangeListener;
 import com.mjfelecio.beatsync.state.GameState;
@@ -97,7 +97,7 @@ public class SceneManager implements SceneChangeListener {
                 }
                 case SONG_SELECT -> {
 //                    loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/song_select.fxml"));
-                    scene = new SongSelectController().getSongSelectScene();
+                    scene = new SongSelectUI().getSongSelectScene();
                 }
                 case SETTINGS -> {
                     loader = new FXMLLoader(getClass().getResource("/com/mjfelecio/beatsync/views/settings.fxml"));

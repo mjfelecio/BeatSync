@@ -23,7 +23,7 @@ import java.io.File;
 import java.util.Comparator;
 import java.util.List;
 
-public class SongSelectController {
+public class SongSelectUI {
     private ListView<BeatmapSet> songListView;
     private ListView<Beatmap> diffListView;
     private VBox difficultyListViewWrapper;
