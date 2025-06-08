@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.controller.SongSelectUI;
+import com.mjfelecio.beatsync.views.SongSelectUI;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.SceneChangeListener;
 import com.mjfelecio.beatsync.state.GameState;

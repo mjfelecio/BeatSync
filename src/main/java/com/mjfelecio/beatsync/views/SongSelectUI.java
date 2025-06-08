@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.controller;
+package com.mjfelecio.beatsync.views;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.SceneManager;
