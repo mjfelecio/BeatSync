@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.judgement.JudgementMode;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.beans.property.*;
@@ -17,10 +18,6 @@ public class SettingsUI {
     private final DoubleProperty musicVolume = new SimpleDoubleProperty(100);
     private final DoubleProperty effectsVolume = new SimpleDoubleProperty(100);
     private final ObjectProperty<JudgementMode> selectedJudgement = new SimpleObjectProperty<>(JudgementMode.NORMAL);
-
-    public enum JudgementMode {
-        FORGIVING, NORMAL, PRECISE
-    }
 
     public SettingsUI() {
         setupUI();
