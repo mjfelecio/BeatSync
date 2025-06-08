@@ -4,9 +4,11 @@ import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.object.Note;
 import com.mjfelecio.beatsync.input.InputState;
+import com.mjfelecio.beatsync.utils.FontProvider;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
 import java.util.List;
 
@@ -113,18 +115,47 @@ public class PlayfieldRenderer {
         }
     }
 
-    private void drawUI(GraphicsContext gc, GameSession gameSession) {
-        gc.setFill(Color.WHITE);
-        gc.setFont(new Font(20));
-        // These are just temporary
-        gc.fillText("Combo: " + gameSession.getCombo(), 20, 50);
-        gc.fillText("Score: " + gameSession.getScore(), 20, 80);
-        gc.fillText("Accuracy: " + gameSession.getAccuracy(), 20, 100);
+    private final Text measurementText = new Text();
 
-        gc.setFont(new Font(30));
-        gc.fillText(gameSession.getLastJudgement(),
-                (GameConfig.PLAYFIELD_WIDTH / 2.0) - 50,
-                GameConfig.PLAYFIELD_HEIGHT - 250);
+    private void drawUI(GraphicsContext gc, GameSession gameSession) {
+        gc.setFill(Color.LIGHTBLUE);
+
+        double centerX = GameConfig.PLAYFIELD_WIDTH / 2.0;
+        double judgementY = GameConfig.PLAYFIELD_HEIGHT - 250;
+        double comboY = judgementY - 50;
+
+        // Draw combo (centered)
+        String comboText = String.valueOf(gameSession.getCombo());
+        Font comboFont = FontProvider.ARCADE_R.getFont(20);
+        gc.setFont(comboFont);
+        double comboWidth = getTextWidth(comboText, comboFont);
+        gc.fillText(comboText, centerX - (comboWidth / 2), comboY);
+
+        // Draw judgement (centered)
+        String judgementText = gameSession.getLastJudgement();
+        if (judgementText != null && !judgementText.isEmpty()) {
+            Font judgementFont = FontProvider.ARCADE_R.getFont(20);
+            gc.setFill(getJudgementColor(judgementText));
+            gc.setFont(judgementFont);
+            double judgementWidth = getTextWidth(judgementText, judgementFont);
+            gc.fillText(judgementText, centerX - (judgementWidth / 2), judgementY);
+        }
+    }
+
+    private Color getJudgementColor(String judgement) {
+        return switch (judgement.toUpperCase()) {
+            case "PERFECT" -> Color.GOLD;
+            case "GREAT" -> Color.LIGHTBLUE;
+            case "MEH" -> Color.YELLOW;
+            case "MISS" -> Color.RED;
+            default -> Color.WHITE;
+        };
+    }
+
+    private double getTextWidth(String text, Font font) {
+        measurementText.setText(text);
+        measurementText.setFont(font);
+        return measurementText.getBoundsInLocal().getWidth();
     }
 
     private int calculateNoteX(int laneNumber) {
