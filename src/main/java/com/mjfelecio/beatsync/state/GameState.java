@@ -5,7 +5,7 @@ import com.mjfelecio.beatsync.object.Beatmap;
 public class GameState {
     private static final GameState instance = new GameState();
     private boolean isPlaying = false;
-    private Beatmap currentBeatmap;
+    private Beatmap currentBeatmap = null;
 
     private GameState() {}
 
