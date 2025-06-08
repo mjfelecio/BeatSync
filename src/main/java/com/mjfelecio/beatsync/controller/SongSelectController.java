@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.controller;
 
+import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
@@ -36,15 +37,15 @@ public class SongSelectController {
                 createListViewSection(),
                 createNavigationButtons()
         );
-        return new Scene(root, 1920, 1080);
+        return new Scene(root, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
     }
 
     private VBox createRootLayout() {
         VBox root = new VBox(30);
         root.setAlignment(Pos.CENTER);
-        root.setPrefSize(1200, 1000);
         root.setStyle("-fx-padding: 20;");
         root.setBackground(ImageProvider.SONG_SELECT_BG.getImageAsBackground());
+        root.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         return root;
     }
 
@@ -56,21 +57,37 @@ public class SongSelectController {
     }
 
     private HBox createListViewSection() {
-        HBox listViewContainer = new HBox(40);
+        HBox listViewContainer = new HBox(20);
         listViewContainer.setAlignment(Pos.TOP_CENTER);
+        listViewContainer.setPrefSize(1000, 450);
+        listViewContainer.setMaxWidth(Region.USE_PREF_SIZE);
 
+        // Song List Section
         VBox songListSection = new VBox(10, createSectionLabel("Select Song"), createSongListView());
         songListSection.setAlignment(Pos.TOP_CENTER);
 
+        // Difficulty Section
         VBox difficultySection = new VBox(10);
         difficultySection.setAlignment(Pos.TOP_CENTER);
         difficultyListViewWrapper = new VBox(5);
         difficultyListViewWrapper.setAlignment(Pos.CENTER);
         difficultySection.getChildren().addAll(createSectionLabel("Select Difficulty"), difficultyListViewWrapper);
 
+        // Make both sections grow horizontally
+        HBox.setHgrow(songListSection, Priority.ALWAYS);
+        HBox.setHgrow(difficultySection, Priority.ALWAYS);
+
+        // Bind widths to 80% and 20% of the parent HBox
+        listViewContainer.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double totalWidth = newVal.doubleValue();
+            songListSection.setPrefWidth(totalWidth * 0.8);
+            difficultySection.setPrefWidth(totalWidth * 0.2);
+        });
+
         listViewContainer.getChildren().addAll(songListSection, difficultySection);
         return listViewContainer;
     }
+
 
     private HBox createNavigationButtons() {
         Button backButton = new Button("Back");
