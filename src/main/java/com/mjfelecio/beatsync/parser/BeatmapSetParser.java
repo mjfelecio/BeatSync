@@ -56,15 +56,19 @@ public class BeatmapSetParser {
 
                 // If it's a .osu file → parse to Beatmap and add to list
                 if (nameLower.endsWith(".osu")) {
-                    Beatmap diff = BeatmapParser.parse(f);
-                    difficulties.add(diff);
+                    try {
+                        Beatmap diff = BeatmapParser.parse(f);
+                        difficulties.add(diff);
 
-                    // Extract metadata (title, artist, creator) from the first .osu we encounter
-                    if (beatmapSet.getTitle() == null) {
-                        beatmapSet.setTitle(extractMetadataField(f, "Title"));
-                        beatmapSet.setArtist(extractMetadataField(f, "Artist"));
-                        beatmapSet.setCreator(extractMetadataField(f, "Creator"));
-                        beatmapSet.setBeatmapSetID(Integer.parseInt(extractMetadataField(f, "BeatmapSetID")));
+                        // Extract metadata (title, artist, creator) from the first .osu we encounter
+                        if (beatmapSet.getTitle() == null) {
+                            beatmapSet.setTitle(extractMetadataField(f, "Title"));
+                            beatmapSet.setArtist(extractMetadataField(f, "Artist"));
+                            beatmapSet.setCreator(extractMetadataField(f, "Creator"));
+                            beatmapSet.setBeatmapSetID(Integer.parseInt(extractMetadataField(f, "BeatmapSetID")));
+                        }
+                    } catch (Exception e) {
+                        System.err.println("Skipping invalid .osu file: " + f.getName());
                     }
                 }
             }

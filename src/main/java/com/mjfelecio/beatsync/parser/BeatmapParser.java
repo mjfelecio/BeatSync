@@ -94,16 +94,22 @@ public class BeatmapParser {
                     ));
             beatmap.setHoldNoteCount(Math.toIntExact(noteCounts.getOrDefault(true, 0L)));
             beatmap.setRegularNoteCount(Math.toIntExact(noteCounts.getOrDefault(false, 0L)));
+        } catch (IOException e) {
+            throw new IOException("Failed to parse beatmap: " + e);
         }
 
         return beatmap;
     }
 
-    private static void parseGeneral(Beatmap beatmap, String line, File file) {
+    private static void parseGeneral(Beatmap beatmap, String line, File file) throws IOException {
         if (line.startsWith("AudioFilename:")) {
             String audioFileName = line.substring(14).trim();
             Path audioPath = Paths.get(file.getParent(), audioFileName);
             beatmap.setAudioPath(audioPath.toUri().toASCIIString());
+        }
+        if (line.startsWith("Mode:")) {
+            boolean isMania = line.substring(5).trim().equals("3");
+            if (!isMania) throw new IOException("Only mania beatmaps are supported");
         }
     }
 
@@ -113,7 +119,7 @@ public class BeatmapParser {
         if (line.startsWith("BeatmapID:")) beatmap.setBeatmapID(Integer.parseInt(line.substring(10).trim()));
     }
 
-    private static void parseHitObjects(Beatmap beatmap, String line) {
+    private static void parseHitObjects(Beatmap beatmap, String line) throws IOException {
         String[] parts = line.split(",");
         if (parts.length < 5) return;
 
@@ -125,6 +131,13 @@ public class BeatmapParser {
 //            int hitSound = Integer.parseInt(parts[4]); // I don't need hit sound for now
 
             int laneNumber = getLaneNumber(x);
+
+            // If the lane number is not being mapped correctly, that means it's a 5k+ beatmap
+            // Which we currently can't support, so just throw an error
+            if (laneNumber == -1) {
+                throw new IOException("Only 4K beatmaps supported");
+            }
+
             Integer endTime = getEndTime(type, parts);
 
             beatmap.addNote(endTime == null ? new Note(laneNumber, time) : new Note(laneNumber, time, endTime));
