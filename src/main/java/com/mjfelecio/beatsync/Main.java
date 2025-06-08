@@ -1,9 +1,6 @@
 package com.mjfelecio.beatsync;
 
 import com.mjfelecio.beatsync.config.GameConfig;
-import com.mjfelecio.beatsync.core.GameEngine;
-import com.mjfelecio.beatsync.core.GameplayManager;
-import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.core.SceneManager;
 import javafx.application.Application;
