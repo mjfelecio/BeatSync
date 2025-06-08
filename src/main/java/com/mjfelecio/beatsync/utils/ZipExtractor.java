@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.zip.ZipEntry;
@@ -71,7 +72,13 @@ public class ZipExtractor {
 
             return true;
         } catch (IOException e) {
-            throw new IOException("Error extracting ZIP file: " + e.getMessage(), e);
+            System.err.println("Extraction failed: " + e.getMessage());
+            return false;
+        } finally {
+            // Clean up on failure
+            if (tempDestDir != null && tempDestDir.exists()) {
+                deleteRecursively(tempDestDir);
+            }
         }
     }
 
@@ -189,16 +196,29 @@ public class ZipExtractor {
     public static void main(String[] args) throws IOException {
         String oszToImportFilePath = GameConfig.BEATMAP_DIRECTORY;
         String destinationFilePath = GameConfig.BEATMAP_DIRECTORY;
+        ArrayList<String> successfulExtractions = new ArrayList<>();
+        ArrayList<String> failedExtractions = new ArrayList<>();
 
         File[] oszFiles = Arrays.stream(Objects.requireNonNull(new File(oszToImportFilePath).listFiles()))
                 .filter(ZipExtractor::checkIfOsz)
                 .toList().toArray(new File[0]);
 
         for (File file : oszFiles) {
-            ZipExtractor.extractZipFile(file.getAbsolutePath(), destinationFilePath);
+            boolean success = ZipExtractor.extractZipFile(file.getAbsolutePath(), destinationFilePath);
 
-            // Remove the archive once it has been extracted
-            System.out.println("Archive extracted: " + file.delete());
+            if (success) {
+                successfulExtractions.add(file.getName());
+                file.delete(); // Delete the osz file once it has been extracted successfully
+            } else {
+                failedExtractions.add(file.getName());
+            }
         }
+
+        // Extraction report
+        System.out.println("Successfully imported these files:");
+        successfulExtractions.forEach(s -> System.out.println("--> " + s));
+
+        System.out.println("Failed to import these files:");
+        failedExtractions.forEach(s -> System.out.println("--> " + s));
     }
 }
