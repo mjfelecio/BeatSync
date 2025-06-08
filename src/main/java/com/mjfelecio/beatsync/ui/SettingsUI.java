@@ -1,0 +1,186 @@
+package com.mjfelecio.beatsync.ui;
+
+import com.mjfelecio.beatsync.utils.FontProvider;
+import com.mjfelecio.beatsync.utils.ImageProvider;
+import javafx.beans.property.*;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
+
+public class SettingsUI {
+
+    private final VBox root = new VBox();
+    private final DoubleProperty scrollSpeed = new SimpleDoubleProperty(1000);
+    private final DoubleProperty musicVolume = new SimpleDoubleProperty(100);
+    private final DoubleProperty effectsVolume = new SimpleDoubleProperty(100);
+    private final ObjectProperty<JudgementMode> selectedJudgement = new SimpleObjectProperty<>(JudgementMode.NORMAL);
+
+    public enum JudgementMode {
+        FORGIVING, NORMAL, PRECISE
+    }
+
+    public SettingsUI() {
+        setupUI();
+    }
+
+    private void setupUI() {
+        root.setBackground(ImageProvider.SETTINGS_BG.getImageAsBackground());
+        root.setPadding(new Insets(40));
+        root.setSpacing(30);
+        root.setAlignment(Pos.TOP_CENTER);
+
+        root.setStyle("-fx-border-color: red");
+
+        // Title
+        Label title = new Label("SETTINGS");
+        title.setPadding(new Insets(50, 0, 0, 0));
+        title.setFont(FontProvider.ARCADE_R.getFont(48));
+        title.setTextFill(Color.web("#0ff"));
+
+        VBox settingsContent = new VBox(30);
+        settingsContent.setAlignment(Pos.TOP_CENTER);
+        settingsContent.setPrefSize(1000, 800);
+        settingsContent.setMaxWidth(Region.USE_PREF_SIZE);
+        settingsContent.setMinWidth(Region.USE_PREF_SIZE);
+
+        settingsContent.getChildren().addAll(
+                createGameplaySettings(),
+                createAudioSettings()
+        );
+
+        root.getChildren().addAll(title, settingsContent);
+    }
+
+    private VBox createGameplaySettings() {
+        VBox gameplayBox = new VBox(15);
+        gameplayBox.setAlignment(Pos.TOP_LEFT);
+
+        Label sectionLabel = new Label("Gameplay");
+        sectionLabel.setFont(FontProvider.ARCADE_R.getFont(24));
+        sectionLabel.setTextFill(Color.WHITE);
+
+        // Scroll Speed
+        Label scrollLabel = new Label("Scroll Speed");
+        scrollLabel.setFont(FontProvider.ARCADE_R.getFont(16));
+        scrollLabel.setTextFill(Color.LIGHTGRAY);
+
+        Slider scrollSlider = new Slider(500, 2000, 1000);
+        scrollSlider.setBlockIncrement(100);
+        scrollSlider.setShowTickLabels(true);
+        scrollSlider.setShowTickMarks(true);
+        scrollSlider.setMajorTickUnit(500);
+        scrollSlider.valueProperty().bindBidirectional(scrollSpeed);
+
+        // Judgement Mode
+        Label judgementLabel = new Label("Judgement Window");
+        judgementLabel.setFont(FontProvider.ARCADE_R.getFont(16));
+        judgementLabel.setTextFill(Color.LIGHTGRAY);
+
+        ToggleGroup judgementGroup = new ToggleGroup();
+
+        RadioButton forgiving = createRadio("Forgiving", JudgementMode.FORGIVING, judgementGroup);
+        RadioButton normal = createRadio("Normal", JudgementMode.NORMAL, judgementGroup);
+        RadioButton precise = createRadio("Precise", JudgementMode.PRECISE, judgementGroup);
+
+        normal.setSelected(true);
+
+        HBox judgementButtons = new HBox(10, forgiving, normal, precise);
+        judgementButtons.setAlignment(Pos.CENTER_LEFT);
+
+        gameplayBox.getChildren().addAll(
+                sectionLabel,
+                scrollLabel, scrollSlider,
+                judgementLabel, judgementButtons
+        );
+
+        return gameplayBox;
+    }
+
+    private VBox createAudioSettings() {
+        VBox audioBox = new VBox(15);
+        audioBox.setAlignment(Pos.TOP_LEFT);
+
+        Label sectionLabel = new Label("Audio");
+        sectionLabel.setFont(FontProvider.ARCADE_R.getFont(24));
+        sectionLabel.setTextFill(Color.WHITE);
+
+        // Music Volume
+        Label musicLabel = new Label("Music");
+        musicLabel.setFont(FontProvider.ARCADE_R.getFont(16));
+        musicLabel.setTextFill(Color.LIGHTGRAY);
+
+        Slider musicSlider = new Slider(0, 100, 100);
+        musicSlider.setShowTickLabels(true);
+        musicSlider.setShowTickMarks(true);
+        musicSlider.setMajorTickUnit(25);
+        musicSlider.valueProperty().bindBidirectional(musicVolume);
+
+        // Effects Volume
+        Label effectsLabel = new Label("Effects");
+        effectsLabel.setFont(FontProvider.ARCADE_R.getFont(16));
+        effectsLabel.setTextFill(Color.LIGHTGRAY);
+
+        Slider effectsSlider = new Slider(0, 100, 100);
+        effectsSlider.setShowTickLabels(true);
+        effectsSlider.setShowTickMarks(true);
+        effectsSlider.setMajorTickUnit(25);
+        effectsSlider.valueProperty().bindBidirectional(effectsVolume);
+
+        audioBox.getChildren().addAll(
+                sectionLabel,
+                musicLabel, musicSlider,
+                effectsLabel, effectsSlider
+        );
+
+        return audioBox;
+    }
+
+    private RadioButton createRadio(String text, JudgementMode value, ToggleGroup group) {
+        RadioButton button = new RadioButton(text);
+        button.setFont(FontProvider.ARCADE_R.getFont(14));
+        button.setTextFill(Color.WHITE);
+        button.setToggleGroup(group);
+        button.setOnAction(_ -> selectedJudgement.set(value));
+        return button;
+    }
+
+    // === Public API ===
+    public Scene getScene() {
+        return new Scene(root, 1280, 720);
+    }
+
+    public double getScrollSpeed() {
+        return scrollSpeed.get();
+    }
+
+    public double getMusicVolume() {
+        return musicVolume.get();
+    }
+
+    public double getEffectsVolume() {
+        return effectsVolume.get();
+    }
+
+    public JudgementMode getJudgementMode() {
+        return selectedJudgement.get();
+    }
+
+    public ReadOnlyDoubleProperty scrollSpeedProperty() {
+        return scrollSpeed;
+    }
+
+    public ReadOnlyDoubleProperty musicVolumeProperty() {
+        return musicVolume;
+    }
+
+    public ReadOnlyDoubleProperty effectsVolumeProperty() {
+        return effectsVolume;
+    }
+
+    public ReadOnlyObjectProperty<JudgementMode> judgementModeProperty() {
+        return selectedJudgement;
+    }
+}
