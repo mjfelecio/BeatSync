@@ -7,9 +7,11 @@ import com.mjfelecio.beatsync.object.BeatmapSet;
 import com.mjfelecio.beatsync.parser.BeatmapLoader;
 import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.state.GameState;
+import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -41,18 +43,18 @@ public class SongSelectController {
     }
 
     private VBox createRootLayout() {
-        VBox root = new VBox(30);
+        VBox root = new VBox(20);
         root.setAlignment(Pos.CENTER);
         root.setStyle("-fx-padding: 20;");
         root.setBackground(ImageProvider.SONG_SELECT_BG.getImageAsBackground());
-        root.setPrefSize(Region.USE_COMPUTED_SIZE, Region.USE_COMPUTED_SIZE);
         return root;
     }
 
     private Label createTitleLabel() {
         Label title = new Label("Song Select");
-        title.setFont(new Font("Verdana", 25));
-        title.setStyle("-fx-text-fill: green;");
+        title.setPadding(new Insets(30, 0, 0, 0));
+        title.setFont(FontProvider.ARCADE_R.getFont(40));
+        title.setStyle("-fx-text-fill: #0FF;");
         return title;
     }
 
@@ -90,7 +92,7 @@ public class SongSelectController {
         HBox.setHgrow(songListSection, Priority.ALWAYS);
         HBox.setHgrow(difficultySection, Priority.ALWAYS);
 
-        // Bind widths to 70% and 30% of the parent HBox
+        // Bind widths to 65% and 35% of the parent HBox
         listViewContainer.widthProperty().addListener((obs, oldVal, newVal) -> {
             double totalWidth = newVal.doubleValue();
             songListSection.setPrefWidth(totalWidth * 0.65);
@@ -118,8 +120,8 @@ public class SongSelectController {
 
     private Label createSectionLabel(String text) {
         Label label = new Label(text);
-        label.setFont(Font.font(16));
-        label.setStyle("-fx-text-fill: green;");
+        label.setFont(FontProvider.ARCADE_R.getFont(16));
+        label.setStyle("-fx-text-fill: #0FF;");
         return label;
     }
 
