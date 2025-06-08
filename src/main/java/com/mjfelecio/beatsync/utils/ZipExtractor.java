@@ -25,33 +25,51 @@ public class ZipExtractor {
      * @param destDirectoryPath the path to the destination directory where files will be extracted
      * @throws IOException if an I/O error occurs during extraction
      */
-    public static void extractZipFile(String zipFilePath, String destDirectoryPath) throws IOException {
-        // Get the name of the ZIP file without the .zip extension
+    public static boolean extractZipFile(String zipFilePath, String destDirectoryPath) {
         File zipFile = new File(zipFilePath);
-        File destDir = getDestDir(destDirectoryPath, zipFile);
+        File tempDestDir = null;
 
-        // Open the ZIP file
-        try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
-            ZipEntry entry;
-            // Iterate through the entries in the ZIP file
-            while ((entry = zipInputStream.getNextEntry()) != null) {
-                File newFile = newFile(destDir, entry);
-                if (entry.isDirectory()) {
-                    if (!newFile.isDirectory() && !newFile.mkdirs()) {
-                        throw new IOException("Failed to create directory: " + newFile.getAbsolutePath());
+        try {
+            // Prepare temp directory
+            tempDestDir = File.createTempFile("extract_", "");
+            if (!tempDestDir.delete() || !tempDestDir.mkdir()) {
+                throw new IOException("Failed to create temporary extraction directory");
+            }
+
+            try (ZipInputStream zipInputStream = new ZipInputStream(new FileInputStream(zipFile))) {
+                ZipEntry entry;
+
+                while ((entry = zipInputStream.getNextEntry()) != null) {
+                    File newFile = newFile(tempDestDir, entry);
+                    if (newFile == null) {
+                        throw new IOException("Invalid file or unsupported type: " + entry.getName());
                     }
-                } else {
-                    // Write the file to the destination
-                    try (FileOutputStream fos = new FileOutputStream(newFile)) {
-                        byte[] buffer = new byte[1024];
-                        int length;
-                        while ((length = zipInputStream.read(buffer)) > 0) {
-                            fos.write(buffer, 0, length);
+
+                    if (entry.isDirectory()) {
+                        if (!newFile.mkdirs()) {
+                            throw new IOException("Failed to create directory: " + newFile.getAbsolutePath());
+                        }
+                    } else {
+                        try (FileOutputStream fos = new FileOutputStream(newFile)) {
+                            byte[] buffer = new byte[1024];
+                            int length;
+                            while ((length = zipInputStream.read(buffer)) > 0) {
+                                fos.write(buffer, 0, length);
+                            }
                         }
                     }
+
+                    zipInputStream.closeEntry();
                 }
-                zipInputStream.closeEntry();
             }
+
+            // Move temp directory to final location
+            File finalDestDir = getDestDir(destDirectoryPath, zipFile);
+            if (!tempDestDir.renameTo(finalDestDir)) {
+                throw new IOException("Failed to move extracted files to final destination");
+            }
+
+            return true;
         } catch (IOException e) {
             throw new IOException("Error extracting ZIP file: " + e.getMessage(), e);
         }
@@ -90,9 +108,8 @@ public class ZipExtractor {
     private static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
         File destFile = new File(destinationDir, zipEntry.getName());
 
-        if (destFile.getName().endsWith(".ogg")) {
-//            destFile = convertOGGToMP3(destFile);
-            throw new IOException(".ogg file is not currently supported");
+        if (!isValidFile(destFile)) {
+            return null;
         }
 
         String destDirPath = destinationDir.getCanonicalPath();
@@ -103,6 +120,28 @@ public class ZipExtractor {
         }
 
         return destFile;
+    }
+
+    public static boolean isValidFile(File file) {
+        if (file.getName().endsWith(".ogg")) {
+//            destFile = convertOGGToMP3(destFile);
+            System.err.println(".ogg audio file is currently not supported");
+            return false;
+        }
+
+        return true;
+    }
+
+    private static void deleteRecursively(File file) {
+        if (file.isDirectory()) {
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    deleteRecursively(child);
+                }
+            }
+        }
+        file.delete();
     }
 
 //    private static File convertOGGToMP3(File oggFile) {
