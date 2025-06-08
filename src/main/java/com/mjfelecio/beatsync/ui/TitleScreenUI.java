@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.views;
+package com.mjfelecio.beatsync.ui;
 
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.rendering.GameScene;

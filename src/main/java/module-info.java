@@ -17,6 +17,6 @@ module com.mjfelecio.beatsync {
     exports com.mjfelecio.beatsync.audio;
 
     opens com.mjfelecio.beatsync.controller to javafx.fxml;
-    exports com.mjfelecio.beatsync.views;
-    opens com.mjfelecio.beatsync.views to javafx.fxml;
+    exports com.mjfelecio.beatsync.ui;
+    opens com.mjfelecio.beatsync.ui to javafx.fxml;
 }
