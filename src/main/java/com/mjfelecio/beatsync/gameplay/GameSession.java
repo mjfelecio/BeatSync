@@ -16,7 +16,14 @@ public class GameSession {
     private int mehCount = 0;
     private int missCount = 0;
 
-    public void incrementCombo() { combo++; }
+    public void incrementCombo() {
+        combo++;
+
+        // Determine the max combo
+        if (maxCombo < combo) {
+            maxCombo = combo;
+        }
+    }
     public void resetCombo() { combo = 0; }
     public int getCombo() {
         return combo;

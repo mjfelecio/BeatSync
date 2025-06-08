@@ -95,7 +95,6 @@ public class GameplayLogic {
         gameSession.setScore(scoreManager.getScore());
         gameSession.setAccuracy(scoreManager.getAccuracy());
         gameSession.setJudgement(judgementResult.toString());
-        gameSession.setMaxCombo(scoreManager.getMaxScore());
         gameSession.setRank(scoreManager.getRank());
     }
 
