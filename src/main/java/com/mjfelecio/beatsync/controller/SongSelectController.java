@@ -76,7 +76,8 @@ public class SongSelectController {
         VBox difficultySection = new VBox(10);
         difficultySection.setAlignment(Pos.TOP_CENTER);
         difficultyListViewWrapper = new VBox(5);
-        difficultyListViewWrapper.setAlignment(Pos.CENTER);
+        VBox.setVgrow(difficultyListViewWrapper, Priority.ALWAYS); // This makes the wrapper take up the whole space
+
         difficultySection.getChildren().addAll(createSectionLabel("Select Difficulty"), difficultyListViewWrapper);
         difficultySection.setStyle("""
         -fx-border-color: #0ff;
@@ -200,7 +201,7 @@ public class SongSelectController {
                 .sorted(Comparator.comparingInt(a -> a.getNotes().size()))
                 .toList();
 
-        ListView<Beatmap> diffListView = new ListView<>();
+        diffListView = new ListView<>();
         diffListView.setPrefHeight(150);
         diffListView.setItems(FXCollections.observableArrayList(sortedDiffs));
         diffListView.setStyle("""
@@ -208,6 +209,7 @@ public class SongSelectController {
         -fx-control-inner-background: transparent;
         -fx-padding: 10;
         """);
+        VBox.setVgrow(diffListView, Priority.ALWAYS);
 
         // Hide scrollbars after skin loads
         diffListView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
