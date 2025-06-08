@@ -65,6 +65,12 @@ public class SongSelectController {
         // Song List Section
         VBox songListSection = new VBox(10, createSectionLabel("Select Song"), createSongListView());
         songListSection.setAlignment(Pos.TOP_CENTER);
+        songListSection.setStyle("""
+        -fx-border-color: #0ff;
+        -fx-border-width: 2;
+        -fx-padding: 10;
+        -fx-border-radius: 8;
+        """);
 
         // Difficulty Section
         VBox difficultySection = new VBox(10);
@@ -72,6 +78,12 @@ public class SongSelectController {
         difficultyListViewWrapper = new VBox(5);
         difficultyListViewWrapper.setAlignment(Pos.CENTER);
         difficultySection.getChildren().addAll(createSectionLabel("Select Difficulty"), difficultyListViewWrapper);
+        difficultySection.setStyle("""
+        -fx-border-color: #0ff;
+        -fx-border-width: 2;
+        -fx-padding: 10;
+        -fx-border-radius: 8;
+        """);
 
         // Make both sections grow horizontally
         HBox.setHgrow(songListSection, Priority.ALWAYS);
@@ -87,7 +99,6 @@ public class SongSelectController {
         listViewContainer.getChildren().addAll(songListSection, difficultySection);
         return listViewContainer;
     }
-
 
     private HBox createNavigationButtons() {
         Button backButton = new Button("Back");
@@ -113,6 +124,19 @@ public class SongSelectController {
 
     private ListView<BeatmapSet> createSongListView() {
         songListView = new ListView<>();
+        songListView.setFocusTraversable(false); // Prevent focus border
+        songListView.setStyle("""
+        -fx-background-color: transparent;
+        -fx-control-inner-background: transparent;
+        -fx-padding: 10;
+        """);
+
+        // Hide scrollbars using CSS
+        songListView.lookupAll(".scroll-bar").forEach(sb -> sb.setVisible(false));
+        songListView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
+            songListView.lookupAll(".scroll-bar").forEach(sb -> sb.setVisible(false));
+        });
+
         BeatmapLoader.load();
 
         ObservableList<BeatmapSet> beatmapSets = FXCollections.observableArrayList(
@@ -128,9 +152,14 @@ public class SongSelectController {
             {
                 thumbnail.setFitWidth(80);
                 thumbnail.setFitHeight(80);
-                title.setStyle("-fx-font-size: 16px;");
+                title.setStyle("""
+                -fx-font-size: 16px;
+                -fx-text-fill: #0ff;
+                -fx-font-family: 'Verdana';
+                """);
                 content.setAlignment(Pos.CENTER_LEFT);
                 content.getChildren().addAll(thumbnail, title);
+                content.setStyle("-fx-background-color: rgba(0,255,255,0.1); -fx-padding: 5 10; -fx-border-radius: 5; -fx-background-radius: 5;");
             }
 
             @Override
@@ -138,11 +167,13 @@ public class SongSelectController {
                 super.updateItem(beatmapSet, empty);
                 if (empty || beatmapSet == null) {
                     setGraphic(null);
+                    setStyle(""); // reset cell style
                 } else {
                     String imagePath = new File(beatmapSet.getImagePath()).toURI().toASCIIString();
                     thumbnail.setImage(new Image(imagePath));
                     title.setText(beatmapSet.getTitle());
                     setGraphic(content);
+                    setStyle("-fx-background-color: transparent;");
                 }
             }
         });
@@ -156,6 +187,7 @@ public class SongSelectController {
 
         return songListView;
     }
+
 
     private void updateDifficultyList(BeatmapSet beatmapSet) {
         difficultyListViewWrapper.getChildren().clear();
@@ -171,12 +203,35 @@ public class SongSelectController {
         ListView<Beatmap> diffListView = new ListView<>();
         diffListView.setPrefHeight(150);
         diffListView.setItems(FXCollections.observableArrayList(sortedDiffs));
+        diffListView.setStyle("""
+        -fx-background-color: transparent;
+        -fx-control-inner-background: transparent;
+        -fx-padding: 10;
+        """);
+
+        // Hide scrollbars after skin loads
+        diffListView.skinProperty().addListener((obs, oldSkin, newSkin) -> {
+            diffListView.lookupAll(".scroll-bar").forEach(sb -> sb.setVisible(false));
+        });
 
         diffListView.setCellFactory(_ -> new ListCell<>() {
             @Override
             protected void updateItem(Beatmap diff, boolean empty) {
                 super.updateItem(diff, empty);
-                setText((diff == null || empty) ? null : diff.getTitle() + " - " + diff.getDiffName());
+                if (empty || diff == null) {
+                    setText(null);
+                    setStyle("");
+                } else {
+                    setText(diff.getTitle() + " - " + diff.getDiffName());
+                    setStyle("""
+                    -fx-text-fill: #0ff;
+                    -fx-font-size: 14px;
+                    -fx-font-family: 'Verdana';
+                    -fx-background-color: rgba(0,255,255,0.1);
+                    -fx-padding: 5 10;
+                    -fx-background-radius: 5;
+                """);
+                }
             }
         });
 
@@ -186,4 +241,5 @@ public class SongSelectController {
 
         return diffListView;
     }
+
 }
