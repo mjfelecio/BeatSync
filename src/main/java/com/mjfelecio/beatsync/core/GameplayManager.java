@@ -52,6 +52,10 @@ public class GameplayManager {
     public void initializeGameplay() {
         // This is the ui, the view itself (I'm not using fxml because it's annoying)
         gameplayUI = new GameplayUI(); // Initialize the UI
+
+        // Reset the UI in case we are from a retry
+        gameplayUI.resetValues();
+
         gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
         gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
 

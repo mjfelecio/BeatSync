@@ -157,4 +157,10 @@ public class GameplayUI {
     public void setCombo(int value) {
         combo.set(value);
     }
+
+    public void resetValues() {
+        setScore(0);
+        setAccuracy(100);
+        setCombo(0);
+    }
 }
