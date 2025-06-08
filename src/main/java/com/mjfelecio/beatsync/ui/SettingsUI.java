@@ -32,13 +32,11 @@ public class SettingsUI {
         root.setSpacing(30);
         root.setAlignment(Pos.TOP_CENTER);
 
-        root.setStyle("-fx-border-color: red");
-
         // Title
         Label title = new Label("SETTINGS");
         title.setPadding(new Insets(50, 0, 0, 0));
         title.setFont(FontProvider.ARCADE_R.getFont(48));
-        title.setTextFill(Color.web("#0ff"));
+        title.setTextFill(Color.web("#00FFAA"));
 
         VBox settingsContent = new VBox(30);
         settingsContent.setAlignment(Pos.TOP_CENTER);
@@ -67,7 +65,7 @@ public class SettingsUI {
         scrollLabel.setFont(FontProvider.ARCADE_R.getFont(16));
         scrollLabel.setTextFill(Color.LIGHTGRAY);
 
-        Slider scrollSlider = new Slider(500, 2000, 1000);
+        Slider scrollSlider = createThemedSlider(500, 2000, 1000);
         scrollSlider.setBlockIncrement(100);
         scrollSlider.setShowTickLabels(true);
         scrollSlider.setShowTickMarks(true);
@@ -112,7 +110,7 @@ public class SettingsUI {
         musicLabel.setFont(FontProvider.ARCADE_R.getFont(16));
         musicLabel.setTextFill(Color.LIGHTGRAY);
 
-        Slider musicSlider = new Slider(0, 100, 100);
+        Slider musicSlider = createThemedSlider(0, 100, 100);
         musicSlider.setShowTickLabels(true);
         musicSlider.setShowTickMarks(true);
         musicSlider.setMajorTickUnit(25);
@@ -123,7 +121,7 @@ public class SettingsUI {
         effectsLabel.setFont(FontProvider.ARCADE_R.getFont(16));
         effectsLabel.setTextFill(Color.LIGHTGRAY);
 
-        Slider effectsSlider = new Slider(0, 100, 100);
+        Slider effectsSlider = createThemedSlider(0, 100, 100);
         effectsSlider.setShowTickLabels(true);
         effectsSlider.setShowTickMarks(true);
         effectsSlider.setMajorTickUnit(25);
@@ -146,6 +144,24 @@ public class SettingsUI {
         button.setOnAction(_ -> selectedJudgement.set(value));
         return button;
     }
+
+    private Slider createThemedSlider(double min, double max, double initialValue) {
+        Slider slider = new Slider(min, max, initialValue);
+        slider.setShowTickLabels(true);
+        slider.setShowTickMarks(true);
+        slider.setMajorTickUnit((max - min) / 4);
+        slider.setBlockIncrement(100);
+        slider.setMaxWidth(500);
+        slider.setStyle("""
+        -fx-control-inner-background: #111;
+        -fx-background-color: transparent;
+        -fx-accent: #0ff;
+        -fx-text-box-border: transparent;
+        -fx-focus-color: #0ff;
+        """);
+        return slider;
+    }
+
 
     // === Public API ===
     public Scene getScene() {
