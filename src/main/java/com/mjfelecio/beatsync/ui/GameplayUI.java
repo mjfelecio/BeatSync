@@ -30,7 +30,7 @@ public class GameplayUI {
     }
 
     private void setupUI() {
-        root.setPadding(new Insets(20, 0, 37, 0));
+        root.setPadding(new Insets(20, 0, 29, 0));
         root.setBackground(ImageProvider.GAMEPLAY_BG.getImageAsBackground());
         root.setAlignment(Pos.BOTTOM_CENTER);
         root.setSpacing(20);
