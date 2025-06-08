@@ -90,11 +90,11 @@ public class SongSelectController {
         HBox.setHgrow(songListSection, Priority.ALWAYS);
         HBox.setHgrow(difficultySection, Priority.ALWAYS);
 
-        // Bind widths to 80% and 20% of the parent HBox
+        // Bind widths to 70% and 30% of the parent HBox
         listViewContainer.widthProperty().addListener((obs, oldVal, newVal) -> {
             double totalWidth = newVal.doubleValue();
-            songListSection.setPrefWidth(totalWidth * 0.8);
-            difficultySection.setPrefWidth(totalWidth * 0.2);
+            songListSection.setPrefWidth(totalWidth * 0.65);
+            difficultySection.setPrefWidth(totalWidth * 0.35);
         });
 
         listViewContainer.getChildren().addAll(songListSection, difficultySection);
