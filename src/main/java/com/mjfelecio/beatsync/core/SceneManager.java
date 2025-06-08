@@ -105,6 +105,13 @@ public class SceneManager implements SceneChangeListener {
                 }
                 case GAMEPLAY -> {
                     GameplayManager gameplayManager = GameplayManager.getInstance();
+
+                    // Resets the notes state so that it can still get rendered on retry
+                    // You have no idea how long I spent to fix this bug. 4 fking hours and it was just this simple thing.
+                    // I almost rewrote my entire gameplay logic to find what was going on
+                    // I hate my liiiiife
+                    GameState.getInstance().getCurrentBeatmap().resetNotesState();
+
                     gameplayManager.loadBeatmap(GameState.getInstance().getCurrentBeatmap());
                     gameplayManager.initializeGameplay();
                     gameplayManager.startGameplay();

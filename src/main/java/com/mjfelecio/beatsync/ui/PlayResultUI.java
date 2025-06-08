@@ -1,9 +1,12 @@
 package com.mjfelecio.beatsync.ui;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
 import com.mjfelecio.beatsync.judgement.Rank;
+import com.mjfelecio.beatsync.rendering.GameScene;
+import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.geometry.Insets;
@@ -228,10 +231,12 @@ public class PlayResultUI {
         Button retryButton = new Button("Retry");
         retryButton.setFont(FontProvider.ARCADE_R.getFont(24));
         retryButton.setStyle(buttonStyle());
+        retryButton.setOnAction(e -> retryBeatmap());
 
         Button songSelectButton = new Button("Song Select");
         songSelectButton.setFont(FontProvider.ARCADE_R.getFont(24));
         songSelectButton.setStyle(buttonStyle());
+        songSelectButton.setOnAction(e -> navigateToSongSelect());
 
         buttonGroup.getChildren().addAll(retryButton, songSelectButton);
         return buttonGroup;
@@ -276,6 +281,14 @@ public class PlayResultUI {
             -fx-padding: 8 20 8 20;
             -fx-cursor: hand;
         """;
+    }
+
+    private void retryBeatmap() {
+        SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+    }
+
+    private void navigateToSongSelect() {
+        SceneManager.getInstance().setCurrentScene(GameScene.SONG_SELECT);
     }
 
     public Scene getScene() {
