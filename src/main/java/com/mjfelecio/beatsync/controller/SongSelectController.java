@@ -105,9 +105,31 @@ public class SongSelectController {
 
     private HBox createNavigationButtons() {
         Button backButton = new Button("Back");
+        backButton.setFont(FontProvider.ARCADE_R.getFont(12));
+        backButton.setStyle("""
+            -fx-text-fill: #CCCCCC;
+            -fx-background-color: black;
+            -fx-border-color: #0FF;
+            -fx-border-width: 3px;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 20 8 20;
+            -fx-cursor: hand;
+        """);
         backButton.setOnAction(e -> SceneManager.getInstance().setCurrentScene(GameScene.TITLE_SCREEN));
 
         Button playButton = new Button("Play");
+        playButton.setFont(FontProvider.ARCADE_R.getFont(12));
+        playButton.setStyle("""
+            -fx-text-fill: #CCCCCC;
+            -fx-background-color: black;
+            -fx-border-color: #0FF;
+            -fx-border-width: 3px;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 20 8 20;
+            -fx-cursor: hand;
+        """);
         playButton.setOnAction(e -> {
             GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
             SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
