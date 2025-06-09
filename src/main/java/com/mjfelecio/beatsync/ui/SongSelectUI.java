@@ -175,8 +175,8 @@ public class SongSelectUI {
             private final Label title = new Label();
 
             {
-                thumbnail.setFitWidth(80);
-                thumbnail.setFitHeight(80);
+                thumbnail.setFitWidth(60);
+                thumbnail.setFitHeight(60);
                 title.setStyle("""
                 -fx-font-size: 16px;
                 -fx-text-fill: #0ff;
