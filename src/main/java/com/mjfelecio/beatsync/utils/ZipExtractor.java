@@ -64,6 +64,9 @@ public class ZipExtractor {
                 }
             }
 
+            // Convert .ogg to .mp3
+            convertAllOggFiles(tempDestDir);
+
             // Move temp directory to final location
             File finalDestDir = getDestDir(destDirectoryPath, zipFile);
             if (!tempDestDir.renameTo(finalDestDir)) {
@@ -79,6 +82,7 @@ public class ZipExtractor {
             if (tempDestDir != null && tempDestDir.exists()) {
                 deleteRecursively(tempDestDir);
             }
+
         }
     }
 
@@ -115,10 +119,6 @@ public class ZipExtractor {
     private static File newFile(File destinationDir, ZipEntry zipEntry) throws IOException {
         File destFile = new File(destinationDir, zipEntry.getName());
 
-        if (!isValidFile(destFile)) {
-            return null;
-        }
-
         String destDirPath = destinationDir.getCanonicalPath();
         String destFilePath = destFile.getCanonicalPath();
 
@@ -127,16 +127,6 @@ public class ZipExtractor {
         }
 
         return destFile;
-    }
-
-    public static boolean isValidFile(File file) {
-        if (file.getName().endsWith(".ogg")) {
-//            destFile = convertOGGToMP3(destFile);
-            System.err.println(".ogg audio file is currently not supported");
-            return false;
-        }
-
-        return true;
     }
 
     private static void deleteRecursively(File file) {
@@ -151,20 +141,42 @@ public class ZipExtractor {
         file.delete();
     }
 
-//    private static File convertOGGToMP3(File oggFile) {
-//        File mp3File = new File(oggFile.getParent(), oggFile.getName().replaceAll("\\.ogg$", ".mp3"));
-//
-//        FFmpeg.atPath() // assumes ffmpeg is in system PATH
-//                .addInput(UrlInput.fromPath(oggFile.toPath()))
-//                .addOutput(UrlOutput.toPath(mp3File.toPath())
-//                        .setCodec(StreamType.AUDIO, "libmp3lame"))
-//                .execute();
-//
-//        // Optionally delete the .ogg file after conversion
-//        oggFile.delete();
-//
-//        return mp3File;
-//    }
+    private static void convertAllOggFiles(File directory) throws IOException {
+        File[] oggFiles = directory.listFiles((dir, name) -> name.toLowerCase().endsWith(".ogg"));
+        if (oggFiles == null) return;
+
+        for (File oggFile : oggFiles) {
+            convertOGGToMP3(oggFile);
+        }
+    }
+
+    private static File convertOGGToMP3(File oggFile) throws IOException {
+        if (oggFile == null || !oggFile.exists()) {
+            throw new IllegalArgumentException("OGG file does not exist: " + oggFile);
+        }
+
+        File mp3File = new File(
+                oggFile.getParent(),
+                oggFile.getName().replaceAll("\\.ogg$", ".mp3")
+        );
+
+        try {
+            AudioConverter.convertOggToMp3(oggFile.getPath(), mp3File.getPath());
+        } catch (Exception e) {
+            throw new IOException("Failed to convert OGG to MP3: " + oggFile.getName(), e);
+        }
+
+        // Only delete the OGG file if conversion was successful and output file exists
+        if (mp3File.exists()) {
+            if (!oggFile.delete()) {
+                System.err.println("Warning: Failed to delete original OGG file: " + oggFile.getPath());
+            }
+        } else {
+            throw new IOException("Conversion failed: MP3 file not created.");
+        }
+
+        return mp3File;
+    }
 
     // WTF I spent so long on this and I just realized I don't even need it
 //    /**
