@@ -2,15 +2,15 @@ package com.mjfelecio.beatsync.audio;
 
 import java.util.Objects;
 
-public enum AudioType {
+public enum SoundEffect {
     HITSOUND("/com/mjfelecio/beatsync/audio/hitsound.wav"),
     HOLDBREAK("/com/mjfelecio/beatsync/audio/holdbreak.wav");
 
     private final String uri;
 
-    AudioType(String resourcePath) {
+    SoundEffect(String resourcePath) {
         this.uri = Objects.requireNonNull(
-                AudioType.class.getResource(resourcePath),
+                SoundEffect.class.getResource(resourcePath),
                 "Missing audio resource: " + resourcePath
         ).toExternalForm();
     }

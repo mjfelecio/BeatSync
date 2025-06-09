@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.input;
 
-import com.mjfelecio.beatsync.audio.AudioType;
+import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import javafx.scene.input.KeyCode;
@@ -25,7 +25,7 @@ public class InputHandler {
             inputState.pressLane(lane);
 
             // Play hit sound only once in a press (It shouldn't keep playing when holding)
-            if (inputState.isPressNotHold(lane)) SFXPlayer.getInstance().play(AudioType.HITSOUND);
+            if (inputState.isPressNotHold(lane)) SFXPlayer.getInstance().play(SoundEffect.HITSOUND);
 
             gameplayLogic.handleLanePress(lane, currentTime);
         }
