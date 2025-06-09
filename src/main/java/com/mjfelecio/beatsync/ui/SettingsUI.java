@@ -202,22 +202,22 @@ public class SettingsUI {
         return new Scene(root, 1920, 1080);
     }
 
-    public int getScrollSpeed() {
+    private int getScrollSpeed() {
         return scrollSpeed.get();
     }
 
-    public int getMusicVolume() {
+    private int getMusicVolume() {
         return musicVolume.get();
     }
 
-    public int getEffectsVolume() {
+    private int getEffectsVolume() {
         return effectsVolume.get();
     }
 
-    public JudgementMode getJudgementMode() {
+    private JudgementMode getJudgementMode() {
         return selectedJudgement.get();
     }
 
-    public void saveSettings() {
+    private void saveSettings() {
     }
 }
