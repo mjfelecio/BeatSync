@@ -16,9 +16,9 @@ import javafx.scene.paint.Color;
 public class SettingsUI {
 
     private final VBox root = new VBox();
-    private final DoubleProperty scrollSpeed = new SimpleDoubleProperty(1000);
-    private final DoubleProperty musicVolume = new SimpleDoubleProperty(100);
-    private final DoubleProperty effectsVolume = new SimpleDoubleProperty(100);
+    private final IntegerProperty scrollSpeed = new SimpleIntegerProperty(1000);
+    private final IntegerProperty musicVolume = new SimpleIntegerProperty(100);
+    private final IntegerProperty effectsVolume = new SimpleIntegerProperty(100);
     private final ObjectProperty<JudgementMode> selectedJudgement = new SimpleObjectProperty<>(JudgementMode.NORMAL);
 
     public SettingsUI() {
@@ -198,23 +198,20 @@ public class SettingsUI {
         return buttonBox;
     }
 
-    private void saveSettings() {
-    }
-
     // === Public API ===
     public Scene getScene() {
         return new Scene(root, 1920, 1080);
     }
 
-    public double getScrollSpeed() {
+    public int getScrollSpeed() {
         return scrollSpeed.get();
     }
 
-    public double getMusicVolume() {
+    public int getMusicVolume() {
         return musicVolume.get();
     }
 
-    public double getEffectsVolume() {
+    public int getEffectsVolume() {
         return effectsVolume.get();
     }
 
@@ -222,19 +219,22 @@ public class SettingsUI {
         return selectedJudgement.get();
     }
 
-    public ReadOnlyDoubleProperty scrollSpeedProperty() {
+    public ReadOnlyIntegerProperty scrollSpeedProperty() {
         return scrollSpeed;
     }
 
-    public ReadOnlyDoubleProperty musicVolumeProperty() {
+    public ReadOnlyIntegerProperty musicVolumeProperty() {
         return musicVolume;
     }
 
-    public ReadOnlyDoubleProperty effectsVolumeProperty() {
+    public ReadOnlyIntegerProperty effectsVolumeProperty() {
         return effectsVolume;
     }
 
     public ReadOnlyObjectProperty<JudgementMode> judgementModeProperty() {
         return selectedJudgement;
+    }
+
+    public void saveSettings() {
     }
 }
