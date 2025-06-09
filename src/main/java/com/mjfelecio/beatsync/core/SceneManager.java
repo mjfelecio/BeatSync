@@ -3,10 +3,10 @@ package com.mjfelecio.beatsync.core;
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.gameplay.GameSession;
-import com.mjfelecio.beatsync.ui.SettingsUI;
-import com.mjfelecio.beatsync.ui.SongSelectUI;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.ui.PlayResultUI;
+import com.mjfelecio.beatsync.ui.SettingsUI;
+import com.mjfelecio.beatsync.ui.SongSelectUI;
 import com.mjfelecio.beatsync.ui.TitleScreenUI;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -16,6 +16,11 @@ public class SceneManager {
     private final Stage primaryStage; // This contains the original stage (window) for the game
 
     private Scene currentScene;
+
+    // Cached scenes for reuse
+    private TitleScreenUI cachedTitleScreenUI;
+    private SongSelectUI cachedSongSelectUI;
+    private SettingsUI cachedSettingsUI;
 
     private SceneManager(Stage primaryStage) {
         this.primaryStage = primaryStage;
@@ -35,15 +40,24 @@ public class SceneManager {
     }
 
     public void loadTitleScreen() {
-        setCurrentScene(new TitleScreenUI().getScene());
+        if (cachedTitleScreenUI == null) {
+            cachedTitleScreenUI = new TitleScreenUI();
+        }
+        applyScene(cachedTitleScreenUI.getScene());
     }
 
     public void loadSongSelect() {
-        setCurrentScene(new SongSelectUI().getScene());
+        if (cachedSongSelectUI == null) {
+            cachedSongSelectUI = new SongSelectUI();
+        }
+        applyScene(cachedSongSelectUI.getScene());
     }
 
     public void loadSettings() {
-        setCurrentScene(new SettingsUI().getScene());
+        if (cachedSettingsUI == null) {
+            cachedSettingsUI = new SettingsUI();
+        }
+        applyScene(cachedSettingsUI.getScene());
     }
 
     public void loadGameplay() {
@@ -59,25 +73,32 @@ public class SceneManager {
         gameplayManager.initializeGameplay();
         gameplayManager.startGameplay();
 
-        setCurrentScene(gameplayManager.getGameplayScene());
+        applyScene(gameplayManager.getGameplayScene());
     }
 
     public void loadResultScreen(GameSession gameSession) {
         PlayResultUI playResultUI = new PlayResultUI();
         playResultUI.initializeValues(gameSession);
 
-        setCurrentScene(playResultUI.getScene());
+        applyScene(playResultUI.getScene());
     }
 
-    private void setCurrentScene(Scene newScene) {
-        if (newScene != null) {
-            this.currentScene = newScene;
-
-            // Update the window with the new scene
-            if (primaryStage != null) {
-                primaryStage.setScene(newScene);
-                SFXPlayer.getInstance().play(SoundEffect.SCENE_CHANGE);
-            }
+    private void applyScene(Scene newScene) {
+        if (newScene == null) {
+            System.err.println("Attempted to set null scene. Keeping current scene.");
+            return;
         }
+
+        this.currentScene = newScene;
+
+        // Update the window with the new scene
+        if (primaryStage != null) {
+            primaryStage.setScene(newScene);
+            SFXPlayer.getInstance().play(SoundEffect.SCENE_CHANGE);
+        }
+    }
+
+    public Scene getCurrentScene() {
+        return currentScene;
     }
 }
