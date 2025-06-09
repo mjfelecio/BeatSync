@@ -198,7 +198,6 @@ public class SettingsUI {
         return buttonBox;
     }
 
-    // === Public API ===
     public Scene getScene() {
         return new Scene(root, 1920, 1080);
     }
@@ -217,22 +216,6 @@ public class SettingsUI {
 
     public JudgementMode getJudgementMode() {
         return selectedJudgement.get();
-    }
-
-    public ReadOnlyIntegerProperty scrollSpeedProperty() {
-        return scrollSpeed;
-    }
-
-    public ReadOnlyIntegerProperty musicVolumeProperty() {
-        return musicVolume;
-    }
-
-    public ReadOnlyIntegerProperty effectsVolumeProperty() {
-        return effectsVolume;
-    }
-
-    public ReadOnlyObjectProperty<JudgementMode> judgementModeProperty() {
-        return selectedJudgement;
     }
 
     public void saveSettings() {
