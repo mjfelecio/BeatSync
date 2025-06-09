@@ -44,6 +44,10 @@ public class AudioManager {
         return 0;
     }
 
+    public void setVolume(int volume) {
+        player.setVolume(volume);
+    }
+
     public boolean isPlaying() {
         return player != null && player.getStatus() == MediaPlayer.Status.PLAYING;
     }
