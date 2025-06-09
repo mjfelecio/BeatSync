@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.judgement.JudgementMode;
 import com.mjfelecio.beatsync.rendering.GameScene;
@@ -202,22 +203,10 @@ public class SettingsUI {
         return new Scene(root, 1920, 1080);
     }
 
-    private int getScrollSpeed() {
-        return scrollSpeed.get();
-    }
-
-    private int getMusicVolume() {
-        return musicVolume.get();
-    }
-
-    private int getEffectsVolume() {
-        return effectsVolume.get();
-    }
-
-    private JudgementMode getJudgementMode() {
-        return selectedJudgement.get();
-    }
-
     private void saveSettings() {
+        SettingsManager settingsManager = SettingsManager.getInstance();
+        settingsManager.setScrollSpeed(scrollSpeed.intValue());
+        settingsManager.setJudgementMode(selectedJudgement.getValue());
+        settingsManager.setMusicVolume(musicVolume.intValue());
     }
 }
