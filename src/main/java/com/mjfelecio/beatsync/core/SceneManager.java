@@ -2,6 +2,7 @@ package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
+import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.ui.SettingsUI;
 import com.mjfelecio.beatsync.ui.SongSelectUI;
 import com.mjfelecio.beatsync.rendering.GameScene;
@@ -137,8 +138,14 @@ public class SceneManager implements SceneChangeListener {
         return scene;
     }
 
-    // This is more manual approach in case we want to show a different scene not defined in GameScene
-    public void changeSceneTo(Scene newScene) {
+    public void loadResultScreen(GameSession gameSession) {
+        PlayResultUI playResultUI = new PlayResultUI();
+        playResultUI.initializeValues(gameSession);
+
+        setCurrentScene(playResultUI.getScene());
+    }
+
+    private void setCurrentScene(Scene newScene) {
         if (newScene != null) {
             this.currentScene = newScene;
 

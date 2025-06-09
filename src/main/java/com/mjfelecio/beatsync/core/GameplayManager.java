@@ -171,9 +171,7 @@ public class GameplayManager {
         // We just navigate to the PlayResult from here instead of in the SceneManager because I'm lazy
         // Delay for a sec
         Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            PlayResultUI playResultUI = new PlayResultUI();
-            playResultUI.initializeValues(gameSession);
-            SceneManager.getInstance().changeSceneTo(playResultUI.getScene()); // Change the scene manually
+            SceneManager.getInstance().loadResultScreen(gameSession);
         }));
         delayTimeline.setCycleCount(1);
         delayTimeline.play();
