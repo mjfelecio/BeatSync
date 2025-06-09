@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.audio.SoundManager;
 import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
@@ -62,6 +63,7 @@ public class GameplayManager {
         gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
 
         gameEngine.getAudioManager().setVolume(SettingsManager.getInstance().getMusicVolume());
+        SoundManager.getInstance().setVolume(SettingsManager.getInstance().getEffectsVolume()); // IDK why but this doesn't work
 
         // Once the music (aka the map) has ended, we navigate to the play result with the gameSession data
         gameEngine.getAudioManager().getPlayer().setOnEndOfMedia(() -> {

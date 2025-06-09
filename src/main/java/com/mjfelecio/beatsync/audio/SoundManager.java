@@ -36,9 +36,9 @@ public class SoundManager {
         }
     }
 
-    public void setVolume(double volume) {
-        this.volume = volume;
-        effects.values().forEach(clip -> clip.setVolume(volume));
+    public void setVolume(int volume) {
+        this.volume = volume / 100.0;
+        effects.values().forEach(clip -> clip.setVolume(this.volume));
     }
 
     public double getVolume() {

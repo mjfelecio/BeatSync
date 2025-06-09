@@ -208,5 +208,6 @@ public class SettingsUI {
         settingsManager.setScrollSpeed(scrollSpeed.intValue());
         settingsManager.setJudgementMode(selectedJudgement.getValue());
         settingsManager.setMusicVolume(musicVolume.intValue());
+        settingsManager.setEffectsVolume(effectsVolume.intValue());
     }
 }
