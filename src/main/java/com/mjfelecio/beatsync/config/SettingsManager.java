@@ -3,7 +3,7 @@ package com.mjfelecio.beatsync.config;
 import com.mjfelecio.beatsync.judgement.JudgementMode;
 
 public class SettingsManager {
-    private final SettingsManager instance = new SettingsManager();
+    private static final SettingsManager instance = new SettingsManager();
 
     private int scrollSpeed;
     private JudgementMode judgementMode;
@@ -18,7 +18,7 @@ public class SettingsManager {
         this.effectsVolume = 100;
     }
 
-    public SettingsManager getInstance() {
+    public static SettingsManager getInstance() {
         return instance;
     }
 
