@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.core;
 
+import com.mjfelecio.beatsync.audio.SFXPlayer;
+import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.ui.SettingsUI;
 import com.mjfelecio.beatsync.ui.SongSelectUI;
 import com.mjfelecio.beatsync.rendering.GameScene;
@@ -83,6 +85,7 @@ public class SceneManager implements SceneChangeListener {
             // Automatically update the primary stage with the new scene
             if (primaryStage != null) {
                 primaryStage.setScene(scene);
+                SFXPlayer.getInstance().play(SoundEffect.SCENE_CHANGE);
             }
         }
     }
@@ -142,6 +145,7 @@ public class SceneManager implements SceneChangeListener {
             // Update the window with the new scene
             if (primaryStage != null) {
                 primaryStage.setScene(newScene);
+                SFXPlayer.getInstance().play(SoundEffect.SCENE_CHANGE);
             }
         }
     }
