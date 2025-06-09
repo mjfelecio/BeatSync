@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.core;
 
-import com.mjfelecio.beatsync.audio.AudioManager;
+import com.mjfelecio.beatsync.audio.MusicPlayer;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 
 public class GameEngine {
@@ -8,12 +8,12 @@ public class GameEngine {
 
     private final GameSession gameSession;
     private final GameClock gameClock;
-    private final AudioManager audioManager;
+    private final MusicPlayer musicPlayer;
 
     private GameEngine() {
         this.gameSession = new GameSession();
         this.gameClock = new GameClock();
-        this.audioManager = new AudioManager();
+        this.musicPlayer = new MusicPlayer();
     }
 
     public static GameEngine getInstance() {
@@ -25,6 +25,6 @@ public class GameEngine {
 
     // Provide services to managers
     public GameClock getGameClock() { return gameClock; }
-    public AudioManager getAudioManager() { return audioManager; }
+    public MusicPlayer getMusicPlayer() { return musicPlayer; }
     public GameSession getGameSession() { return gameSession; }
 }

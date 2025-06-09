@@ -62,11 +62,11 @@ public class GameplayManager {
         gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
         gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
 
-        gameEngine.getAudioManager().setVolume(SettingsManager.getInstance().getMusicVolume());
+        gameEngine.getMusicPlayer().setVolume(SettingsManager.getInstance().getMusicVolume());
         SoundManager.getInstance().setVolume(SettingsManager.getInstance().getEffectsVolume()); // IDK why but this doesn't work
 
         // Once the music (aka the map) has ended, we navigate to the play result with the gameSession data
-        gameEngine.getAudioManager().getPlayer().setOnEndOfMedia(() -> {
+        gameEngine.getMusicPlayer().getPlayer().setOnEndOfMedia(() -> {
             navigateToPlayResult(gameEngine.getGameSession());
         });
 
@@ -112,7 +112,7 @@ public class GameplayManager {
     public void loadBeatmap(Beatmap beatmap) {
         try {
             gameplayLogic.loadBeatmap(beatmap);
-            gameEngine.getAudioManager().loadMusic(beatmap.getAudioPath());
+            gameEngine.getMusicPlayer().loadMusic(beatmap.getAudioPath());
         } catch (Exception e) {
             throw new RuntimeException("Failed to load beatmap", e);
         }
@@ -127,7 +127,7 @@ public class GameplayManager {
 
     public void startGameplay() {
         isPaused = false;
-        gameEngine.getAudioManager().play();
+        gameEngine.getMusicPlayer().play();
         gameEngine.getGameClock().start();
         GameState.getInstance().setPlaying(true);
 
@@ -143,7 +143,7 @@ public class GameplayManager {
 
     public void pauseGameplay() {
         isPaused = true;
-        gameEngine.getAudioManager().pause();
+        gameEngine.getMusicPlayer().pause();
         GameState.getInstance().setPlaying(false);
         gameplayUI.setPaused(true);
     }
@@ -151,7 +151,7 @@ public class GameplayManager {
     public void resumeGameplay() {
         gameplayUI.setPaused(false);
         isPaused = false;
-        gameEngine.getAudioManager().resume();
+        gameEngine.getMusicPlayer().resume();
         GameState.getInstance().setPlaying(true);
     }
 
@@ -160,7 +160,7 @@ public class GameplayManager {
             gameLoop.stop();
         }
 
-        gameEngine.getAudioManager().stop();
+        gameEngine.getMusicPlayer().stop();
         GameState.getInstance().setPlaying(false);
 
         // Clean up resources
@@ -182,7 +182,7 @@ public class GameplayManager {
     private void update(long deltaTime) {
         if (!GameState.getInstance().isPlaying()) return;
 
-        long currentAudioTime = gameEngine.getAudioManager().getCurrentTime();
+        long currentAudioTime = gameEngine.getMusicPlayer().getCurrentTime();
         gameEngine.getGameClock().syncToAudioTime(currentAudioTime);
         gameplayLogic.update(currentAudioTime, deltaTime);
 
