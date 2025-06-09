@@ -105,6 +105,16 @@ public class BeatmapParser {
         if (line.startsWith("AudioFilename:")) {
             String audioFileName = line.substring(14).trim();
             Path audioPath = Paths.get(file.getParent(), audioFileName);
+
+            // ALERT, major hack right here haha. Because we are converting .ogg to .mp3
+            // We need to make sure that the audio path points to the mp3 and not the .ogg
+            // that has already been deleted after conversion
+            if (audioFileName.endsWith(".ogg")) {
+                // Construct the new file name with ".mp3" extension
+                String newAudioFileName = audioFileName.substring(0, audioFileName.length() - 4) + ".mp3";
+                audioPath = Paths.get(file.getParent(), newAudioFileName);
+            }
+
             beatmap.setAudioPath(audioPath.toUri().toASCIIString());
         }
         if (line.startsWith("Mode:")) {
