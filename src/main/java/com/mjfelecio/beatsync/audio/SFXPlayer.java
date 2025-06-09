@@ -4,21 +4,21 @@ import javafx.scene.media.AudioClip;
 
 import java.util.EnumMap;
 
-public class SoundManager {
-    private static SoundManager instance;
+public class SFXPlayer {
+    private static SFXPlayer instance;
 
     private final EnumMap<AudioType, AudioClip> effects = new EnumMap<>(AudioType.class);
     private double volume = 1.0; // 0.0 to 1.0
 
-    private SoundManager() {
+    private SFXPlayer() {
         for (AudioType type : AudioType.values()) {
             load(type);
         }
     }
 
-    public static SoundManager getInstance() {
+    public static SFXPlayer getInstance() {
         if (instance == null) {
-            instance = new SoundManager();
+            instance = new SFXPlayer();
         }
         return instance;
     }
