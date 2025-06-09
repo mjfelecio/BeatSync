@@ -132,6 +132,7 @@ public class GameplayManager {
     }
 
     public void restartGameplay() {
+        stopGameplay();
         SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
     }
 
