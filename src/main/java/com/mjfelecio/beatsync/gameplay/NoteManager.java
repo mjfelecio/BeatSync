@@ -1,6 +1,7 @@
 package com.mjfelecio.beatsync.gameplay;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.judgement.JudgementWindow;
 import com.mjfelecio.beatsync.object.Note;
 
@@ -39,7 +40,7 @@ public class NoteManager {
         for (Note note : allNotes) {
             if (   !note.isMiss()
                 && !note.isHit()
-                && timeElapsed >= note.getStartTime() - GameConfig.NOTE_APPROACH_TIME - DELAY_MS
+                && timeElapsed >= note.getStartTime() - SettingsManager.getInstance().getScrollSpeed() - DELAY_MS
                 && !visibleNotes.contains(note))
             {
                 visibleNotes.add(note);

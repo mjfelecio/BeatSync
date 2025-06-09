@@ -1,6 +1,7 @@
 package com.mjfelecio.beatsync.object;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.config.SettingsManager;
 
 import java.util.Objects;
 
@@ -49,8 +50,9 @@ public class Note {
      */
     public double calculateY() {
         // Calculate how far through the approach time we are
-        double timeIntoApproach = currentTime - (startTime - GameConfig.NOTE_APPROACH_TIME);
-        double progress = timeIntoApproach / GameConfig.NOTE_APPROACH_TIME;
+        double approachTime = SettingsManager.getInstance().getScrollSpeed();
+        double timeIntoApproach = currentTime - (startTime - approachTime);
+        double progress = timeIntoApproach / approachTime;
 
         // Clamp progress to -GameConfig.NOTE_DIAMETER so that it looks like it came from above
         // and not just pop out of nowhere
@@ -63,8 +65,9 @@ public class Note {
     // Gets the y of the end of the hold note
     public double calculateHoldEndY() {
         // Calculate how far through the approach time we are
-        double timeIntoApproach = currentTime - (endTime - GameConfig.NOTE_APPROACH_TIME);
-        double progress = timeIntoApproach / GameConfig.NOTE_APPROACH_TIME;
+        double approachTime = SettingsManager.getInstance().getScrollSpeed();
+        double timeIntoApproach = currentTime - (endTime - approachTime);
+        double progress = timeIntoApproach / approachTime;
 
         // Clamp progress to -GameConfig.NOTE_DIAMETER so that it looks like it came from above
         // and not just pop out of nowhere
