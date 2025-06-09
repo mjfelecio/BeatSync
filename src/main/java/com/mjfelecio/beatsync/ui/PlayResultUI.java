@@ -5,8 +5,6 @@ import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
 import com.mjfelecio.beatsync.judgement.Rank;
-import com.mjfelecio.beatsync.rendering.GameScene;
-import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.geometry.Insets;
@@ -284,11 +282,11 @@ public class PlayResultUI {
     }
 
     private void retryBeatmap() {
-        SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+        SceneManager.getInstance().loadGameplay();
     }
 
     private void navigateToSongSelect() {
-        SceneManager.getInstance().setCurrentScene(GameScene.SONG_SELECT);
+        SceneManager.getInstance().loadSongSelect();
     }
 
     public Scene getScene() {

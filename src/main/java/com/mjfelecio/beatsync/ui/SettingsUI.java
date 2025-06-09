@@ -3,7 +3,6 @@ package com.mjfelecio.beatsync.ui;
 import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.judgement.JudgementMode;
-import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.beans.property.*;
@@ -177,7 +176,7 @@ public class SettingsUI {
             -fx-padding: 8 20 8 20;
             -fx-cursor: hand;
         """);
-        backButton.setOnAction(e -> SceneManager.getInstance().setCurrentScene(GameScene.TITLE_SCREEN));
+        backButton.setOnAction(e -> SceneManager.getInstance().loadTitleScreen());
 
         Button saveButton = new Button("Save");
         saveButton.setFont(FontProvider.ARCADE_R.getFont(14));

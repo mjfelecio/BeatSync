@@ -1,7 +1,6 @@
 package com.mjfelecio.beatsync.ui;
 
 import com.mjfelecio.beatsync.core.SceneManager;
-import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.geometry.Insets;
@@ -67,10 +66,10 @@ public class TitleScreenUI {
     }
 
     private void onStartButtonClick() {
-        SceneManager.getInstance().setCurrentScene(GameScene.SONG_SELECT);
+        SceneManager.getInstance().loadSongSelect();
     }
 
     private void onSettingButtonClick() {
-        SceneManager.getInstance().setCurrentScene(GameScene.SETTINGS);
+        SceneManager.getInstance().loadSettings();
     }
 }

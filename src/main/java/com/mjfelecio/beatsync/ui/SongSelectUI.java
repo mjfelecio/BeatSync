@@ -5,7 +5,6 @@ import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
 import com.mjfelecio.beatsync.parser.BeatmapLoader;
-import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
@@ -117,7 +116,7 @@ public class SongSelectUI {
             -fx-padding: 8 20 8 20;
             -fx-cursor: hand;
         """);
-        backButton.setOnAction(e -> SceneManager.getInstance().setCurrentScene(GameScene.TITLE_SCREEN));
+        backButton.setOnAction(e -> SceneManager.getInstance().loadTitleScreen());
 
         Button playButton = new Button("Play");
         playButton.setFont(FontProvider.ARCADE_R.getFont(12));
@@ -275,6 +274,6 @@ public class SongSelectUI {
             return;
         }
         GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
-        SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+        SceneManager.getInstance().loadGameplay();
     }
 }

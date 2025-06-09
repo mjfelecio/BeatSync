@@ -6,11 +6,9 @@ import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import com.mjfelecio.beatsync.input.InputHandler;
 import com.mjfelecio.beatsync.object.Beatmap;
-import com.mjfelecio.beatsync.rendering.GameScene;
 import com.mjfelecio.beatsync.rendering.PlayfieldRenderer;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.ui.GameplayUI;
-import com.mjfelecio.beatsync.ui.PlayResultUI;
 import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
@@ -138,7 +136,7 @@ public class GameplayManager {
 
     public void restartGameplay() {
         stopGameplay();
-        SceneManager.getInstance().setCurrentScene(GameScene.GAMEPLAY);
+        SceneManager.getInstance().loadGameplay();
     }
 
     public void pauseGameplay() {
