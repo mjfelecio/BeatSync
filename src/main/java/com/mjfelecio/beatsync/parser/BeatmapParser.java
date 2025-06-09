@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.parser;
 
+import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Note;
 
@@ -140,11 +141,11 @@ public class BeatmapParser {
             int type = Integer.parseInt(parts[3]);
 //            int hitSound = Integer.parseInt(parts[4]); // I don't need hit sound for now
 
-            int laneNumber = getLaneNumber(x);
+            int laneNumber = calculateLaneNumber(x);
 
             // If the lane number is not being mapped correctly, that means it's a 5k+ beatmap
             // Which we currently can't support, so just throw an error
-            if (laneNumber == -1) {
+            if (laneNumber > 4) {
                 throw new IOException("Only 4K beatmaps supported");
             }
 
@@ -156,16 +157,8 @@ public class BeatmapParser {
         }
     }
 
-    private static int getLaneNumber(int x) {
-        int lane = -1;
-        switch (x) {
-            case 64 -> lane = 0;
-            case 192 -> lane = 1;
-            case 320 -> lane = 2;
-            case 448 -> lane = 3;
-        }
-
-        return lane;
+    private static int calculateLaneNumber(int x) {
+        return (int) Math.floor((double) (x * GameConfig.NUM_LANES) / 512);
     }
 
     private static Integer getEndTime(int type, String[] parts) {
