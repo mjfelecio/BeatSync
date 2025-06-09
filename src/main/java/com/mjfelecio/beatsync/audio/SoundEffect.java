@@ -4,7 +4,15 @@ import java.util.Objects;
 
 public enum SoundEffect {
     HITSOUND("/com/mjfelecio/beatsync/sound-effects/hitsound.wav"),
-    HOLDBREAK("/com/mjfelecio/beatsync/sound-effects/holdbreak.wav");
+    HOLDBREAK("/com/mjfelecio/beatsync/sound-effects/holdbreak.wav"),
+    BUTTON_SELECT("/com/mjfelecio/beatsync/sound-effects/button-select.wav"),
+    BUTTON_HOVER("/com/mjfelecio/beatsync/sound-effects/button-hover.wav"),
+    APPLAUSE("/com/mjfelecio/beatsync/sound-effects/applause.wav"),
+    NOTIFICATION("/com/mjfelecio/beatsync/sound-effects/notification.wav"),
+    PLAY_BEATMAP("/com/mjfelecio/beatsync/sound-effects/play-beatmap.wav"),
+    RESULTS_SWOOSH("/com/mjfelecio/beatsync/sound-effects/results-swoosh.wav"),
+    SCENE_CHANGE("/com/mjfelecio/beatsync/sound-effects/scene-change.wav"),
+    SELECT_DIFFICULTY("/com/mjfelecio/beatsync/sound-effects/select-difficulty.wav");
 
     private final String uri;
 
