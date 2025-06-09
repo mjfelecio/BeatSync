@@ -150,7 +150,7 @@ public class ZipExtractor {
         }
     }
 
-    private static File convertOGGToMP3(File oggFile) throws IOException {
+    private static void convertOGGToMP3(File oggFile) throws IOException {
         if (oggFile == null || !oggFile.exists()) {
             throw new IllegalArgumentException("OGG file does not exist: " + oggFile);
         }
@@ -175,7 +175,6 @@ public class ZipExtractor {
             throw new IOException("Conversion failed: MP3 file not created.");
         }
 
-        return mp3File;
     }
 
     // WTF I spent so long on this and I just realized I don't even need it
