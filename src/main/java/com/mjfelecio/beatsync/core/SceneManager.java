@@ -5,41 +5,25 @@ import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.ui.SettingsUI;
 import com.mjfelecio.beatsync.ui.SongSelectUI;
-import com.mjfelecio.beatsync.rendering.GameScene;
-import com.mjfelecio.beatsync.rendering.SceneChangeListener;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.ui.PlayResultUI;
 import com.mjfelecio.beatsync.ui.TitleScreenUI;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-
-public class SceneManager implements SceneChangeListener {
+public class SceneManager {
     private static SceneManager instance;
     private final Stage primaryStage; // This contains the original stage (window) for the game
 
-    private final int width;
-    private final int height;
-
-    private final List<SceneChangeListener> listeners = new ArrayList<>();
-    private GameScene currentGameScene;
     private Scene currentScene;
 
-    private SceneManager(int width, int height, Stage primaryStage) {
-        this.width = width;
-        this.height = height;
+    private SceneManager(Stage primaryStage) {
         this.primaryStage = primaryStage;
-
-        // Register this SceneManager as a listener to Scene changes
-        addSceneChangeListener(this);
     }
 
-    public static void initialize(int width, int height, Stage primaryStage) {
+    public static void initialize(Stage primaryStage) {
         if (instance == null) {
-            instance = new SceneManager(width, height, primaryStage);
+            instance = new SceneManager(primaryStage);
         }
     }
 
@@ -50,92 +34,32 @@ public class SceneManager implements SceneChangeListener {
         return instance;
     }
 
-    public Scene getCurrentScene() {
-        return currentScene;
+    public void loadTitleScreen() {
+        setCurrentScene(new TitleScreenUI().getScene());
     }
 
-    public void setCurrentScene(GameScene currentGameScene) {
-        GameScene oldScene = this.currentGameScene;
-        this.currentGameScene = currentGameScene;
-
-        // Notify all listeners about the scene change
-        notifySceneChange(oldScene, currentGameScene);
+    public void loadSongSelect() {
+        setCurrentScene(new SongSelectUI().getScene());
     }
 
-    // Method to register listeners
-    public void addSceneChangeListener(SceneChangeListener listener) {
-        listeners.add(listener);
+    public void loadSettings() {
+        setCurrentScene(new SettingsUI().getScene());
     }
 
-    public void removeSceneChangeListener(SceneChangeListener listener) {
-        listeners.remove(listener);
-    }
+    public void loadGameplay() {
+        GameplayManager gameplayManager = GameplayManager.getInstance();
 
-    private void notifySceneChange(GameScene oldScene, GameScene newScene) {
-        for (SceneChangeListener listener : listeners) {
-            listener.onSceneChange(oldScene, newScene);
-        }
-    }
+        // Resets the notes state so that it can still get rendered on retry
+        // You have no idea how long I spent to fix this bug. 4 fking hours and it was just this simple thing.
+        // I almost rewrote my entire gameplay logic to find what was going on
+        // I hate my liiiiife
+        GameState.getInstance().getCurrentBeatmap().resetNotesState();
 
-    @Override
-    public void onSceneChange(GameScene oldScene, GameScene newScene) {
-        if (newScene != null) {
-            Scene scene = getSceneFromGameScene(newScene);
-            this.currentScene = scene;
+        gameplayManager.loadBeatmap(GameState.getInstance().getCurrentBeatmap());
+        gameplayManager.initializeGameplay();
+        gameplayManager.startGameplay();
 
-            // Automatically update the primary stage with the new scene
-            if (primaryStage != null) {
-                primaryStage.setScene(scene);
-                SFXPlayer.getInstance().play(SoundEffect.SCENE_CHANGE);
-            }
-        }
-    }
-
-    public Scene getSceneFromGameScene(GameScene gameScene) {
-        FXMLLoader loader;
-        Scene scene = null;
-
-        try {
-            switch (gameScene) {
-                case TITLE_SCREEN -> {
-                    scene = new TitleScreenUI().getScene();
-                }
-                case SONG_SELECT -> {
-                    scene = new SongSelectUI().getScene();
-                }
-                case SETTINGS -> {
-                    scene = new SettingsUI().getScene();
-                }
-                case GAMEPLAY -> {
-                    GameplayManager gameplayManager = GameplayManager.getInstance();
-
-                    // Resets the notes state so that it can still get rendered on retry
-                    // You have no idea how long I spent to fix this bug. 4 fking hours and it was just this simple thing.
-                    // I almost rewrote my entire gameplay logic to find what was going on
-                    // I hate my liiiiife
-                    GameState.getInstance().getCurrentBeatmap().resetNotesState();
-
-                    gameplayManager.loadBeatmap(GameState.getInstance().getCurrentBeatmap());
-                    gameplayManager.initializeGameplay();
-                    gameplayManager.startGameplay();
-
-                    scene = gameplayManager.getGameplayScene();
-                }
-                case RESULT_SCREEN -> {
-                    scene = new PlayResultUI().getScene();
-                }
-                default -> {
-                    // Just return the current scene if the scene isn't found
-                    System.out.println("Unknown scene: " + gameScene + ". Returning current scene.");
-                    scene = getCurrentScene();
-                }
-            }
-        } catch (Exception e) {
-            System.err.println("Failed to load " + gameScene + " due to:" + e.getMessage());
-            e.printStackTrace();
-        }
-
-        return scene;
+        setCurrentScene(gameplayManager.getGameplayScene());
     }
 
     public void loadResultScreen(GameSession gameSession) {
