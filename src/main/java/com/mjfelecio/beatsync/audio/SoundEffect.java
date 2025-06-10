@@ -12,7 +12,8 @@ public enum SoundEffect {
     PLAY_BEATMAP("/com/mjfelecio/beatsync/sound-effects/play-beatmap.wav"),
     RESULTS_SWOOSH("/com/mjfelecio/beatsync/sound-effects/results-swoosh.wav"),
     SCENE_CHANGE("/com/mjfelecio/beatsync/sound-effects/scene-change.wav"),
-    SELECT("/com/mjfelecio/beatsync/sound-effects/select.wav");
+    SELECT("/com/mjfelecio/beatsync/sound-effects/select.wav"),
+    SAVE_SETTINGS("/com/mjfelecio/beatsync/sound-effects/save-settings.wav");
 
     private final String uri;
 

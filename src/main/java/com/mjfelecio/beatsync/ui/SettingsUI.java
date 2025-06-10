@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.audio.SFXPlayer;
+import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.judgement.JudgementMode;
@@ -210,5 +212,6 @@ public class SettingsUI {
         settingsManager.setJudgementMode(selectedJudgement.getValue());
         settingsManager.setMusicVolume(musicVolume.intValue());
         settingsManager.setEffectsVolume(effectsVolume.intValue());
+        SFXPlayer.getInstance().play(SoundEffect.SAVE_SETTINGS);
     }
 }
