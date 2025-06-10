@@ -1,9 +1,5 @@
 package com.mjfelecio.beatsync.utils;
 
-//import com.github.kokorin.jaffree.StreamType;
-//import com.github.kokorin.jaffree.ffmpeg.FFmpeg;
-//import com.github.kokorin.jaffree.ffmpeg.UrlInput;
-//import com.github.kokorin.jaffree.ffmpeg.UrlOutput;
 import com.mjfelecio.beatsync.config.GameConfig;
 
 import java.io.File;
@@ -204,7 +200,7 @@ public class ZipExtractor {
     }
 
     // I just run this in case I need to import new maps
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         String oszToImportFilePath = GameConfig.BEATMAP_DIRECTORY;
         String destinationFilePath = GameConfig.BEATMAP_DIRECTORY;
         ArrayList<String> successfulExtractions = new ArrayList<>();
