@@ -5,13 +5,11 @@ import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.judgement.JudgementWindow;
 import com.mjfelecio.beatsync.object.Note;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
+import java.util.*;
 
 public class NoteManager {
     private final List<Note> allNotes;
-    private final List<Note> visibleNotes;
+    private final Set<Note> visibleNotes;
 
     public interface MissCallback {
         void onNoteMissed(Note note);
@@ -25,7 +23,7 @@ public class NoteManager {
 
     public NoteManager(List<Note> allNotes) {
         this.allNotes = allNotes;
-        this.visibleNotes = new ArrayList<>();
+        this.visibleNotes = new HashSet<>();
     }
 
     public void updateVisibleNotes(long timeElapsed) {
@@ -40,8 +38,7 @@ public class NoteManager {
         for (Note note : allNotes) {
             if (   !note.isMiss()
                 && !note.isHit()
-                && timeElapsed >= note.getStartTime() - SettingsManager.getInstance().getScrollSpeed() - DELAY_MS
-                && !visibleNotes.contains(note))
+                && timeElapsed >= note.getStartTime() - SettingsManager.getInstance().getScrollSpeed() - DELAY_MS)
             {
                 visibleNotes.add(note);
             }
