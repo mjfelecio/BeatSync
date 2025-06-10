@@ -128,6 +128,11 @@ public class GameplayManager {
         GameState.getInstance().setPlaying(false);
     }
 
+    public void quitGameplay() {
+        stopGameplay();
+        SceneManager.getInstance().loadSongSelect();
+    }
+
     private void update(long deltaTime) {
         if (!GameState.getInstance().isPlaying()) return;
 
@@ -160,13 +165,14 @@ public class GameplayManager {
 
     private void setUpInputHandling() {
         gameplayScene.setOnKeyPressed(event -> {
-            if (event.getCode() == KeyCode.ESCAPE) {
-                if (isPaused) resumeGameplay();
-                else pauseGameplay();
-            } else if (event.getCode() == KeyCode.BACK_QUOTE) {
-                restartGameplay();
+            switch (event.getCode()) {
+                case P -> {
+                    if (isPaused) resumeGameplay();
+                    else pauseGameplay();
+                }
+                case ESCAPE -> quitGameplay();
+                case BACK_QUOTE -> restartGameplay();
             }
-
             inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentSongTime());
         });
         gameplayScene.setOnKeyReleased(event ->
