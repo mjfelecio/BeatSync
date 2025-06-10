@@ -22,12 +22,12 @@ public class GameplayLogic {
     public void loadBeatmap(Beatmap beatmap) {
         this.noteManager = new NoteManager(beatmap.getNotes());
         this.scoreManager = new ScoreManager(beatmap.getRegularNoteCount(), beatmap.getHoldNoteCount());
+        noteManager.setMissCallback(this::handleMissedNote);
     }
 
     public void update(long currentTime, long deltaTime) {
         noteManager.updateVisibleNotes(currentTime);
         noteManager.cullExpiredNotes(currentTime);
-        noteManager.setMissCallback(this::handleMissedNote);
     }
 
     private void handleMissedNote(Note note) {
