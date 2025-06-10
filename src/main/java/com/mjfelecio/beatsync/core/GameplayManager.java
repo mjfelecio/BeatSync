@@ -19,8 +19,6 @@ import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 public class GameplayManager {
-    private static GameplayManager instance;
-
     // UI Components
     private Canvas gameCanvas;
     private GraphicsContext gc;
@@ -37,17 +35,10 @@ public class GameplayManager {
     private final GameplayLogic gameplayLogic;
     private InputHandler inputHandler;
 
-    private GameplayManager() {
+    public GameplayManager() {
         this.gameEngine = GameEngine.getInstance();
         this.renderer = new PlayfieldRenderer();
         this.gameplayLogic = new GameplayLogic(gameEngine.getGameSession());
-    }
-
-    public static GameplayManager getInstance() {
-        if (instance == null) {
-            instance = new GameplayManager();
-        }
-        return instance;
     }
 
     public void initializeGameplay() {
@@ -200,9 +191,6 @@ public class GameplayManager {
         gc = null;
         gameplayScene = null;
         inputHandler = null;
-
-        // Reset singleton for next gameplay session
-        instance = null;
     }
 
     // Getters for compatibility with existing code
