@@ -11,6 +11,8 @@ public final class GameConfig {
     public static final int NUM_LANES = 4;
     public static final int NOTE_DIAMETER = 80;
 
+    public static final int AUDIO_LEAD_IN = 1000;
+
     public static final int HIT_LINE_Y = PLAYFIELD_HEIGHT - 150;
     public static final String BEATMAP_DIRECTORY = "src/main/resources/com/mjfelecio/beatsync/beatmaps";
 

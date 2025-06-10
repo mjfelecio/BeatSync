@@ -1,6 +1,7 @@
 package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.audio.SFXPlayer;
+import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
@@ -32,6 +33,11 @@ public class GameplayManager {
     private final PlayfieldRenderer renderer;
     private final GameplayLogic gameplayLogic;
     private InputHandler inputHandler;
+
+    // Audio Lead-in related properties
+    long gameStartTime = -1;
+    long songStartTime = -1;
+    private boolean songStarted = false;
 
     public GameplayManager() {
         this.gameEngine = GameEngine.getInstance();
@@ -86,14 +92,29 @@ public class GameplayManager {
     }
 
     public void startGameplay() {
+        gameStartTime = System.currentTimeMillis();
+        songStartTime = gameStartTime + GameConfig.AUDIO_LEAD_IN;
+
         isPaused = false;
-        gameEngine.getMusicPlayer().play();
-        gameEngine.getGameClock().start();
         GameState.getInstance().setPlaying(true);
 
         if (gameLoop != null) {
             gameLoop.start();
         }
+    }
+
+    public long getCurrentSongTime() {
+        double currentTime = System.currentTimeMillis();
+
+        if (currentTime > songStartTime) {
+            // Normal playback - start audio if not started
+            if (!songStarted) {
+                gameEngine.getMusicPlayer().play();
+                gameEngine.getGameClock().start();
+                songStarted = true;
+            }
+        }
+        return (long) currentTime - songStartTime;
     }
 
     public void restartGameplay() {
@@ -127,7 +148,8 @@ public class GameplayManager {
     private void update(long deltaTime) {
         if (!GameState.getInstance().isPlaying()) return;
 
-        long currentAudioTime = gameEngine.getMusicPlayer().getCurrentTime();
+        long currentAudioTime = getCurrentSongTime();
+
         gameEngine.getGameClock().syncToAudioTime(currentAudioTime);
         gameplayLogic.update(currentAudioTime, deltaTime);
 
@@ -155,10 +177,10 @@ public class GameplayManager {
                 restartGameplay();
             }
 
-            inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentTime());
+            inputHandler.handleKeyPress(event.getCode(), getCurrentSongTime());
         });
         gameplayScene.setOnKeyReleased(event ->
-                inputHandler.handleKeyRelease(event.getCode(), gameEngine.getGameClock().getCurrentTime()));
+                inputHandler.handleKeyRelease(event.getCode(), getCurrentSongTime()));
     }
 
     private void setUpSettings() {
