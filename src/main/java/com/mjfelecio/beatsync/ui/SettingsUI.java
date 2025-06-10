@@ -180,7 +180,7 @@ public class SettingsUI {
             -fx-padding: 8 20 8 20;
             -fx-cursor: hand;
         """);
-        backButton.setOnAction(e -> SceneManager.getInstance().loadTitleScreen());
+        backButton.setOnAction(e -> navigateToTitleScreen());
 
         Button saveButton = new Button("Save");
         saveButton.setFont(FontProvider.ARCADE_R.getFont(14));
@@ -204,6 +204,11 @@ public class SettingsUI {
 
     public Scene getScene() {
         return scene;
+    }
+
+    private void navigateToTitleScreen() {
+        SFXPlayer.getInstance().play(SoundEffect.SELECT);
+        SceneManager.getInstance().loadTitleScreen();
     }
 
     private void saveSettings() {
