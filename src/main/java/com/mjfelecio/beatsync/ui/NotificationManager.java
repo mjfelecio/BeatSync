@@ -12,17 +12,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.util.Duration;
 
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.Map;
 
 public class NotificationManager {
     private static final VBox notificationBox = new VBox(10);
-    private static final Map<String, String> colorMap = new HashMap<>();
+    private static final Map<Notification, String> colorMap = new EnumMap<>(Notification.class);
 
     static {
-        colorMap.put("success", "#0f0");
-        colorMap.put("info", "#0ff");
-        colorMap.put("error", "#f00");
+        colorMap.put(Notification.SUCCESS, "#0f0");
+        colorMap.put(Notification.INFO, "#0ff");
+        colorMap.put(Notification.ERROR, "#f00");
 
         notificationBox.setAlignment(Pos.TOP_RIGHT);
         notificationBox.setPickOnBounds(false);
@@ -30,7 +30,7 @@ public class NotificationManager {
         notificationBox.setPadding(new Insets(20, 20, 0, 0)); // top-right margin
     }
 
-    public static void showNotification(Scene scene, String type, String message) {
+    public static void showNotification(Scene scene, Notification type, String message) {
         if (!colorMap.containsKey(type)) {
             throw new IllegalArgumentException("Unknown notification type: " + type);
         }
