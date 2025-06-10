@@ -284,5 +284,6 @@ public class SongSelectUI {
         }
         GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
         SceneManager.getInstance().loadGameplay();
+        selectedBeatmap = null; // Remove the currently selected beatmap
     }
 }
