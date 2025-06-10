@@ -35,7 +35,7 @@ public class GameplayManager {
     private InputHandler inputHandler;
 
     public GameplayManager() {
-        this.gameEngine = GameEngine.getInstance();
+        this.gameEngine = new GameEngine();
         this.renderer = new PlayfieldRenderer();
         this.gameplayLogic = new GameplayLogic(gameEngine.getGameSession());
         inputHandler = new InputHandler(gameplayLogic);
