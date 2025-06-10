@@ -82,6 +82,7 @@ public class SceneManager {
         playResultUI.initializeValues(gameSession);
 
         applyScene(playResultUI.getScene());
+        SFXPlayer.getInstance().play(SoundEffect.RESULTS_SWOOSH);
     }
 
     private void applyScene(Scene newScene) {
