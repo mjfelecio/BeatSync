@@ -34,11 +34,6 @@ public class GameplayManager {
     private final GameplayLogic gameplayLogic;
     private InputHandler inputHandler;
 
-    // Audio Lead-in related properties
-    long gameStartTime = -1;
-    long songStartTime = -1;
-    private boolean songStarted = false;
-
     public GameplayManager() {
         this.gameEngine = GameEngine.getInstance();
         this.renderer = new PlayfieldRenderer();
@@ -92,29 +87,14 @@ public class GameplayManager {
     }
 
     public void startGameplay() {
-        gameStartTime = System.currentTimeMillis();
-        songStartTime = gameStartTime + GameConfig.AUDIO_LEAD_IN;
-
         isPaused = false;
         GameState.getInstance().setPlaying(true);
+
+        gameEngine.getGameClock().startGame();
 
         if (gameLoop != null) {
             gameLoop.start();
         }
-    }
-
-    public long getCurrentSongTime() {
-        double currentTime = System.currentTimeMillis();
-
-        if (currentTime > songStartTime) {
-            // Normal playback - start audio if not started
-            if (!songStarted) {
-                gameEngine.getMusicPlayer().play();
-                gameEngine.getGameClock().start();
-                songStarted = true;
-            }
-        }
-        return (long) currentTime - songStartTime;
     }
 
     public void restartGameplay() {
@@ -125,6 +105,7 @@ public class GameplayManager {
     public void pauseGameplay() {
         isPaused = true;
         gameEngine.getMusicPlayer().pause();
+        gameEngine.getGameClock().pause();
         GameState.getInstance().setPlaying(false);
         gameplayUI.setPaused(true);
     }
@@ -133,6 +114,7 @@ public class GameplayManager {
         gameplayUI.setPaused(false);
         isPaused = false;
         gameEngine.getMusicPlayer().resume();
+        gameEngine.getGameClock().resume();
         GameState.getInstance().setPlaying(true);
     }
 
@@ -142,16 +124,24 @@ public class GameplayManager {
         }
 
         gameEngine.getMusicPlayer().stop();
+        gameEngine.getGameClock().stop();
         GameState.getInstance().setPlaying(false);
     }
 
     private void update(long deltaTime) {
         if (!GameState.getInstance().isPlaying()) return;
 
-        long currentAudioTime = getCurrentSongTime();
+        gameEngine.getGameClock().update();
 
-        gameEngine.getGameClock().syncToAudioTime(currentAudioTime);
-        gameplayLogic.update(currentAudioTime, deltaTime);
+        // Check if we should start audio
+        if (gameEngine.getGameClock().shouldStartAudio()) {
+            gameEngine.getMusicPlayer().play();
+            gameEngine.getGameClock().markAudioStarted();
+        }
+
+        long currentSongTime = gameEngine.getGameClock().getCurrentSongTime();
+
+        gameplayLogic.update(currentSongTime, deltaTime);
 
         updateUIInfo();
     }
@@ -177,10 +167,10 @@ public class GameplayManager {
                 restartGameplay();
             }
 
-            inputHandler.handleKeyPress(event.getCode(), getCurrentSongTime());
+            inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentSongTime());
         });
         gameplayScene.setOnKeyReleased(event ->
-                inputHandler.handleKeyRelease(event.getCode(), getCurrentSongTime()));
+                inputHandler.handleKeyRelease(event.getCode(), gameEngine.getGameClock().getCurrentSongTime()));
     }
 
     private void setUpSettings() {
