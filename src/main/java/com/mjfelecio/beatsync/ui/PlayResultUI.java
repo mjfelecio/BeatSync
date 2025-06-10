@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.audio.SFXPlayer;
+import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
@@ -282,10 +284,12 @@ public class PlayResultUI {
     }
 
     private void retryBeatmap() {
+        SFXPlayer.getInstance().play(SoundEffect.SELECT);
         SceneManager.getInstance().loadGameplay();
     }
 
     private void navigateToSongSelect() {
+        SFXPlayer.getInstance().play(SoundEffect.SELECT);
         SceneManager.getInstance().loadSongSelect();
     }
 
