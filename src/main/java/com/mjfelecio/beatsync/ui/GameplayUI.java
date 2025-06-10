@@ -165,12 +165,6 @@ public class GameplayUI {
         combo.set(value);
     }
 
-    public void resetValues() {
-        setScore(0);
-        setAccuracy(100);
-        setCombo(0);
-    }
-
     public void setPaused(boolean isPaused) {
         pausedLabel.setVisible(isPaused);
     }
