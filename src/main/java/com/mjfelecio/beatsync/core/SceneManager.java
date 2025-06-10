@@ -22,6 +22,9 @@ public class SceneManager {
     private SongSelectUI cachedSongSelectUI;
     private SettingsUI cachedSettingsUI;
 
+    // Keep track of the active GameplayManager for cleanup
+    private GameplayManager currentGameplayManager;
+
     private SceneManager(Stage primaryStage) {
         this.primaryStage = primaryStage;
     }
@@ -61,13 +64,17 @@ public class SceneManager {
     }
 
     public void loadGameplay() {
+        if (GameState.getInstance().getCurrentBeatmap() == null) return;
+
+        // Dispose of any previous gameplay to stop timers and media callbacks
+        if (currentGameplayManager != null) {
+            currentGameplayManager.dispose();
+        }
+
         SFXPlayer.getInstance().play(SoundEffect.ENTER_GAMEPLAY);
         GameplayManager gameplayManager = new GameplayManager();
+        currentGameplayManager = gameplayManager;
 
-        // Resets the notes state so that it can still get rendered on retry
-        // You have no idea how long I spent to fix this bug. 4 fking hours and it was just this simple thing.
-        // I almost rewrote my entire gameplay logic to find what was going on
-        // I hate my liiiiife
         GameState.getInstance().getCurrentBeatmap().resetNotesState();
 
         gameplayManager.loadBeatmap(GameState.getInstance().getCurrentBeatmap());

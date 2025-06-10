@@ -8,7 +8,8 @@ import java.util.*;
 
 public class NoteManager {
     private final List<Note> allNotes;
-    private final Set<Note> visibleNotes;
+    private final Deque<Note> visibleNotes = new ArrayDeque<>();  // ▶ use Deque for fast add/remove
+    private int nextNoteIndex = 0;
 
     public interface MissCallback {
         void onNoteMissed(Note note);
@@ -22,54 +23,55 @@ public class NoteManager {
 
     public NoteManager(List<Note> allNotes) {
         this.allNotes = allNotes;
-        this.visibleNotes = new HashSet<>();
     }
 
     public void updateVisibleNotes(long timeElapsed) {
-        allNotes.forEach(n -> n.update(timeElapsed));
+        final int DELAY_MS = 100;
+        long scrollSpeed = SettingsManager.getInstance().getScrollSpeed();
 
-        // Delay to make sure that the notes get added to the visibleNotes earlier.
-        int DELAY_MS = 100;
-
-        for (Note note : allNotes) {
-            if (       !note.isMiss()
-                    && !note.isHit()
-                    && timeElapsed >= note.getStartTime() - SettingsManager.getInstance().getScrollSpeed() - DELAY_MS)
-            {
-                visibleNotes.add(note);
+        // Spawn any new notes whose startTime is within the scroll window
+        while (nextNoteIndex < allNotes.size()) {
+            Note note = allNotes.get(nextNoteIndex);
+            long triggerTime = note.getStartTime() - scrollSpeed - DELAY_MS;
+            if (timeElapsed >= triggerTime) {
+                note.update(timeElapsed);
+                visibleNotes.addLast(note);
+                nextNoteIndex++;
+            } else {
+                break;
             }
+        }
+
+        // Update only the notes that are currently on‐screen
+        for (Note note : visibleNotes) {
+            note.update(timeElapsed);
         }
     }
 
     public void cullExpiredNotes(long currentTime) {
-        visibleNotes.removeIf(n -> {
-            final int MISS_WINDOW_MS = JudgementWindow.MISS.getMillis();
-            // Arbitrary delay to allow the note to move below the playfield before removing it
-            final int REMOVAL_DELAY_MS = 100;
+        Iterator<Note> it = visibleNotes.iterator();
+        final int MISS_WINDOW_MS = JudgementWindow.MISS.getMillis();
+        final int REMOVAL_DELAY_MS = 100;
 
-            // If it's a hold note, we should only cull it if the tail of the note has passed the playfield
+        while (it.hasNext()) {
+            Note n = it.next();
             long noteTime = n.isHoldNote() ? n.getEndTime() : n.getStartTime();
-
             long timeSinceNote = currentTime - noteTime;
             boolean shouldRemove = timeSinceNote > (MISS_WINDOW_MS + REMOVAL_DELAY_MS);
 
-            // For hold notes, if the player is still holding, we don't want to cull yet
+            // ▶ don’t cull hold notes that are actively held
             if (n.isHoldNote() && n.isHeld()) {
-                return false;
+                continue;
             }
 
-            // If it's time to remove it, and it hasn't been hit/held, mark a miss
             if (shouldRemove && !n.isHit() && !n.isHeld()) {
                 n.setMiss(true);
-                if (missCallback != null) {
-                    missCallback.onNoteMissed(n);
-                }
-                return true;
+                if (missCallback != null) missCallback.onNoteMissed(n);
+                it.remove();
+            } else if (shouldRemove && (n.isHit() || n.isMiss())) {
+                it.remove();
             }
-
-            // Otherwise, only remove it if we've already judged it (hit or miss) and we're past the window
-            return shouldRemove && (n.isHit() || n.isMiss());
-        });
+        }
     }
 
     public Note getHittableNote(int laneNumber, long currentTime) {

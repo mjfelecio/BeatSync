@@ -184,6 +184,15 @@ public class GameplayManager {
         SFXPlayer.getInstance().setVolume(SettingsManager.getInstance().getEffectsVolume()); // IDK why but this doesn't work
     }
 
+    public void dispose() {
+        stopGameplay();
+        // Unregister the end-of-media callback to prevent stacking
+        gameEngine.getMusicPlayer().getPlayer().setOnEndOfMedia(null);
+        // Remove input handlers to avoid duplicate events
+        gameplayScene.setOnKeyPressed(null);
+        gameplayScene.setOnKeyReleased(null);
+    }
+
     private void navigateToPlayResult(GameSession gameSession) {
         Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             SceneManager.getInstance().loadResultScreen(gameSession);
