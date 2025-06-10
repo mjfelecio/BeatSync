@@ -10,7 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class PlayfieldRenderer {
     private static final Color[] LANE_COLORS = {
@@ -19,6 +21,12 @@ public class PlayfieldRenderer {
             GameConfig.INNER_NOTE_COLOR, // Lane 2
             GameConfig.OUTER_NOTE_COLOR  // Lane 3
     };
+
+    private final Text measurementText = new Text();
+
+    // Cache text measurements to avoid expensive calculations
+    private final Map<String, Double> textWidthCache = new HashMap<>();
+    private Font lastFont = null;
 
     public void render(GraphicsContext gc, GameSession gameSession,
                        List<Note> visibleNotes, InputState inputState) {
@@ -110,8 +118,6 @@ public class PlayfieldRenderer {
         }
     }
 
-    private final Text measurementText = new Text();
-
     private void drawUI(GraphicsContext gc, GameSession gameSession) {
         gc.setFill(Color.LIGHTBLUE);
 
@@ -147,10 +153,29 @@ public class PlayfieldRenderer {
         };
     }
 
+    // I didn't implement this caching thing lol, IDK how that works, I got Claude to do it for me
     private double getTextWidth(String text, Font font) {
+        // Create cache key
+        String cacheKey = text + "@" + font.toString();
+
+        // Check cache first
+        Double cachedWidth = textWidthCache.get(cacheKey);
+        if (cachedWidth != null) {
+            return cachedWidth;
+        }
+
+        // Calculate and cache
         measurementText.setText(text);
         measurementText.setFont(font);
-        return measurementText.getBoundsInLocal().getWidth();
+        double width = measurementText.getBoundsInLocal().getWidth();
+
+        // Limit cache size to prevent memory leaks
+        if (textWidthCache.size() > 100) {
+            textWidthCache.clear();
+        }
+
+        textWidthCache.put(cacheKey, width);
+        return width;
     }
 
     private int calculateNoteX(int laneNumber) {
