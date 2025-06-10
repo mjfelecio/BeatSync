@@ -6,7 +6,7 @@ import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
-import com.mjfelecio.beatsync.judgement.Rank;
+import com.mjfelecio.beatsync.object.Rank;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.geometry.Insets;

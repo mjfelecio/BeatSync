@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.judgement;
 
+import com.mjfelecio.beatsync.object.Rank;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 

@@ -1,4 +1,4 @@
-package com.mjfelecio.beatsync.judgement;
+package com.mjfelecio.beatsync.object;
 
 public enum Rank {
     SS,

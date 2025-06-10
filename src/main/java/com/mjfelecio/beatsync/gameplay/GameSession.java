@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.gameplay;
 
-import com.mjfelecio.beatsync.judgement.Rank;
+import com.mjfelecio.beatsync.object.Rank;
 
 public class GameSession {
     private int combo = 0;
