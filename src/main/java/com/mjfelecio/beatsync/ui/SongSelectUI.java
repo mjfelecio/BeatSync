@@ -279,6 +279,7 @@ public class SongSelectUI {
 
     public void navigateToGameplay() {
         if (selectedBeatmap == null) {
+            SFXPlayer.getInstance().play(SoundEffect.NOTIFICATION_ERROR);
             NotificationManager.showNotification(scene, Notification.ERROR, "No beatmap currently selected");
             return;
         }
