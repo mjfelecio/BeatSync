@@ -1,6 +1,5 @@
 package com.mjfelecio.beatsync.gameplay;
 
-import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.config.SettingsManager;
 import com.mjfelecio.beatsync.judgement.JudgementWindow;
 import com.mjfelecio.beatsync.object.Note;
@@ -30,15 +29,12 @@ public class NoteManager {
         allNotes.forEach(n -> n.update(timeElapsed));
 
         // Delay to make sure that the notes get added to the visibleNotes earlier.
-        // This makes sure that they don't suddenly pop out at y = 0 and actually
-        // fall from above the playfield
         int DELAY_MS = 100;
 
-        // Add newly visible notes based on currentTime
         for (Note note : allNotes) {
-            if (   !note.isMiss()
-                && !note.isHit()
-                && timeElapsed >= note.getStartTime() - SettingsManager.getInstance().getScrollSpeed() - DELAY_MS)
+            if (       !note.isMiss()
+                    && !note.isHit()
+                    && timeElapsed >= note.getStartTime() - SettingsManager.getInstance().getScrollSpeed() - DELAY_MS)
             {
                 visibleNotes.add(note);
             }
