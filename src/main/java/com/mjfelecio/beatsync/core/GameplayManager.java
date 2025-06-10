@@ -13,14 +13,12 @@ import javafx.animation.AnimationTimer;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.input.KeyCode;
 import javafx.util.Duration;
 
 public class GameplayManager {
     // UI Components
-    private Canvas gameCanvas;
     private GraphicsContext gc;
     private Scene gameplayScene;
     private GameplayUI gameplayUI;
@@ -39,47 +37,20 @@ public class GameplayManager {
         this.gameEngine = GameEngine.getInstance();
         this.renderer = new PlayfieldRenderer();
         this.gameplayLogic = new GameplayLogic(gameEngine.getGameSession());
+        inputHandler = new InputHandler(gameplayLogic);
+        gameplayUI = new GameplayUI();
+        gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
+        gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
     }
 
     public void initializeGameplay() {
-        // This is the ui, the view itself (I'm not using fxml because it's annoying)
-        gameplayUI = new GameplayUI(); // Initialize the UI
-
-        // Reset the UI in case we are from a retry
-        gameplayUI.resetValues();
-
-        gameplayScene = gameplayUI.getGamePlayScene(); // Get the actual scene
-        gc = gameplayUI.getGameplayCanvas().getGraphicsContext2D(); // Get the Graphics context for the program to use
-
-        gameEngine.getMusicPlayer().setVolume(SettingsManager.getInstance().getMusicVolume());
-        SFXPlayer.getInstance().setVolume(SettingsManager.getInstance().getEffectsVolume()); // IDK why but this doesn't work
+        setUpSettings();
+        setUpInputHandling();
 
         // Once the music (aka the map) has ended, we navigate to the play result with the gameSession data
         gameEngine.getMusicPlayer().getPlayer().setOnEndOfMedia(() -> {
             navigateToPlayResult(gameEngine.getGameSession());
         });
-
-        // Initialize input handler
-        inputHandler = new InputHandler(gameplayLogic);
-
-        // Setup input handling for this scene only
-        gameplayScene.setOnKeyPressed(event -> {
-            // Move this to another class maybe? But I don't care for now
-            // Pauses or unpauses the game
-            if (event.getCode() == KeyCode.ESCAPE) {
-                if (isPaused) {
-                    resumeGameplay();
-                } else {
-                    pauseGameplay();
-                }
-            } else if (event.getCode() == KeyCode.BACK_QUOTE) {
-                restartGameplay();
-            }
-
-            inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentTime());
-        });
-        gameplayScene.setOnKeyReleased(event ->
-                inputHandler.handleKeyRelease(event.getCode(), gameEngine.getGameClock().getCurrentTime()));
 
         // Setup game loop
         gameLoop = new AnimationTimer() {
@@ -151,19 +122,6 @@ public class GameplayManager {
 
         gameEngine.getMusicPlayer().stop();
         GameState.getInstance().setPlaying(false);
-
-        // Clean up resources
-        cleanupResources();
-    }
-
-    private void navigateToPlayResult(GameSession gameSession) {
-        // We just navigate to the PlayResult from here instead of in the SceneManager because I'm lazy
-        // Delay for a sec
-        Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            SceneManager.getInstance().loadResultScreen(gameSession);
-        }));
-        delayTimeline.setCycleCount(1);
-        delayTimeline.play();
     }
 
     private void update(long deltaTime) {
@@ -173,11 +131,7 @@ public class GameplayManager {
         gameEngine.getGameClock().syncToAudioTime(currentAudioTime);
         gameplayLogic.update(currentAudioTime, deltaTime);
 
-        // Update the UI
-        GameSession gameSession = gameEngine.getGameSession();
-        gameplayUI.setScore(gameSession.getScore());
-        gameplayUI.setAccuracy(gameSession.getAccuracy());
-        gameplayUI.setCombo(gameSession.getCombo());
+        updateUIInfo();
     }
 
     private void render() {
@@ -185,16 +139,38 @@ public class GameplayManager {
                 inputHandler.getCurrentInput());
     }
 
-    private void cleanupResources() {
-        // Clean up gameplay-specific resources
-        gameCanvas = null;
-        gc = null;
-        gameplayScene = null;
-        inputHandler = null;
+    private void updateUIInfo() {
+        GameSession gameSession = gameEngine.getGameSession();
+        gameplayUI.setScore(gameSession.getScore());
+        gameplayUI.setAccuracy(gameSession.getAccuracy());
+        gameplayUI.setCombo(gameSession.getCombo());
     }
 
-    // Getters for compatibility with existing code
-    public InputHandler getInputHandler() { return inputHandler; }
-    public GameplayLogic getGameplayLogic() { return gameplayLogic; }
+    private void setUpInputHandling() {
+        gameplayScene.setOnKeyPressed(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                if (isPaused) resumeGameplay();
+                else pauseGameplay();
+            } else if (event.getCode() == KeyCode.BACK_QUOTE) {
+                restartGameplay();
+            }
 
+            inputHandler.handleKeyPress(event.getCode(), gameEngine.getGameClock().getCurrentTime());
+        });
+        gameplayScene.setOnKeyReleased(event ->
+                inputHandler.handleKeyRelease(event.getCode(), gameEngine.getGameClock().getCurrentTime()));
+    }
+
+    private void setUpSettings() {
+        gameEngine.getMusicPlayer().setVolume(SettingsManager.getInstance().getMusicVolume());
+        SFXPlayer.getInstance().setVolume(SettingsManager.getInstance().getEffectsVolume()); // IDK why but this doesn't work
+    }
+
+    private void navigateToPlayResult(GameSession gameSession) {
+        Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
+            SceneManager.getInstance().loadResultScreen(gameSession);
+        }));
+        delayTimeline.setCycleCount(1);
+        delayTimeline.play();
+    }
 }
