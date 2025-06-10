@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.audio.SFXPlayer;
+import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.object.Beatmap;
@@ -206,6 +208,7 @@ public class SongSelectUI {
             selectedBeatmapSet = newVal;
             if (selectedBeatmapSet != null) {
                 updateDifficultyList(selectedBeatmapSet);
+                SFXPlayer.getInstance().play(SoundEffect.SELECT_DIFFICULTY); // Plays a sound effect when you click on a cell
             }
         });
 
@@ -262,6 +265,7 @@ public class SongSelectUI {
 
         diffListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedBeatmap = newVal;
+            SFXPlayer.getInstance().play(SoundEffect.SELECT_DIFFICULTY);
         });
 
         return diffListView;
