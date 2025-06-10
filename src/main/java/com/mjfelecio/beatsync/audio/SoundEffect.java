@@ -8,12 +8,13 @@ public enum SoundEffect {
     ENTER_SONG_SELECT("/com/mjfelecio/beatsync/sound-effects/enter-song-select.wav"),
     BUTTON_HOVER("/com/mjfelecio/beatsync/sound-effects/button-hover.wav"),
     APPLAUSE("/com/mjfelecio/beatsync/sound-effects/applause.wav"),
-    NOTIFICATION("/com/mjfelecio/beatsync/sound-effects/notification.wav"),
     PLAY_BEATMAP("/com/mjfelecio/beatsync/sound-effects/play-beatmap.wav"),
     RESULTS_SWOOSH("/com/mjfelecio/beatsync/sound-effects/results-swoosh.wav"),
     SCENE_CHANGE("/com/mjfelecio/beatsync/sound-effects/scene-change.wav"),
     SELECT("/com/mjfelecio/beatsync/sound-effects/select.wav"),
-    SAVE_SETTINGS("/com/mjfelecio/beatsync/sound-effects/save-settings.wav");
+    NOTIFICATION_SUCCESS("/com/mjfelecio/beatsync/sound-effects/notification-success.wav"),
+    NOTIFICATION_INFO("/com/mjfelecio/beatsync/sound-effects/notification-info.wav"),
+    NOTIFICATION_ERROR("/com/mjfelecio/beatsync/sound-effects/notification-error.wav");
 
     private final String uri;
 
