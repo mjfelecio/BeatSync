@@ -13,6 +13,13 @@ import javafx.scene.text.Text;
 import java.util.List;
 
 public class PlayfieldRenderer {
+    private static final Color[] LANE_COLORS = {
+            GameConfig.OUTER_NOTE_COLOR, // Lane 0
+            GameConfig.INNER_NOTE_COLOR, // Lane 1
+            GameConfig.INNER_NOTE_COLOR, // Lane 2
+            GameConfig.OUTER_NOTE_COLOR  // Lane 3
+    };
+
     public void render(GraphicsContext gc, GameSession gameSession,
                        List<Note> visibleNotes, InputState inputState) {
         clearCanvasToBlack(gc);
@@ -47,7 +54,7 @@ public class PlayfieldRenderer {
 
     public void drawNotes(GraphicsContext gc, List<Note> visibleNotes) {
         // Draw notes
-        visibleNotes.forEach(n -> {
+        for (Note n : visibleNotes) {
             if (!n.isHit()) {
                 if (n.isHoldNote()) {
                     drawHoldNotes(gc, n);
@@ -55,20 +62,14 @@ public class PlayfieldRenderer {
                     drawRegularNotes(gc, n);
                 }
             }
-        });
+        }
     }
 
     public void drawRegularNotes(GraphicsContext gc, Note n) {
         int x = calculateNoteX(n.getLaneNumber());
         double y = n.calculateY();
 
-        Color color;
-
-        if (n.getLaneNumber() == 0 || n.getLaneNumber() == 3) {
-            color = GameConfig.OUTER_NOTE_COLOR;
-        } else {
-            color = GameConfig.INNER_NOTE_COLOR;
-        }
+        Color color = getLaneColor(n.getLaneNumber());
 
         gc.setFill(color);
         gc.fillOval(x, y, GameConfig.NOTE_DIAMETER, GameConfig.NOTE_DIAMETER);
@@ -166,12 +167,6 @@ public class PlayfieldRenderer {
      * @return Color - the color of the laneNumber
     * */
     private Color getLaneColor(int laneNumber) {
-        Color color = null;
-        if (laneNumber == 0 || laneNumber == 3) {
-            color = GameConfig.OUTER_NOTE_COLOR;
-        } else if (laneNumber == 1 || laneNumber == 2) {
-            color = GameConfig.INNER_NOTE_COLOR;
-        }
-        return color;
+        return LANE_COLORS[laneNumber];
     }
 }
