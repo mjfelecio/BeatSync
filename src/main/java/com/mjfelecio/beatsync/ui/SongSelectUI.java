@@ -25,6 +25,8 @@ import java.util.Comparator;
 import java.util.List;
 
 public class SongSelectUI {
+    private final Scene scene;
+
     private ListView<BeatmapSet> songListView;
     private ListView<Beatmap> diffListView;
     private VBox difficultyListViewWrapper;
@@ -32,15 +34,18 @@ public class SongSelectUI {
     private BeatmapSet selectedBeatmapSet;
     private Beatmap selectedBeatmap;
 
-    public Scene getScene() {
+    public SongSelectUI() {
         VBox root = createRootLayout();
         root.getChildren().addAll(
                 createTitleLabel(),
                 createListViewSection(),
                 createNavigationButtons()
         );
-        Scene scene = new Scene(root, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
+        scene = new Scene(root, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
         scene.getStylesheets().add(getClass().getResource("/com/mjfelecio/beatsync/styles/song-select.css").toExternalForm());
+    }
+
+    public Scene getScene() {
         return scene;
     }
 
