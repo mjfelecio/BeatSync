@@ -68,7 +68,7 @@ public class TitleScreenUI {
     }
 
     private void onStartButtonClick() {
-        SFXPlayer.getInstance().play(SoundEffect.ENTER_SONG_SELECT);
+        SFXPlayer.getInstance().play(SoundEffect.SELECT);
         SceneManager.getInstance().loadSongSelect();
     }
 
