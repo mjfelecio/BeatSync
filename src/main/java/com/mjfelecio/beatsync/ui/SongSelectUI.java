@@ -208,7 +208,7 @@ public class SongSelectUI {
             selectedBeatmapSet = newVal;
             if (selectedBeatmapSet != null) {
                 updateDifficultyList(selectedBeatmapSet);
-                SFXPlayer.getInstance().play(SoundEffect.SELECT_DIFFICULTY); // Plays a sound effect when you click on a cell
+                SFXPlayer.getInstance().play(SoundEffect.SELECT); // Plays a sound effect when you click on a cell
             }
         });
 
@@ -265,7 +265,7 @@ public class SongSelectUI {
 
         diffListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
             selectedBeatmap = newVal;
-            SFXPlayer.getInstance().play(SoundEffect.SELECT_DIFFICULTY);
+            SFXPlayer.getInstance().play(SoundEffect.SELECT);
         });
 
         return diffListView;

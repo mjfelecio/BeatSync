@@ -12,7 +12,7 @@ public enum SoundEffect {
     PLAY_BEATMAP("/com/mjfelecio/beatsync/sound-effects/play-beatmap.wav"),
     RESULTS_SWOOSH("/com/mjfelecio/beatsync/sound-effects/results-swoosh.wav"),
     SCENE_CHANGE("/com/mjfelecio/beatsync/sound-effects/scene-change.wav"),
-    SELECT_DIFFICULTY("/com/mjfelecio/beatsync/sound-effects/select-difficulty.wav");
+    SELECT("/com/mjfelecio/beatsync/sound-effects/select.wav");
 
     private final String uri;
 
