@@ -1,9 +1,9 @@
 package com.mjfelecio.beatsync.input;
 
 import com.mjfelecio.beatsync.audio.SoundEffect;
-import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.gameplay.GameplayLogic;
 import javafx.scene.input.KeyCode;
+import javafx.scene.media.AudioClip;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -12,6 +12,7 @@ public class InputHandler {
     private final GameplayLogic gameplayLogic;
     private final InputState inputState;
     private final Map<KeyCode, Integer> keyToLaneMap;
+    private final AudioClip hitsound = new AudioClip(SoundEffect.HITSOUND.getUri());
 
     public InputHandler(GameplayLogic gameplayLogic) {
         this.gameplayLogic = gameplayLogic;
@@ -25,7 +26,7 @@ public class InputHandler {
             inputState.pressLane(lane);
 
             // Play hit sound only once in a press (It shouldn't keep playing when holding)
-            if (inputState.isPressNotHold(lane)) SFXPlayer.getInstance().play(SoundEffect.HITSOUND);
+            if (inputState.isPressNotHold(lane)) hitsound.play();
 
             gameplayLogic.handleLanePress(lane, currentTime);
         }
