@@ -5,7 +5,7 @@ import java.util.Objects;
 public enum SoundEffect {
     HITSOUND("/com/mjfelecio/beatsync/sound-effects/hitsound.wav"),
     HOLDBREAK("/com/mjfelecio/beatsync/sound-effects/holdbreak.wav"),
-    BUTTON_SELECT("/com/mjfelecio/beatsync/sound-effects/button-select.wav"),
+    ENTER_SONG_SELECT("/com/mjfelecio/beatsync/sound-effects/enter-song-select.wav"),
     BUTTON_HOVER("/com/mjfelecio/beatsync/sound-effects/button-hover.wav"),
     APPLAUSE("/com/mjfelecio/beatsync/sound-effects/applause.wav"),
     NOTIFICATION("/com/mjfelecio/beatsync/sound-effects/notification.wav"),

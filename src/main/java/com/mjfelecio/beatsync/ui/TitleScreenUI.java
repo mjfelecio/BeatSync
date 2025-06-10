@@ -1,5 +1,7 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.audio.SFXPlayer;
+import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
@@ -66,10 +68,12 @@ public class TitleScreenUI {
     }
 
     private void onStartButtonClick() {
+        SFXPlayer.getInstance().play(SoundEffect.ENTER_SONG_SELECT);
         SceneManager.getInstance().loadSongSelect();
     }
 
     private void onSettingButtonClick() {
+        SFXPlayer.getInstance().play(SoundEffect.SELECT);
         SceneManager.getInstance().loadSettings();
     }
 }
