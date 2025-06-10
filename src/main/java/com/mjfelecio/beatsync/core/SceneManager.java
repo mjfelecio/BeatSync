@@ -61,6 +61,7 @@ public class SceneManager {
     }
 
     public void loadGameplay() {
+        SFXPlayer.getInstance().play(SoundEffect.ENTER_GAMEPLAY);
         GameplayManager gameplayManager = GameplayManager.getInstance();
 
         // Resets the notes state so that it can still get rendered on retry
