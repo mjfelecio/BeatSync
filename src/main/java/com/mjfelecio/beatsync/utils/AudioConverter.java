@@ -3,7 +3,7 @@ package com.mjfelecio.beatsync.utils;
 import java.io.IOException;
 
 public class AudioConverter {
-    public static boolean convertOggToMp3(String inputPath, String outputPath) {
+    public static void convertOggToMp3(String inputPath, String outputPath) throws IOException {
         ProcessBuilder builder = new ProcessBuilder(
                 "ffmpeg", "-y",  // Overwrite output file if it exists
                 "-i", inputPath,            // Input file
@@ -17,16 +17,12 @@ public class AudioConverter {
         try {
             Process process = builder.start();
             int exitCode = process.waitFor();
-            return exitCode == 0;
+            if (exitCode != 0) {
+                throw new IOException("FFmpeg exited with non-zero code: " + exitCode);
+            }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
-            return false;
+            throw new IOException(String.format("Failed to convert %s to .mp3", inputPath), e);
         }
     }
-
-    public static void main(String[] args) {
-        boolean success = AudioConverter.convertOggToMp3("src/main/resources/com/mjfelecio/beatsync/beatmaps/1996162 Akiri X HowToPlayLN - Kuroi Hanabira.osz_FILES/audio.ogg", "src/main/resources/com/mjfelecio/beatsync/beatmaps/1996162 Akiri X HowToPlayLN - Kuroi Hanabira.osz_FILES/audio.mp3");
-        System.out.println("Conversion successful? " + success);
-    }
-
 }
