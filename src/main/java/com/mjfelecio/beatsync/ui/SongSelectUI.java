@@ -41,7 +41,8 @@ public class SongSelectUI {
                 createListViewSection(),
                 createNavigationButtons()
         );
-        scene = new Scene(root, GameConfig.SCREEN_WIDTH, GameConfig.SCREEN_HEIGHT);
+        StackPane rootWrapper = new StackPane(root);
+        scene = new Scene(rootWrapper);
         scene.getStylesheets().add(getClass().getResource("/com/mjfelecio/beatsync/styles/song-select.css").toExternalForm());
     }
 
@@ -278,8 +279,7 @@ public class SongSelectUI {
 
     public void navigateToGameplay() {
         if (selectedBeatmap == null) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "No beatmap currently selected");
-            alert.show();
+            NotificationManager.showNotification(scene, Notification.ERROR, "No beatmap currently selected");
             return;
         }
         GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
