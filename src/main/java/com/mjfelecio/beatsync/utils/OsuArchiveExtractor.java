@@ -12,7 +12,7 @@ import java.util.Objects;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-public class ZipExtractor {
+public class OsuArchiveExtractor {
 
     /**
      * Extracts the contents of a ZIP file to a specified destination directory.
@@ -207,11 +207,11 @@ public class ZipExtractor {
         ArrayList<String> failedExtractions = new ArrayList<>();
 
         File[] oszFiles = Arrays.stream(Objects.requireNonNull(new File(oszToImportFilePath).listFiles()))
-                .filter(ZipExtractor::checkIfOsz)
+                .filter(OsuArchiveExtractor::checkIfOsz)
                 .toList().toArray(new File[0]);
 
         for (File file : oszFiles) {
-            boolean success = ZipExtractor.extractZipFile(file.getAbsolutePath(), destinationFilePath);
+            boolean success = OsuArchiveExtractor.extractZipFile(file.getAbsolutePath(), destinationFilePath);
 
             if (success) {
                 successfulExtractions.add(file.getName());
