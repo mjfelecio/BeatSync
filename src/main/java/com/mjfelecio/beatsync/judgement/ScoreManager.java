@@ -30,7 +30,7 @@ public class ScoreManager {
 
     public Rank getRank() {
         double percent = (currentScore * 100.0 / maxScore);
-        if (percent >= 98) return Rank.SS;
+        if (percent >= 95) return Rank.SS;
         if (percent >= 90) return Rank.S;
         if (percent >= 80) return Rank.A;
         if (percent >= 60) return Rank.B;
