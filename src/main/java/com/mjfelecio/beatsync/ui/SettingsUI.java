@@ -14,8 +14,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 
 public class SettingsUI {
+    private Scene scene;
 
-    private final VBox root = new VBox();
     private final IntegerProperty scrollSpeed = new SimpleIntegerProperty(1000);
     private final IntegerProperty musicVolume = new SimpleIntegerProperty(100);
     private final IntegerProperty effectsVolume = new SimpleIntegerProperty(100);
@@ -26,6 +26,7 @@ public class SettingsUI {
     }
 
     private void setupUI() {
+        VBox root = new VBox();
         root.setBackground(ImageProvider.SETTINGS_BG.getImageAsBackground());
         root.setPadding(new Insets(40));
         root.setSpacing(30);
@@ -51,6 +52,7 @@ public class SettingsUI {
         );
 
         root.getChildren().addAll(title, settingsContent, navigationButtons);
+        scene = new Scene(root);
     }
 
     private VBox createGameplaySettings() {
@@ -199,7 +201,7 @@ public class SettingsUI {
     }
 
     public Scene getScene() {
-        return new Scene(root, 1920, 1080);
+        return scene;
     }
 
     private void saveSettings() {
