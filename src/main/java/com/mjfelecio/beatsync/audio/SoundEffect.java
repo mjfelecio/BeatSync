@@ -6,7 +6,6 @@ public enum SoundEffect {
     HITSOUND("/com/mjfelecio/beatsync/sound-effects/hitsound.wav"),
     HOLDBREAK("/com/mjfelecio/beatsync/sound-effects/holdbreak.wav"),
     ENTER_GAMEPLAY("/com/mjfelecio/beatsync/sound-effects/enter-gameplay.wav"),
-    BUTTON_HOVER("/com/mjfelecio/beatsync/sound-effects/button-hover.wav"),
     APPLAUSE("/com/mjfelecio/beatsync/sound-effects/applause.wav"),
     PLAY_BEATMAP("/com/mjfelecio/beatsync/sound-effects/play-beatmap.wav"),
     RESULTS_SWOOSH("/com/mjfelecio/beatsync/sound-effects/results-swoosh.wav"),
