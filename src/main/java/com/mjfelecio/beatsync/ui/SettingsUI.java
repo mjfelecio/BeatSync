@@ -54,7 +54,8 @@ public class SettingsUI {
         );
 
         root.getChildren().addAll(title, settingsContent, navigationButtons);
-        scene = new Scene(root);
+        StackPane rootWrapper = new StackPane(root);
+        scene = new Scene(rootWrapper);
     }
 
     private VBox createGameplaySettings() {
@@ -218,5 +219,6 @@ public class SettingsUI {
         settingsManager.setMusicVolume(musicVolume.intValue());
         settingsManager.setEffectsVolume(effectsVolume.intValue());
         SFXPlayer.getInstance().play(SoundEffect.SAVE_SETTINGS);
+        NotificationManager.showNotification(scene, Notification.SUCCESS, "Settings saved!");
     }
 }
