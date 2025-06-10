@@ -1,7 +1,8 @@
-package com.mjfelecio.beatsync.parser;
+package com.mjfelecio.beatsync.core;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.object.BeatmapSet;
+import com.mjfelecio.beatsync.parser.BeatmapSetParser;
 
 import java.io.File;
 import java.io.IOException;

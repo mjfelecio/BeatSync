@@ -2,11 +2,10 @@ package com.mjfelecio.beatsync.ui;
 
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
-import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
-import com.mjfelecio.beatsync.parser.BeatmapLoader;
+import com.mjfelecio.beatsync.core.BeatmapLoader;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
