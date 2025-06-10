@@ -218,7 +218,7 @@ public class SettingsUI {
         settingsManager.setJudgementMode(selectedJudgement.getValue());
         settingsManager.setMusicVolume(musicVolume.intValue());
         settingsManager.setEffectsVolume(effectsVolume.intValue());
-        SFXPlayer.getInstance().play(SoundEffect.SAVE_SETTINGS);
+        SFXPlayer.getInstance().play(SoundEffect.NOTIFICATION_SUCCESS);
         NotificationManager.showNotification(scene, Notification.SUCCESS, "Settings saved!");
     }
 }
