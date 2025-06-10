@@ -21,12 +21,6 @@ public class PlayfieldRenderer {
         drawUI(gc, gameSession);
     }
 
-    public void renderEmptyPlayfield(GraphicsContext gc, GameSession gameSession) {
-        clearCanvasToBlack(gc);
-        drawHitZoneIndicators(gc, new InputState());
-        drawUI(gc, gameSession);
-    }
-
     public void clearCanvasToBlack(GraphicsContext gc) {
         gc.setFill(Color.BLACK);
         gc.fillRect(0, 0, GameConfig.PLAYFIELD_WIDTH, GameConfig.PLAYFIELD_HEIGHT);
