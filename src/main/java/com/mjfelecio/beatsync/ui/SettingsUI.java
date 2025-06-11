@@ -96,9 +96,10 @@ public class SettingsUI {
 
         gameplayBox.getChildren().addAll(
                 sectionLabel,
-                scrollLabel, scrollSlider,
-                judgementLabel, judgementButtons
+                scrollLabel, scrollSlider
         );
+//                judgementLabel, judgementButtons
+
 
         return gameplayBox;
     }
@@ -135,9 +136,10 @@ public class SettingsUI {
 
         audioBox.getChildren().addAll(
                 sectionLabel,
-                musicLabel, musicSlider,
-                effectsLabel, effectsSlider
+                musicLabel, musicSlider
         );
+//                effectsLabel, effectsSlider
+
 
         return audioBox;
     }
