@@ -1,6 +1,10 @@
 package com.mjfelecio.beatsync.object;
 
+import com.mjfelecio.beatsync.judgement.JudgementResult;
+
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Score {
     private final int id;
@@ -10,8 +14,9 @@ public class Score {
     private final double accuracy;
     private final int maxCombo;
     private final LocalDateTime submittedAt;
+    private final Map<JudgementResult, Integer> judgementCounts;
 
-    public Score(int id, int beatmapID, Rank rank, long score, double accuracy, int maxCombo) {
+    public Score(int id, int beatmapID, Rank rank, long score, double accuracy, int maxCombo, Map<JudgementResult, Integer> judgementCounts) {
         this.id = id;
         this.beatmapID = beatmapID;
         this.rank = rank;
@@ -19,6 +24,7 @@ public class Score {
         this.accuracy = accuracy;
         this.maxCombo = maxCombo;
         this.submittedAt = LocalDateTime.now();
+        this.judgementCounts = judgementCounts;
     }
 
     public int getId() {
@@ -47,5 +53,9 @@ public class Score {
 
     public LocalDateTime getSubmittedAt() {
         return submittedAt;
+    }
+
+    public Map<JudgementResult, Integer> getJudgementCounts() {
+        return new HashMap<>(judgementCounts);
     }
 }
