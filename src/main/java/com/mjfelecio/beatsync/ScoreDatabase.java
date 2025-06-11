@@ -41,7 +41,7 @@ public class ScoreDatabase {
 
     public static void createScoresTable() throws SQLException {
         String sql = "CREATE TABLE IF NOT EXISTS scores ("
-                + "	id INTEGER PRIMARY KEY,"
+                + "	id INTEGER PRIMARY KEY AUTOINCREMENT,"
                 + "	beatmap_id INTEGER NOT NULL,"
                 + "	rank TEXT NOT NULL,"
                 + "	score INTEGER NOT NULL,"
