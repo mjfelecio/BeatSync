@@ -10,6 +10,13 @@ public class BeatSyncApp extends Application {
         // Add -1 as a hacky way to not shift the scenes to the top right of the screen when switching scenes
         SceneManager.initialize(stage);
 
+        try {
+            // Initialize the database on game startup
+            ScoreDatabase.connect();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
         SceneManager.getInstance().loadTitleScreen();
 
         stage.setTitle("Beat Sync: VSRG made with Java");
