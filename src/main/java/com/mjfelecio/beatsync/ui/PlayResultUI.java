@@ -7,6 +7,8 @@ import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
 import com.mjfelecio.beatsync.object.Rank;
+import com.mjfelecio.beatsync.object.Score;
+import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.geometry.Insets;
@@ -50,8 +52,29 @@ public class PlayResultUI {
         judgementCounts.put(JudgementResult.MEH, gameSession.getMehCount());
         judgementCounts.put(JudgementResult.MISS, gameSession.getMissCount());
 
+        // Create a Score object from the play
+        recordScore(gameSession);
+
         // Create the scene once the values has been filled in
         createScene();
+    }
+
+    private void recordScore(GameSession gameSession) {
+        int beatmapID = GameState.getInstance().getCurrentBeatmap().getBeatmapID();
+        int scoreID = beatmapID + gameSession.hashCode(); // Temporary scoreID, will implement this in database later
+
+        // Create the score object
+        Score score = new Score(
+                scoreID,
+                beatmapID,
+                gameSession.getRank(),
+                gameSession.getScore(),
+                gameSession.getAccuracy(),
+                gameSession.getMaxCombo(),
+                this.judgementCounts
+        );
+
+        System.out.println(score); // Testing
     }
 
     private void createScene() {

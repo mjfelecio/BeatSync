@@ -58,4 +58,18 @@ public class Score {
     public Map<JudgementResult, Integer> getJudgementCounts() {
         return new HashMap<>(judgementCounts);
     }
+
+    @Override
+    public String toString() {
+        return "Score{" +
+                "id=" + id +
+                ", beatmapID=" + beatmapID +
+                ", rank=" + rank +
+                ", score=" + score +
+                ", accuracy=" + accuracy +
+                ", maxCombo=" + maxCombo +
+                ", submittedAt=" + submittedAt +
+                ", judgementCounts=" + judgementCounts +
+                '}';
+    }
 }
