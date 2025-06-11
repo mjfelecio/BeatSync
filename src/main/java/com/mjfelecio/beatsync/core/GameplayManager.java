@@ -98,7 +98,7 @@ public class GameplayManager {
     }
 
     public void restartGameplay() {
-        stopGameplay();
+        dispose();
         SceneManager.getInstance().loadGameplay();
     }
 
@@ -194,6 +194,8 @@ public class GameplayManager {
     }
 
     private void navigateToPlayResult(GameSession gameSession) {
+        dispose();
+
         Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
             SceneManager.getInstance().loadResultScreen(gameSession);
         }));
