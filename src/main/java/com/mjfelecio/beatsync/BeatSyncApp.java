@@ -11,8 +11,8 @@ public class BeatSyncApp extends Application {
         SceneManager.initialize(stage);
 
         try {
-            // Initialize the database on game startup
-            ScoreDatabase.connect();
+            ScoreDatabase.connect(); // Initialize the database on game startup
+            ScoreDatabase.createScoresTable(); // Creates the scores table if it isn't already created
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
