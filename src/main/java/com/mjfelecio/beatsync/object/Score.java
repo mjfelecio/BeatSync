@@ -7,7 +7,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Score {
-    private final int id;
     private final int beatmapID;
     private final Rank rank;
     private final long score;
@@ -16,8 +15,7 @@ public class Score {
     private final LocalDateTime submittedAt;
     private final Map<JudgementResult, Integer> judgementCounts;
 
-    public Score(int id, int beatmapID, Rank rank, long score, double accuracy, int maxCombo, Map<JudgementResult, Integer> judgementCounts) {
-        this.id = id;
+    public Score(int beatmapID, Rank rank, long score, double accuracy, int maxCombo, Map<JudgementResult, Integer> judgementCounts) {
         this.beatmapID = beatmapID;
         this.rank = rank;
         this.score = score;
@@ -25,10 +23,6 @@ public class Score {
         this.maxCombo = maxCombo;
         this.submittedAt = LocalDateTime.now();
         this.judgementCounts = judgementCounts;
-    }
-
-    public int getId() {
-        return id;
     }
 
     public int getBeatmapID() {
@@ -62,7 +56,6 @@ public class Score {
     @Override
     public String toString() {
         return "Score{" +
-                "id=" + id +
                 ", beatmapID=" + beatmapID +
                 ", rank=" + rank +
                 ", score=" + score +

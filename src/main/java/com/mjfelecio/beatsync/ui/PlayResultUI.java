@@ -61,11 +61,9 @@ public class PlayResultUI {
 
     private void recordScore(GameSession gameSession) {
         int beatmapID = GameState.getInstance().getCurrentBeatmap().getBeatmapID();
-        int scoreID = beatmapID + gameSession.hashCode(); // Temporary scoreID, will implement this in database later
 
         // Create the score object
         Score score = new Score(
-                scoreID,
                 beatmapID,
                 gameSession.getRank(),
                 gameSession.getScore(),
