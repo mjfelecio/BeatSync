@@ -1,6 +1,7 @@
 module com.mjfelecio.beatsync {
     requires javafx.controls;
     requires javafx.media;
+    requires java.sql;
 
     exports com.mjfelecio.beatsync;
     exports com.mjfelecio.beatsync.core;
