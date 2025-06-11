@@ -1,5 +1,6 @@
 package com.mjfelecio.beatsync.ui;
 
+import com.mjfelecio.beatsync.ScoreDatabase;
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.config.GameConfig;
@@ -21,6 +22,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
+import java.sql.SQLException;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -71,6 +73,12 @@ public class PlayResultUI {
                 gameSession.getMaxCombo(),
                 this.judgementCounts
         );
+
+        try {
+            ScoreDatabase.insertScore(score);
+        } catch (SQLException e) {
+            System.err.println("Failed to insert score into database: " + e);
+        }
 
         System.out.println(score); // Testing
     }
