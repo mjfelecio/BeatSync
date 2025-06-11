@@ -1,13 +1,17 @@
 package com.mjfelecio.beatsync;
 
 import com.mjfelecio.beatsync.config.GameConfig;
+import com.mjfelecio.beatsync.judgement.JudgementResult;
+import com.mjfelecio.beatsync.object.Score;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class ScoreDatabase {
     private static final String DB_FILE_NAME = "beatsync.db";
@@ -54,5 +58,31 @@ public class ScoreDatabase {
                 + "	submitted_at TEXT NOT NULL"
                 + ");";
         conn.createStatement().execute(sql);
+    }
+
+    public static void insertScore(Score score) throws SQLException {
+        String sql = "INSERT INTO scores(beatmap_id, rank, score, accuracy, max_combo, perfect_count, great_count, meh_count, miss_count, submitted_at)" +
+                     "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        Map<JudgementResult, Integer> judgementCounts = score.getJudgementCounts();
+        int perfectCount = judgementCounts.get(JudgementResult.PERFECT);
+        int greatCount = judgementCounts.get(JudgementResult.GREAT);
+        int mehCount = judgementCounts.get(JudgementResult.MEH);
+        int missCount = judgementCounts.get(JudgementResult.MISS);
+
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+
+        pstmt.setInt(1, score.getBeatmapID());
+        pstmt.setString(2, score.getRank().toString());
+        pstmt.setInt(3, (int) score.getScore());
+        pstmt.setDouble(4, score.getAccuracy());
+        pstmt.setInt(5, score.getMaxCombo());
+        pstmt.setInt(6, perfectCount);
+        pstmt.setInt(7, greatCount);
+        pstmt.setInt(8, mehCount);
+        pstmt.setInt(9, missCount);
+        pstmt.setString(10, score.getSubmittedAt().toString());
+
+        pstmt.executeUpdate();
     }
 }
