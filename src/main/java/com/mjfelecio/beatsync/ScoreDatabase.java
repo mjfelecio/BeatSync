@@ -74,7 +74,7 @@ public class ScoreDatabase {
 
         pstmt.setInt(1, score.getBeatmapID());
         pstmt.setString(2, score.getRank().toString());
-        pstmt.setInt(3, (int) score.getScore());
+        pstmt.setLong(3, score.getScore());
         pstmt.setDouble(4, score.getAccuracy());
         pstmt.setInt(5, score.getMaxCombo());
         pstmt.setInt(6, perfectCount);
