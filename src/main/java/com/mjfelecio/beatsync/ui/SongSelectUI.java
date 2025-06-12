@@ -270,7 +270,7 @@ public class SongSelectUI {
                     title.setText(diff.getDiffName());
 
                     scoreNavigationButton.setOnMouseClicked(e -> {
-                        System.out.println("Clicked score list for: " + diff.getDiffName());
+                        navigateToScoreDashboard(diff);
                     });
 
                     setStyle("""
@@ -290,17 +290,6 @@ public class SongSelectUI {
         });
 
         return diffListView;
-    }
-
-    public void navigateToGameplay() {
-        if (selectedBeatmap == null) {
-            SFXPlayer.getInstance().play(SoundEffect.NOTIFICATION_ERROR);
-            NotificationManager.showNotification(scene, Notification.ERROR, "No beatmap currently selected");
-            return;
-        }
-        GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
-        SceneManager.getInstance().loadGameplay();
-        selectedBeatmap = null; // Remove the currently selected beatmap
     }
 
     public Region createScoreNavigationButton() {
@@ -358,5 +347,22 @@ public class SongSelectUI {
         region.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
 
         return region;
+    }
+
+    public void navigateToGameplay() {
+        if (selectedBeatmap == null) {
+            SFXPlayer.getInstance().play(SoundEffect.NOTIFICATION_ERROR);
+            NotificationManager.showNotification(scene, Notification.ERROR, "No beatmap currently selected");
+            return;
+        }
+        GameState.getInstance().setCurrentBeatmap(selectedBeatmap);
+        SceneManager.getInstance().loadGameplay();
+        selectedBeatmap = null; // Remove the currently selected beatmap
+    }
+
+    public void navigateToScoreDashboard(Beatmap selectedBeatmap) {
+        if (selectedBeatmap != null) {
+            SceneManager.getInstance().loadScoreDashboard(selectedBeatmap);
+        }
     }
 }
