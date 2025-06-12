@@ -2,15 +2,16 @@ package com.mjfelecio.beatsync;
 
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
+import com.mjfelecio.beatsync.object.Rank;
 import com.mjfelecio.beatsync.object.Score;
 
 import java.io.File;
 import java.net.URISyntaxException;
 import java.nio.file.Path;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
+import java.sql.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ScoreDatabase {
@@ -84,5 +85,52 @@ public class ScoreDatabase {
         pstmt.setString(10, score.getSubmittedAt().toString());
 
         pstmt.executeUpdate();
+    }
+
+    public static List<Score> getScores(int beatmapID) throws SQLException {
+        String sql = "SELECT * FROM scores WHERE beatmap_id = ?";
+
+        PreparedStatement pstmt = conn.prepareStatement(sql);
+        pstmt.setInt(1, beatmapID);
+
+        ResultSet resultSet = pstmt.executeQuery();
+
+        List<Score> scores = new ArrayList<>();
+        while(resultSet.next()) {
+            Map<JudgementResult, Integer> judgementCounts = new HashMap<>();
+
+            judgementCounts.put(JudgementResult.PERFECT, resultSet.getInt("perfect_count"));
+            judgementCounts.put(JudgementResult.GREAT, resultSet.getInt("perfect_count"));
+            judgementCounts.put(JudgementResult.MEH, resultSet.getInt("meh_count"));
+            judgementCounts.put(JudgementResult.MISS, resultSet.getInt("miss_count"));
+
+            Rank rank = parseRankString(resultSet.getString("rank"));
+
+            Score score = new Score(
+                    resultSet.getInt("beatmap_id"),
+                    rank,
+                    resultSet.getLong("score"),
+                    resultSet.getDouble("accuracy"),
+                    resultSet.getInt("max_combo"),
+                    judgementCounts,
+                    resultSet.getString("submitted_at")
+            );
+
+            scores.add(score);
+        }
+
+        return scores;
+    }
+
+    private static Rank parseRankString(String rank) {
+        return switch (rank) {
+            case "SS" -> Rank.SS;
+            case "S" -> Rank.S;
+            case "A" -> Rank.A;
+            case "B" -> Rank.B;
+            case "C" -> Rank.C;
+            case "D" -> Rank.D;
+            default -> throw new IllegalStateException("Unexpected value: " + rank);
+        };
     }
 }
