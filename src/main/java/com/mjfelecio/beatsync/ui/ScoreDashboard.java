@@ -18,7 +18,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
@@ -47,7 +46,6 @@ public class ScoreDashboard {
         VBox scoreListWrapper = new VBox(createScoreListView());
         scoreListWrapper.setAlignment(Pos.TOP_CENTER);
         scoreListWrapper.setStyle("-fx-border-color: red;");
-
 
         // Bind widths to 65% and 35% of the parent HBox
         root.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -80,10 +78,30 @@ public class ScoreDashboard {
         // TODO: Replace this with the beatmap thumbnail later
         ImageView rankImage = new ImageView(getRankImage(Rank.S, 50));
         rankImage.setStyle("-fx-effect: dropshadow(gaussian, #0FF, 30, 0.3, 0, 0);");
-        VBox statsBox = new VBox();
+        VBox beatmapInfo = createBeatmapInfo();
 
-        card.getChildren().addAll(rankImage, statsBox);
+        card.getChildren().addAll(rankImage, beatmapInfo);
         return card;
+    }
+
+    private VBox createBeatmapInfo() {
+        VBox beatmapInfo = new VBox();
+
+        Label beatmapName = new Label("Try Sail - Utsuroi");
+        beatmapName.setStyle("-fx-text-fill: white;");
+        Label difficultyName = new Label("Hard");
+        difficultyName.setStyle("-fx-text-fill: white;");
+        Label artist = new Label("Try Sail");
+        artist.setStyle("-fx-text-fill: white;");
+        Label creator = new Label("Scotty");
+        creator.setStyle("-fx-text-fill: white;");
+        Label songLength = new Label("1m 30s");
+        songLength.setStyle("-fx-text-fill: white;");
+        Label noteCount = new Label("340 notes");
+        noteCount.setStyle("-fx-text-fill: white;");
+
+        beatmapInfo.getChildren().addAll(beatmapName, difficultyName, artist, creator, songLength, noteCount);
+        return beatmapInfo;
     }
 
 
