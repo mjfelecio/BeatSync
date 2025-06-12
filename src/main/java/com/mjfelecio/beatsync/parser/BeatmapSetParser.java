@@ -10,6 +10,8 @@ import java.util.List;
 // Make sure these classes exist in your project:
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.BeatmapSet;
+import javafx.scene.media.Media;
+import javafx.util.Duration;
 
 public class BeatmapSetParser {
 
@@ -76,6 +78,11 @@ public class BeatmapSetParser {
 
         // Attach the list of parsed difficulties (could be empty if no .osu files found)
         beatmapSet.setDifficulties(difficulties);
+
+        // Supply the beatmaps in the set with the imagePath
+        for (Beatmap beatmap: beatmapSet.getDifficulties()) {
+            beatmap.setImagePath(beatmapSet.getImagePath());
+        }
 
         return beatmapSet;
     }
