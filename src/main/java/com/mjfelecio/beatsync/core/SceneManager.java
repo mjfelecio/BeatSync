@@ -4,10 +4,7 @@ import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.state.GameState;
-import com.mjfelecio.beatsync.ui.PlayResultUI;
-import com.mjfelecio.beatsync.ui.SettingsUI;
-import com.mjfelecio.beatsync.ui.SongSelectUI;
-import com.mjfelecio.beatsync.ui.TitleScreenUI;
+import com.mjfelecio.beatsync.ui.*;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -90,6 +87,14 @@ public class SceneManager {
 
         applyScene(playResultUI.getScene());
         SFXPlayer.getInstance().play(SoundEffect.RESULTS_SWOOSH);
+    }
+
+    public void loadScoreDashboard() {
+        int currentBeatmapID = GameState.getInstance().getCurrentBeatmap().getBeatmapID();
+//        int currentBeatmapID = 2699390; // test
+
+        Scene scoreDashboardScene = new ScoreDashboard(currentBeatmapID).getScene();
+        applyScene(scoreDashboardScene);
     }
 
     private void applyScene(Scene newScene) {
