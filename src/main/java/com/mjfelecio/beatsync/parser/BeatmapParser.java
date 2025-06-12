@@ -3,6 +3,8 @@ package com.mjfelecio.beatsync.parser;
 import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Note;
+import javafx.scene.media.Media;
+import javafx.util.Duration;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -98,6 +100,10 @@ public class BeatmapParser {
         } catch (IOException e) {
             throw new IOException("Failed to parse beatmap: " + e);
         }
+
+        // Get the duration of the song
+        Duration songDuration = new Media(beatmap.getAudioPath()).getDuration();
+        beatmap.setAudioLength(songDuration);
 
         return beatmap;
     }
