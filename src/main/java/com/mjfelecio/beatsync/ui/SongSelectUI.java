@@ -200,8 +200,7 @@ public class SongSelectUI {
                     setGraphic(null);
                     setStyle(""); // reset cell style
                 } else {
-                    String imagePath = new File(beatmapSet.getImagePath()).toURI().toASCIIString();
-                    thumbnail.setImage(new Image(imagePath));
+                    thumbnail.setImage(new Image(beatmapSet.getImagePath()));
                     title.setText(beatmapSet.getTitle());
                     setGraphic(content);
                     setStyle("-fx-background-color: transparent;");

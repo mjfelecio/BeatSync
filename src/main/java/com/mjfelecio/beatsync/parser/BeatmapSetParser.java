@@ -50,7 +50,7 @@ public class BeatmapSetParser {
 
                 // If it's an image (.jpg/.jpeg/.png) → imagePath
                 if (nameLower.endsWith(".jpg") || nameLower.endsWith(".jpeg") || nameLower.endsWith(".png")) {
-                    beatmapSet.setImagePath(f.getAbsolutePath());
+                    beatmapSet.setImagePath(new File(f.getAbsolutePath()).toURI().toASCIIString());
                     continue;
                 }
 
