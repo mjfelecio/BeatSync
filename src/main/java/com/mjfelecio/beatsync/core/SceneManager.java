@@ -3,6 +3,7 @@ package com.mjfelecio.beatsync.core;
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.gameplay.GameSession;
+import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.ui.*;
 import javafx.scene.Scene;
@@ -89,11 +90,8 @@ public class SceneManager {
         SFXPlayer.getInstance().play(SoundEffect.RESULTS_SWOOSH);
     }
 
-    public void loadScoreDashboard() {
-        int currentBeatmapID = GameState.getInstance().getCurrentBeatmap().getBeatmapID();
-//        int currentBeatmapID = 2699390; // test
-
-        Scene scoreDashboardScene = new ScoreDashboard(currentBeatmapID).getScene();
+    public void loadScoreDashboard(Beatmap selectedBeatmap) {
+        Scene scoreDashboardScene = new ScoreDashboard(selectedBeatmap).getScene();
         applyScene(scoreDashboardScene);
     }
 

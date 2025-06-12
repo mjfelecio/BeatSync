@@ -3,6 +3,7 @@ package com.mjfelecio.beatsync.ui;
 import com.mjfelecio.beatsync.ScoreDatabase;
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
+import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Rank;
 import com.mjfelecio.beatsync.object.Score;
 import com.mjfelecio.beatsync.utils.ImageProvider;
@@ -25,11 +26,11 @@ import java.sql.SQLException;
 public class ScoreDashboard {
     private Scene scene;
     private ListView<Score> scoreListView;
-    private final int beatmapID;
+    private final Beatmap beatmap;
     private Score selectedScore;
 
-    public ScoreDashboard(int beatmapID) {
-        this.beatmapID = beatmapID;
+    public ScoreDashboard(Beatmap beatmap) {
+        this.beatmap = beatmap;
         createScene();
     }
 
@@ -120,6 +121,8 @@ public class ScoreDashboard {
         ObservableList<Score> scores = null;
 
         try {
+            // TEST
+            int beatmapID = 2699390;
             scores = FXCollections.observableArrayList(ScoreDatabase.getScores(beatmapID));
         } catch (SQLException e) {
             System.err.println("Failed to get scores from db: " + e);
