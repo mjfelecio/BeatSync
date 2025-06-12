@@ -8,6 +8,7 @@ import com.mjfelecio.beatsync.object.Score;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
@@ -16,6 +17,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
@@ -32,25 +35,71 @@ public class ScoreDashboard {
     }
 
     public void createScene() {
-        VBox root = new VBox();
-        root.setAlignment(Pos.CENTER);
+        HBox root = new HBox(60);
+        root.setPadding(new Insets(120));
+        root.setAlignment(Pos.TOP_CENTER);
         root.setSpacing(24);
+        root.setStyle("-fx-border-color: red;");
         root.setBackground(ImageProvider.SONG_SELECT_BG.getImageAsBackground());
 
-        root.getChildren().addAll(createScoreListView());
+        VBox beatmapInfoCard = createBeatmapInfoCard();
+
+        VBox scoreListWrapper = new VBox(createScoreListView());
+        scoreListWrapper.setAlignment(Pos.TOP_CENTER);
+        scoreListWrapper.setStyle("-fx-border-color: red;");
+
+
+        // Bind widths to 65% and 35% of the parent HBox
+        root.widthProperty().addListener((obs, oldVal, newVal) -> {
+            double totalWidth = newVal.doubleValue();
+            beatmapInfoCard.setPrefWidth(totalWidth * 0.4);
+            scoreListWrapper.setPrefWidth(totalWidth * 0.6);
+        });
+
+        root.getChildren().addAll(beatmapInfoCard, scoreListWrapper);
 
         scene = new Scene(root);
+        scene.getStylesheets().add(getClass().getResource("/com/mjfelecio/beatsync/styles/song-select.css").toExternalForm());
     }
+
+    private VBox createBeatmapInfoCard() {
+        VBox card = new VBox(20);
+        card.setSpacing(30);
+        card.setAlignment(Pos.TOP_CENTER);
+        card.setStyle(
+            """
+               -fx-background-color: linear-gradient(to bottom, #111111, #1A1A1A);
+               -fx-border-color: #0FF;
+               -fx-border-width: 2;
+               -fx-border-radius: 12;
+               -fx-background-radius: 12;
+               -fx-effect: dropshadow(gaussian, #0FF, 15, 0.2, 0, 0);
+            """
+        );
+
+        // TODO: Replace this with the beatmap thumbnail later
+        ImageView rankImage = new ImageView(getRankImage(Rank.S, 50));
+        rankImage.setStyle("-fx-effect: dropshadow(gaussian, #0FF, 30, 0.3, 0, 0);");
+        VBox statsBox = new VBox();
+
+        card.getChildren().addAll(rankImage, statsBox);
+        return card;
+    }
+
 
     private ListView<Score> createScoreListView() {
         scoreListView = new ListView<>();
-        ObservableList<Score> scores = null;
         scoreListView.setFocusTraversable(false); // Prevent focus border
         scoreListView.setStyle("""
         -fx-background-color: transparent;
         -fx-control-inner-background: transparent;
         -fx-padding: 10;
+        -fx-border-color: red;
         """);
+
+        VBox.setVgrow(scoreListView, Priority.ALWAYS);
+
+        ObservableList<Score> scores = null;
 
         try {
             scores = FXCollections.observableArrayList(ScoreDatabase.getScores(beatmapID));
