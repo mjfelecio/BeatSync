@@ -1,14 +1,20 @@
 package com.mjfelecio.beatsync.object;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 // Represents a diff in a single beatmap such as Easy, Normal, etc.
+// TODO: We have a lot of properties here, rethink on whether they are actually needed and make sense
 public class Beatmap {
     private String title;
     private String diffName;
+    private String artist;
+    private String creator;
+    private Duration audioLength; // The length of the audio of the beatmap
     private int beatmapID;
     private String audioPath;
+    private String imagePath;
     private final List<Note> notes = new ArrayList<>();
     private int regularNoteCount;
     private int holdNoteCount;
@@ -67,6 +73,38 @@ public class Beatmap {
 
     public void setHoldNoteCount(int holdNoteCount) {
         this.holdNoteCount = holdNoteCount;
+    }
+
+    public String getArtist() {
+        return artist;
+    }
+
+    public void setArtist(String artist) {
+        this.artist = artist;
+    }
+
+    public String getCreator() {
+        return creator;
+    }
+
+    public void setCreator(String creator) {
+        this.creator = creator;
+    }
+
+    public Duration getAudioLength() {
+        return audioLength;
+    }
+
+    public void setAudioLength(Duration audioLength) {
+        this.audioLength = audioLength;
+    }
+
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
     }
 
     public void resetNotesState() {
