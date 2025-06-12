@@ -15,14 +15,14 @@ public class Score {
     private final LocalDateTime submittedAt;
     private final Map<JudgementResult, Integer> judgementCounts;
 
-    public Score(int beatmapID, Rank rank, long score, double accuracy, int maxCombo, Map<JudgementResult, Integer> judgementCounts) {
+    public Score(int beatmapID, Rank rank, long score, double accuracy, int maxCombo, Map<JudgementResult, Integer> judgementCounts, String submittedAt) {
         this.beatmapID = beatmapID;
         this.rank = rank;
         this.score = score;
         this.accuracy = accuracy;
         this.maxCombo = maxCombo;
-        this.submittedAt = LocalDateTime.now();
         this.judgementCounts = judgementCounts;
+        this.submittedAt = submittedAt == null ? LocalDateTime.now() : LocalDateTime.parse(submittedAt);
     }
 
     public int getBeatmapID() {
