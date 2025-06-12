@@ -128,6 +128,8 @@ public class BeatmapParser {
         if (line.startsWith("Title:")) beatmap.setTitle(line.substring(6).trim());
         if (line.startsWith("Version:")) beatmap.setDiffName(line.substring(8).trim());
         if (line.startsWith("BeatmapID:")) beatmap.setBeatmapID(Integer.parseInt(line.substring(10).trim()));
+        if (line.startsWith("Artist:")) beatmap.setArtist(line.substring(7).trim());
+        if (line.startsWith("Creator:")) beatmap.setCreator(line.substring(8).trim());
     }
 
     private static void parseHitObjects(Beatmap beatmap, String line) throws IOException {
