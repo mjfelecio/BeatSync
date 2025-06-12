@@ -23,6 +23,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.EnumMap;
 import java.util.Map;
 
@@ -71,7 +72,8 @@ public class PlayResultUI {
                 gameSession.getScore(),
                 gameSession.getAccuracy(),
                 gameSession.getMaxCombo(),
-                this.judgementCounts
+                this.judgementCounts,
+                LocalDateTime.now().toString()
         );
 
         try {
