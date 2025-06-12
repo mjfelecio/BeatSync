@@ -1,6 +1,6 @@
 package com.mjfelecio.beatsync.object;
 
-import java.time.Duration;
+import javafx.util.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
