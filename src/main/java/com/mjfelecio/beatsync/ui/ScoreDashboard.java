@@ -136,8 +136,8 @@ public class ScoreDashboard {
         VBox.setVgrow(beatmapInfo, Priority.ALWAYS);
 
         Label beatmapTitle = new Label(beatmap.getTitle());
-        beatmapTitle.setFont(FontProvider.ARCADE_R.getFont(16));
-        beatmapTitle.setStyle("-fx-text-fill: white;");
+        beatmapTitle.setFont(FontProvider.ARCADE_R.getFont(18));
+        beatmapTitle.setStyle("-fx-text-fill: #0FF;");
 
         Label difficultyName = new Label(beatmap.getDiffName());
         difficultyName.setStyle("-fx-text-fill: white;");
