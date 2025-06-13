@@ -26,6 +26,7 @@ import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 
 public class ScoreDashboard {
     private Scene scene;
@@ -204,6 +205,10 @@ public class ScoreDashboard {
                     } else {
                         rankImage.setImage(getRankImage(score.getRank(), RANK_IMAGE_SIZE));
                         this.score.setText(String.valueOf(score.getScore()));
+                        this.submittedAt.setText(formatSubmittedAt(score.getSubmittedAt()));
+                        this.maxCombo.setText("Combo:" + score.getMaxCombo());
+                        this.accuracy.setText("Accuracy:" + score.getAccuracy() + "%");
+
                         setGraphic(content);
                         setStyle("-fx-background-color: transparent;");
 
@@ -220,6 +225,24 @@ public class ScoreDashboard {
         });
 
         return scoreListView;
+    }
+
+    private String formatSubmittedAt(LocalDateTime submittedAt) {
+        int year = submittedAt.getYear();
+        String month = submittedAt.getMonth().toString();
+        int day = submittedAt.getDayOfMonth();
+
+        String formattedDate = String.format("%s %d, %d", month, day, year);
+
+        int hour = submittedAt.getHour();
+        int minute = submittedAt.getMinute();
+        String period = hour > 12 ? "pm" : "am";
+
+        hour %= 12;
+
+        String formattedTime = String.format("%d:%d %s", hour, minute, period);
+
+        return formattedDate + " | " + formattedTime;
     }
 
     private void viewFullPlayDetails(Score score, Beatmap beatmap) {
