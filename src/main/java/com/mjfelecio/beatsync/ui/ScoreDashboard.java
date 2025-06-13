@@ -21,6 +21,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
+import javafx.scene.shape.Rectangle;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -92,29 +93,40 @@ public class ScoreDashboard {
             """
         );
 
-        // TODO: Replace this with the beatmap thumbnail later
-        int imageWidth = 380;
-        ImageView rankImage = new ImageView(ImageProvider.TITLE_SCREEN_BG.getImage(imageWidth, 0, true, true));
-
-        StackPane imageWrapper = new StackPane(rankImage);
-        imageWrapper.setStyle(
-                """
-                   -fx-border-color: red;
-                   -fx-border-width: 2;
-                   -fx-border-radius: 12;
-                   -fx-background-radius: 8;
-                   -fx-padding: 10;
-                """
-        );
-
-
+        StackPane beatmapImage = createBeatmapImage();
         VBox beatmapInfo = createBeatmapInfo();
-
-
         HBox navigationButtons = createNavigationButtons();
 
-        card.getChildren().addAll(rankImage, beatmapInfo, navigationButtons);
+        card.getChildren().addAll(beatmapImage, beatmapInfo, navigationButtons);
         return card;
+    }
+
+    private StackPane createBeatmapImage() {
+        final int imageHeight = 240;
+
+        Image beatmapImage = new Image(beatmap.getImagePath());
+        ImageView imageView = new ImageView(beatmapImage);
+        imageView.setPreserveRatio(true);
+        imageView.setFitHeight(imageHeight);
+
+        // Compute the width based on the aspect ratio
+        double computedWidth = beatmapImage.getWidth() * (imageHeight / beatmapImage.getHeight());
+
+        Rectangle clip = new Rectangle(computedWidth, imageHeight);
+        clip.setArcWidth(20);
+        clip.setArcHeight(20);
+        imageView.setClip(clip);
+
+        StackPane wrapper = new StackPane(imageView);
+        wrapper.setStyle("""
+            -fx-background-color: rgba(0,0,0,0.01);
+            -fx-border-color: #0FF;
+            -fx-border-width: 3;
+            -fx-background-radius: 10;
+            -fx-border-radius: 10;
+        """);
+
+        return wrapper;
     }
 
     private VBox createBeatmapInfo() {
