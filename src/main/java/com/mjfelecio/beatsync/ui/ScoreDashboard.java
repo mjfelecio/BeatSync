@@ -22,6 +22,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.shape.Rectangle;
+import javafx.util.Duration;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -153,7 +154,7 @@ public class ScoreDashboard {
         creator.setStyle("-fx-text-fill: white;");
         creator.setFont(FontProvider.ARCADE_R.getFont(10));
 
-        Label musicLength = new Label("Music Length: " + beatmap.getAudioLength().toString());
+        Label musicLength = new Label("Music Length: " + formatMusicLength(beatmap.getAudioLength()));
         musicLength.setStyle("-fx-text-fill: white;");
         musicLength.setFont(FontProvider.ARCADE_R.getFont(10));
 
@@ -325,6 +326,15 @@ public class ScoreDashboard {
         String formattedTime = String.format("%d:%d %s", hour, minute, period);
 
         return formattedDate + " | " + formattedTime;
+    }
+
+    private String formatMusicLength(Duration duration) {
+        int totalSeconds = (int) duration.toSeconds();
+
+        int min = totalSeconds / 60;
+        int remainingSeconds = totalSeconds - (min * 60);
+
+        return String.format("%dm %ds", min, remainingSeconds);
     }
 
     private void viewFullPlayDetails(Score score, Beatmap beatmap) {
