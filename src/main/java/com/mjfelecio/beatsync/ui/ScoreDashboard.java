@@ -320,11 +320,18 @@ public class ScoreDashboard {
 
         int hour = submittedAt.getHour();
         int minute = submittedAt.getMinute();
+
+        String minString = String.valueOf(minute);
+        // Pad with 0 if the minute is a single digit
+        if (minute < 10) {
+            minString = "0" + minute;
+        }
+
         String period = hour > 12 ? "pm" : "am";
 
         hour %= 12;
 
-        String formattedTime = String.format("%d:%d %s", hour, minute, period);
+        String formattedTime = String.format("%d:%s %s", hour, minString, period);
 
         return formattedDate + " | " + formattedTime;
     }
@@ -335,7 +342,13 @@ public class ScoreDashboard {
         int min = totalSeconds / 60;
         int remainingSeconds = totalSeconds - (min * 60);
 
-        return String.format("%dm %ds", min, remainingSeconds);
+        String secString = String.valueOf(remainingSeconds);
+        // Pad with 0 if the second is a single digit
+        if (remainingSeconds < 10) {
+            secString = "0" + remainingSeconds;
+        }
+
+        return String.format("%dm %ss", min, secString);
     }
 
     private void viewFullPlayDetails(Score score, Beatmap beatmap) {
