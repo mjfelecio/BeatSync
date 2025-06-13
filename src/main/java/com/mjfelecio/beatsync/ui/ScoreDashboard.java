@@ -13,6 +13,7 @@ import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -153,6 +154,8 @@ public class ScoreDashboard {
                 private final Label maxCombo = new Label("Max Combo: 534");
                 private final Label accuracy = new Label("Accuracy: 97.53%");
 
+                private final Button viewPlayResultButton = new Button(">");
+
                 // Containers
                 private final HBox statsContainer = new HBox(5);
                 private final VBox scoreAndTimeContainer = new VBox(5);
@@ -160,6 +163,8 @@ public class ScoreDashboard {
                 private final VBox maxComboAndAccuracyContainer = new VBox(5);
 
                 {
+                    viewPlayResultButton.setMinSize(30, 30);
+
                     rankImage.setFitWidth(RANK_IMAGE_SIZE);
                     rankImage.setFitHeight(RANK_IMAGE_SIZE);
 
@@ -187,7 +192,7 @@ public class ScoreDashboard {
                     content.setAlignment(Pos.CENTER_LEFT);
                     content.setPadding(new Insets(5));
                     content.setStyle("-fx-background-color: rgba(0,255,255,0.1); -fx-border-radius: 5; -fx-background-radius: 5;");
-                    content.getChildren().addAll(rankImage, statsContainer);
+                    content.getChildren().addAll(rankImage, statsContainer, viewPlayResultButton);
                 }
 
                 @Override
@@ -201,6 +206,8 @@ public class ScoreDashboard {
                         this.score.setText(String.valueOf(score.getScore()));
                         setGraphic(content);
                         setStyle("-fx-background-color: transparent;");
+
+                        viewPlayResultButton.setOnAction(e -> viewFullPlayDetails(score));
                     }
                 }
         });
@@ -213,6 +220,10 @@ public class ScoreDashboard {
         });
 
         return scoreListView;
+    }
+
+    private void viewFullPlayDetails(Score score) {
+        System.out.println(score);
     }
 
     private static Image getRankImage(Rank rank, int rankImageSize) {
