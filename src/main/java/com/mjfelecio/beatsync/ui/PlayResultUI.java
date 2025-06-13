@@ -50,7 +50,7 @@ public class PlayResultUI {
         }
     }
 
-    public void initializeValues(GameSession gameSession) {
+    public void initializeValues(GameSession gameSession, Beatmap beatmap) {
         rank = gameSession.getRank();
         score = gameSession.getScore();
         accuracy = gameSession.getAccuracy();
@@ -61,7 +61,7 @@ public class PlayResultUI {
         judgementCounts.put(JudgementResult.MISS, gameSession.getMissCount());
 
         // Create a Score object from the play
-        recordScore(gameSession);
+        recordScore(gameSession, beatmap);
 
         // Create the scene once the values has been filled in
         createScene();
@@ -82,8 +82,8 @@ public class PlayResultUI {
         createScene();
     }
 
-    private void recordScore(GameSession gameSession) {
-        int beatmapID = GameState.getInstance().getCurrentBeatmap().getBeatmapID();
+    private void recordScore(GameSession gameSession, Beatmap beatmap) {
+        int beatmapID = beatmap.getBeatmapID();
 
         // Create the score object
         Score score = new Score(

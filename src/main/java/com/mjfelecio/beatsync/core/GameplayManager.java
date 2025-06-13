@@ -34,6 +34,8 @@ public class GameplayManager {
     private final GameplayLogic gameplayLogic;
     private InputHandler inputHandler;
 
+    private Beatmap beatmap;
+
     public GameplayManager() {
         this.gameEngine = new GameEngine();
         this.renderer = new PlayfieldRenderer();
@@ -72,6 +74,7 @@ public class GameplayManager {
 
     public void loadBeatmap(Beatmap beatmap) {
         try {
+            this.beatmap = beatmap;
             gameplayLogic.loadBeatmap(beatmap);
             gameEngine.getMusicPlayer().loadMusic(beatmap.getAudioPath());
         } catch (Exception e) {
@@ -197,7 +200,7 @@ public class GameplayManager {
         dispose();
 
         Timeline delayTimeline = new Timeline(new KeyFrame(Duration.seconds(1), event -> {
-            SceneManager.getInstance().loadResultScreen(gameSession);
+            SceneManager.getInstance().loadResultScreen(gameSession, beatmap);
         }));
         delayTimeline.setCycleCount(1);
         delayTimeline.play();

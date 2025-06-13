@@ -102,9 +102,9 @@ public class SceneManager {
         applyScene(gameplayManager.getGameplayScene());
     }
 
-    public void loadResultScreen(GameSession gameSession) {
+    public void loadResultScreen(GameSession gameSession, Beatmap beatmap) {
         PlayResultUI playResultUI = new PlayResultUI();
-        playResultUI.initializeValues(gameSession);
+        playResultUI.initializeValues(gameSession, beatmap);
 
         applyScene(playResultUI.getScene());
         SFXPlayer.getInstance().play(SoundEffect.RESULTS_SWOOSH);
