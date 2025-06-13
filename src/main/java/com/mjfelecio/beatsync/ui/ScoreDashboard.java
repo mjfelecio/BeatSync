@@ -130,23 +130,42 @@ public class ScoreDashboard {
     }
 
     private VBox createBeatmapInfo() {
-        VBox beatmapInfo = new VBox();
+        VBox beatmapInfo = new VBox(20);
         VBox.setVgrow(beatmapInfo, Priority.ALWAYS);
 
-        Label beatmapName = new Label("Try Sail - Utsuroi");
-        beatmapName.setStyle("-fx-text-fill: white;");
+        Label beatmapTitle = new Label(beatmap.getTitle());
+        beatmapTitle.setFont(FontProvider.ARCADE_R.getFont(16));
+        beatmapTitle.setStyle("-fx-text-fill: white;");
+
         Label difficultyName = new Label("Hard");
         difficultyName.setStyle("-fx-text-fill: white;");
-        Label artist = new Label("Try Sail");
-        artist.setStyle("-fx-text-fill: white;");
-        Label creator = new Label("Scotty");
-        creator.setStyle("-fx-text-fill: white;");
-        Label songLength = new Label("1m 30s");
-        songLength.setStyle("-fx-text-fill: white;");
-        Label noteCount = new Label("340 notes");
-        noteCount.setStyle("-fx-text-fill: white;");
+        difficultyName.setFont(FontProvider.ARCADE_R.getFont(12));
 
-        beatmapInfo.getChildren().addAll(beatmapName, difficultyName, artist, creator, songLength, noteCount);
+        VBox titleAndDiffContainer = new VBox(10);
+        titleAndDiffContainer.setAlignment(Pos.TOP_CENTER);
+        titleAndDiffContainer.getChildren().addAll(beatmapTitle, difficultyName);
+
+        Label songArtist = new Label(beatmap.getArtist());
+        songArtist.setFont(FontProvider.ARCADE_R.getFont(10));
+        songArtist.setStyle("-fx-text-fill: white;");
+
+        Label creator = new Label("Creator: " + beatmap.getCreator());
+        creator.setStyle("-fx-text-fill: white;");
+        creator.setFont(FontProvider.ARCADE_R.getFont(10));
+
+        Label musicLength = new Label("Music Length: " + beatmap.getAudioLength().toString());
+        musicLength.setStyle("-fx-text-fill: white;");
+        musicLength.setFont(FontProvider.ARCADE_R.getFont(10));
+
+        Label noteCount = new Label("Note Count: " + beatmap.getNotes().size());
+        noteCount.setStyle("-fx-text-fill: white;");
+        noteCount.setFont(FontProvider.ARCADE_R.getFont(10));
+
+        VBox otherInfoContainer = new VBox(10);
+        otherInfoContainer.setAlignment(Pos.CENTER_LEFT);
+        otherInfoContainer.getChildren().addAll(creator, musicLength, noteCount);
+
+        beatmapInfo.getChildren().addAll(titleAndDiffContainer, otherInfoContainer);
         return beatmapInfo;
     }
 
