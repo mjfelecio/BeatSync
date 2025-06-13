@@ -20,10 +20,7 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
@@ -81,8 +78,8 @@ public class ScoreDashboard {
     }
 
     private VBox createBeatmapInfoCard() {
-        VBox card = new VBox(20);
-        card.setSpacing(30);
+        VBox card = new VBox(16);
+        card.setPadding(new Insets(20));
         card.setAlignment(Pos.TOP_CENTER);
         card.setStyle(
             """
@@ -96,16 +93,33 @@ public class ScoreDashboard {
         );
 
         // TODO: Replace this with the beatmap thumbnail later
-        ImageView rankImage = new ImageView(getRankImage(Rank.S, 50));
-        rankImage.setStyle("-fx-effect: dropshadow(gaussian, #0FF, 30, 0.3, 0, 0);");
+        int imageWidth = 380;
+        ImageView rankImage = new ImageView(ImageProvider.TITLE_SCREEN_BG.getImage(imageWidth, 0, true, true));
+
+        StackPane imageWrapper = new StackPane(rankImage);
+        imageWrapper.setStyle(
+                """
+                   -fx-border-color: red;
+                   -fx-border-width: 2;
+                   -fx-border-radius: 12;
+                   -fx-background-radius: 8;
+                   -fx-padding: 10;
+                """
+        );
+
+
         VBox beatmapInfo = createBeatmapInfo();
 
-        card.getChildren().addAll(rankImage, beatmapInfo);
+
+        HBox navigationButtons = createNavigationButtons();
+
+        card.getChildren().addAll(rankImage, beatmapInfo, navigationButtons);
         return card;
     }
 
     private VBox createBeatmapInfo() {
         VBox beatmapInfo = new VBox();
+        VBox.setVgrow(beatmapInfo, Priority.ALWAYS);
 
         Label beatmapName = new Label("Try Sail - Utsuroi");
         beatmapName.setStyle("-fx-text-fill: white;");
@@ -124,6 +138,43 @@ public class ScoreDashboard {
         return beatmapInfo;
     }
 
+    private HBox createNavigationButtons() {
+        Button backButton = new Button("Back");
+        backButton.setFont(FontProvider.ARCADE_R.getFont(14));
+        backButton.setStyle("""
+            -fx-text-fill: #CCCCCC;
+            -fx-background-color: black;
+            -fx-border-color: #0FF;
+            -fx-border-width: 3px;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 20 8 20;
+            -fx-cursor: hand;
+        """);
+        backButton.setOnAction(e -> SceneManager.getInstance().loadSongSelect());
+
+        Button playButton = new Button("Play");
+        playButton.setFont(FontProvider.ARCADE_R.getFont(14));
+        playButton.setStyle("""
+            -fx-text-fill: #CCCCCC;
+            -fx-background-color: black;
+            -fx-border-color: #0FF;
+            -fx-border-width: 3px;
+            -fx-border-radius: 5px;
+            -fx-background-radius: 5px;
+            -fx-padding: 8 20 8 20;
+            -fx-cursor: hand;
+        """);
+        playButton.setOnAction(e -> playDisplayedBeatmap());
+
+        HBox buttonBox = new HBox(20, backButton, playButton);
+        buttonBox.setAlignment(Pos.CENTER);
+        return buttonBox;
+    }
+
+    private void playDisplayedBeatmap() {
+        SceneManager.getInstance().loadGameplay(beatmap);
+    }
 
     private ListView<Score> createScoreListView() {
         scoreListView = new ListView<>();
