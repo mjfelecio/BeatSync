@@ -4,6 +4,7 @@ import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Note;
 import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
 import java.io.BufferedReader;
@@ -101,9 +102,9 @@ public class BeatmapParser {
             throw new IOException("Failed to parse beatmap: " + e);
         }
 
-        // Get the duration of the song
-        Duration songDuration = new Media(beatmap.getAudioPath()).getDuration();
-        beatmap.setAudioLength(songDuration);
+        Media media = new Media(beatmap.getAudioPath());
+        MediaPlayer mediaPlayer = new MediaPlayer(media);
+        mediaPlayer.setOnReady(() -> beatmap.setAudioLength(media.getDuration()));
 
         return beatmap;
     }
