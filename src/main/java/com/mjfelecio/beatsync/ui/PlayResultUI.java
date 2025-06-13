@@ -7,6 +7,7 @@ import com.mjfelecio.beatsync.config.GameConfig;
 import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.judgement.JudgementResult;
+import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Rank;
 import com.mjfelecio.beatsync.object.Score;
 import com.mjfelecio.beatsync.state.GameState;
@@ -35,7 +36,11 @@ public class PlayResultUI {
     private long score = 0;
     private double accuracy = 0;
     private int maxCombo = 0;
-    private final Map<JudgementResult, Integer> judgementCounts;
+    private Map<JudgementResult, Integer> judgementCounts;
+
+    // This is specifically for displaying scores. Will think about moving this later to another class
+    private Beatmap displayedBeatmap = null;
+    private boolean isDisplayingScore = false;
 
     public PlayResultUI() {
         // initialize judgementCounts with default values
@@ -57,6 +62,21 @@ public class PlayResultUI {
 
         // Create a Score object from the play
         recordScore(gameSession);
+
+        // Create the scene once the values has been filled in
+        createScene();
+    }
+
+    // Temporary workaround to reuse this UI to display the score
+    public void initializeValues(Score score, Beatmap beatmap) {
+        this.rank = score.getRank();
+        this.score = score.getScore();
+        this.accuracy = score.getAccuracy();
+        this.maxCombo = score.getMaxCombo();
+        this.judgementCounts = score.getJudgementCounts();
+
+        this.isDisplayingScore = true;
+        this.displayedBeatmap = beatmap;
 
         // Create the scene once the values has been filled in
         createScene();
@@ -259,18 +279,43 @@ public class PlayResultUI {
         HBox buttonGroup = new HBox(20);
         buttonGroup.setAlignment(Pos.CENTER);
 
-        Button retryButton = new Button("Retry");
-        retryButton.setFont(FontProvider.ARCADE_R.getFont(24));
-        retryButton.setStyle(buttonStyle());
-        retryButton.setOnAction(e -> retryBeatmap());
+        Button leftButton = new Button();
+        Button rightButton = new Button();
 
-        Button songSelectButton = new Button("Song Select");
-        songSelectButton.setFont(FontProvider.ARCADE_R.getFont(24));
-        songSelectButton.setStyle(buttonStyle());
-        songSelectButton.setOnAction(e -> navigateToSongSelect());
+        if (isDisplayingScore) {
+            leftButton.setText("Back");
+            leftButton.setFont(FontProvider.ARCADE_R.getFont(24));
+            leftButton.setStyle(buttonStyle());
+            leftButton.setOnAction(e -> navigateToScoreDashboard());
 
-        buttonGroup.getChildren().addAll(retryButton, songSelectButton);
+            rightButton = new Button("Play");
+            rightButton.setFont(FontProvider.ARCADE_R.getFont(24));
+            rightButton.setStyle(buttonStyle());
+            rightButton.setOnAction(e -> playMapOfScore());
+        } else {
+            leftButton.setText("Retry");
+            leftButton.setFont(FontProvider.ARCADE_R.getFont(24));
+            leftButton.setStyle(buttonStyle());
+            leftButton.setOnAction(e -> retryBeatmap());
+
+            rightButton.setText("Song Select");
+            rightButton.setFont(FontProvider.ARCADE_R.getFont(24));
+            rightButton.setStyle(buttonStyle());
+            rightButton.setOnAction(e -> navigateToSongSelect());
+        }
+
+        buttonGroup.getChildren().addAll(leftButton, rightButton);
         return buttonGroup;
+    }
+
+    private void playMapOfScore() {
+        SceneManager.getInstance().loadGameplay(displayedBeatmap);
+    }
+
+    private void navigateToScoreDashboard() {
+        if (displayedBeatmap != null) {
+            SceneManager.getInstance().loadScoreDashboard(displayedBeatmap);
+        }
     }
 
     private Image getRankImage(Rank rank) {

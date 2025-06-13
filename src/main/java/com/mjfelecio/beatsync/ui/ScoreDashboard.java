@@ -3,6 +3,7 @@ package com.mjfelecio.beatsync.ui;
 import com.mjfelecio.beatsync.ScoreDatabase;
 import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
+import com.mjfelecio.beatsync.core.SceneManager;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Rank;
 import com.mjfelecio.beatsync.object.Score;
@@ -136,8 +137,7 @@ public class ScoreDashboard {
         ObservableList<Score> scores = null;
 
         try {
-            // TEST
-            int beatmapID = 2699390;
+            int beatmapID = beatmap.getBeatmapID();
             scores = FXCollections.observableArrayList(ScoreDatabase.getScores(beatmapID));
         } catch (SQLException e) {
             System.err.println("Failed to get scores from db: " + e);
@@ -149,10 +149,10 @@ public class ScoreDashboard {
 
                 private final HBox content = new HBox(10);
                 private final ImageView rankImage = new ImageView();
-                private final Label score = new Label("134, 540");
-                private final Label submittedAt = new Label("June 12, 2025 | 10:39 pm");
-                private final Label maxCombo = new Label("Max Combo: 534");
-                private final Label accuracy = new Label("Accuracy: 97.53%");
+                private final Label score = new Label();
+                private final Label submittedAt = new Label();
+                private final Label maxCombo = new Label();
+                private final Label accuracy = new Label();
 
                 private final Button viewPlayResultButton = new Button(">");
 
@@ -207,7 +207,7 @@ public class ScoreDashboard {
                         setGraphic(content);
                         setStyle("-fx-background-color: transparent;");
 
-                        viewPlayResultButton.setOnAction(e -> viewFullPlayDetails(score));
+                        viewPlayResultButton.setOnAction(e -> viewFullPlayDetails(score, beatmap));
                     }
                 }
         });
@@ -222,8 +222,8 @@ public class ScoreDashboard {
         return scoreListView;
     }
 
-    private void viewFullPlayDetails(Score score) {
-        System.out.println(score);
+    private void viewFullPlayDetails(Score score, Beatmap beatmap) {
+        SceneManager.getInstance().loadFullScoreDetails(score, beatmap);
     }
 
     private static Image getRankImage(Rank rank, int rankImageSize) {

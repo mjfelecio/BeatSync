@@ -4,6 +4,7 @@ import com.mjfelecio.beatsync.audio.SFXPlayer;
 import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.gameplay.GameSession;
 import com.mjfelecio.beatsync.object.Beatmap;
+import com.mjfelecio.beatsync.object.Score;
 import com.mjfelecio.beatsync.state.GameState;
 import com.mjfelecio.beatsync.ui.*;
 import javafx.scene.Scene;
@@ -82,12 +83,39 @@ public class SceneManager {
         applyScene(gameplayManager.getGameplayScene());
     }
 
+    public void loadGameplay(Beatmap beatmap) {
+        // Dispose of any previous gameplay to stop timers and media callbacks
+        if (currentGameplayManager != null) {
+            currentGameplayManager.dispose();
+        }
+
+        SFXPlayer.getInstance().play(SoundEffect.ENTER_GAMEPLAY);
+        GameplayManager gameplayManager = new GameplayManager();
+        currentGameplayManager = gameplayManager;
+
+        beatmap.resetNotesState();
+
+        gameplayManager.loadBeatmap(beatmap);
+        gameplayManager.initializeGameplay();
+        gameplayManager.startGameplay();
+
+        applyScene(gameplayManager.getGameplayScene());
+    }
+
     public void loadResultScreen(GameSession gameSession) {
         PlayResultUI playResultUI = new PlayResultUI();
         playResultUI.initializeValues(gameSession);
 
         applyScene(playResultUI.getScene());
         SFXPlayer.getInstance().play(SoundEffect.RESULTS_SWOOSH);
+    }
+
+    // Temporary workaround to reuse this UI to display the score
+    public void loadFullScoreDetails(Score score, Beatmap beatmap) {
+        PlayResultUI playResultUI = new PlayResultUI();
+        playResultUI.initializeValues(score, beatmap);
+
+        applyScene(playResultUI.getScene());
     }
 
     public void loadScoreDashboard(Beatmap selectedBeatmap) {
