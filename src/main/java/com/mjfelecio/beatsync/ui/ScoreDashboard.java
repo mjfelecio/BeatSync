@@ -175,14 +175,17 @@ public class ScoreDashboard {
                     accuracy.setFont(FontProvider.ARCADE_R.getFont(12));
                     accuracy.setStyle("fx-text-fill: #0ff;");
 
+                    scoreAndTimeContainer.setAlignment(Pos.CENTER_LEFT);
                     scoreAndTimeContainer.getChildren().addAll(score, submittedAt);
                     maxComboAndAccuracyContainer.getChildren().addAll(maxCombo, accuracy);
+                    maxComboAndAccuracyContainer.setAlignment(Pos.CENTER_LEFT);
 
                     HBox.setHgrow(spacer, Priority.ALWAYS);
                     HBox.setHgrow(statsContainer, Priority.ALWAYS);
                     statsContainer.getChildren().addAll(scoreAndTimeContainer, spacer, maxComboAndAccuracyContainer);
 
                     content.setAlignment(Pos.CENTER_LEFT);
+                    content.setPadding(new Insets(5));
                     content.setStyle("-fx-background-color: rgba(0,255,255,0.1); -fx-border-radius: 5; -fx-background-radius: 5;");
                     content.getChildren().addAll(rankImage, statsContainer);
                 }
