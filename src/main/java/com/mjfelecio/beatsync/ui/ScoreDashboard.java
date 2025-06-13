@@ -146,11 +146,11 @@ public class ScoreDashboard {
         titleAndDiffContainer.setAlignment(Pos.TOP_CENTER);
         titleAndDiffContainer.getChildren().addAll(beatmapTitle, difficultyName);
 
-        Label songArtist = new Label(beatmap.getArtist());
+        Label songArtist = new Label("Song Artist: " + beatmap.getArtist());
         songArtist.setFont(FontProvider.ARCADE_R.getFont(10));
         songArtist.setStyle("-fx-text-fill: white;");
 
-        Label creator = new Label("Creator: " + beatmap.getCreator());
+        Label creator = new Label("Beatmap Creator: " + beatmap.getCreator());
         creator.setStyle("-fx-text-fill: white;");
         creator.setFont(FontProvider.ARCADE_R.getFont(10));
 
@@ -164,7 +164,7 @@ public class ScoreDashboard {
 
         VBox otherInfoContainer = new VBox(10);
         otherInfoContainer.setAlignment(Pos.CENTER_LEFT);
-        otherInfoContainer.getChildren().addAll(creator, musicLength, noteCount);
+        otherInfoContainer.getChildren().addAll(songArtist, creator, musicLength, noteCount);
 
         beatmapInfo.getChildren().addAll(titleAndDiffContainer, otherInfoContainer);
         return beatmapInfo;
