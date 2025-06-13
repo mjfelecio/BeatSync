@@ -6,6 +6,7 @@ import com.mjfelecio.beatsync.audio.SoundEffect;
 import com.mjfelecio.beatsync.object.Beatmap;
 import com.mjfelecio.beatsync.object.Rank;
 import com.mjfelecio.beatsync.object.Score;
+import com.mjfelecio.beatsync.utils.FontProvider;
 import com.mjfelecio.beatsync.utils.ImageProvider;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -19,6 +20,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.VBox;
 
 import java.sql.SQLException;
@@ -39,14 +41,22 @@ public class ScoreDashboard {
         root.setPadding(new Insets(120));
         root.setAlignment(Pos.TOP_CENTER);
         root.setSpacing(24);
-        root.setStyle("-fx-border-color: red;");
         root.setBackground(ImageProvider.SONG_SELECT_BG.getImageAsBackground());
 
         VBox beatmapInfoCard = createBeatmapInfoCard();
 
         VBox scoreListWrapper = new VBox(createScoreListView());
         scoreListWrapper.setAlignment(Pos.TOP_CENTER);
-        scoreListWrapper.setStyle("-fx-border-color: red;");
+        scoreListWrapper.setStyle(
+                """
+                   -fx-background-color: linear-gradient(to bottom, #111111, #1A1A1A);
+                   -fx-border-color: #0FF;
+                   -fx-border-width: 2;
+                   -fx-border-radius: 12;
+                   -fx-background-radius: 12;
+                   -fx-effect: dropshadow(gaussian, #0FF, 15, 0.2, 0, 0);
+                """
+        );
 
         // Bind widths to 65% and 35% of the parent HBox
         root.widthProperty().addListener((obs, oldVal, newVal) -> {
@@ -112,8 +122,6 @@ public class ScoreDashboard {
         scoreListView.setStyle("""
         -fx-background-color: transparent;
         -fx-control-inner-background: transparent;
-        -fx-padding: 10;
-        -fx-border-color: red;
         """);
 
         VBox.setVgrow(scoreListView, Priority.ALWAYS);
@@ -130,38 +138,62 @@ public class ScoreDashboard {
 
         scoreListView.setItems(scores);
         scoreListView.setCellFactory(_ -> new ListCell<>() {
-            private final int RANK_IMAGE_SIZE = 50;
+                private final int RANK_IMAGE_SIZE = 50;
 
-            private final HBox content = new HBox(10);
-            private final ImageView rankImage = new ImageView();
-            private final Label score = new Label();
+                private final HBox content = new HBox(10);
+                private final ImageView rankImage = new ImageView();
+                private final Label score = new Label("134, 540");
+                private final Label submittedAt = new Label("June 12, 2025 | 10:39 pm");
+                private final Label maxCombo = new Label("Max Combo: 534");
+                private final Label accuracy = new Label("Accuracy: 97.53%");
 
-            {
-                rankImage.setFitWidth(RANK_IMAGE_SIZE);
-                rankImage.setFitHeight(RANK_IMAGE_SIZE);
-                score.setStyle("""
-                -fx-font-size: 16px;
-                -fx-text-fill: #0ff;
-                -fx-font-family: 'Verdana';
-                """);
-                content.setAlignment(Pos.CENTER_LEFT);
-                content.getChildren().addAll(rankImage, score);
-                content.setStyle("-fx-background-color: rgba(0,255,255,0.1); -fx-padding: 5 10; -fx-border-radius: 5; -fx-background-radius: 5;");
-            }
+                // Containers
+                private final HBox statsContainer = new HBox(5);
+                private final VBox scoreAndTimeContainer = new VBox(5);
+                private final Region spacer = new Region();
+                private final VBox maxComboAndAccuracyContainer = new VBox(5);
 
-            @Override
-            protected void updateItem(Score score, boolean empty) {
-                super.updateItem(score, empty);
-                if (empty || score == null) {
-                    setGraphic(null);
-                    setStyle(""); // reset cell style
-                } else {
-                    rankImage.setImage(getRankImage(score.getRank(), RANK_IMAGE_SIZE));
-                    this.score.setText(String.valueOf(score.getScore()));
-                    setGraphic(content);
-                    setStyle("-fx-background-color: transparent;");
+                {
+                    rankImage.setFitWidth(RANK_IMAGE_SIZE);
+                    rankImage.setFitHeight(RANK_IMAGE_SIZE);
+
+                    score.setFont(FontProvider.ARCADE_R.getFont(24));
+                    score.setStyle("fx-text-fill: #0ff;");
+
+                    submittedAt.setFont(FontProvider.ARCADE_R.getFont(6));
+                    submittedAt.setStyle("fx-text-fill: #0ff;");
+
+                    maxCombo.setFont(FontProvider.ARCADE_R.getFont(12));
+                    maxCombo.setStyle("fx-text-fill: #0ff;");
+
+                    accuracy.setFont(FontProvider.ARCADE_R.getFont(12));
+                    accuracy.setStyle("fx-text-fill: #0ff;");
+
+                    scoreAndTimeContainer.getChildren().addAll(score, submittedAt);
+                    maxComboAndAccuracyContainer.getChildren().addAll(maxCombo, accuracy);
+
+                    HBox.setHgrow(spacer, Priority.ALWAYS);
+                    HBox.setHgrow(statsContainer, Priority.ALWAYS);
+                    statsContainer.getChildren().addAll(scoreAndTimeContainer, spacer, maxComboAndAccuracyContainer);
+
+                    content.setAlignment(Pos.CENTER_LEFT);
+                    content.setStyle("-fx-background-color: rgba(0,255,255,0.1); -fx-border-radius: 5; -fx-background-radius: 5;");
+                    content.getChildren().addAll(rankImage, statsContainer);
                 }
-            }
+
+                @Override
+                protected void updateItem(Score score, boolean empty) {
+                    super.updateItem(score, empty);
+                    if (empty || score == null) {
+                        setGraphic(null);
+                        setStyle("");
+                    } else {
+                        rankImage.setImage(getRankImage(score.getRank(), RANK_IMAGE_SIZE));
+                        this.score.setText(String.valueOf(score.getScore()));
+                        setGraphic(content);
+                        setStyle("-fx-background-color: transparent;");
+                    }
+                }
         });
 
         scoreListView.getSelectionModel().selectedItemProperty().addListener((obs, oldVal, newVal) -> {
