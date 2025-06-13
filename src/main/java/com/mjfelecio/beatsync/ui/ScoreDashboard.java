@@ -21,7 +21,8 @@ import javafx.scene.control.ListView;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.*;
 import javafx.util.Duration;
 
 import java.sql.SQLException;
@@ -238,7 +239,7 @@ public class ScoreDashboard {
                 private final Label maxCombo = new Label();
                 private final Label accuracy = new Label();
 
-                private final Button viewPlayResultButton = new Button(">");
+                private final Region viewPlayResultButton = createButtonToViewPlayDetails();
 
                 // Containers
                 private final HBox statsContainer = new HBox(5);
@@ -295,7 +296,7 @@ public class ScoreDashboard {
                         setGraphic(content);
                         setStyle("-fx-background-color: transparent;");
 
-                        viewPlayResultButton.setOnAction(e -> viewFullPlayDetails(score, beatmap));
+                        viewPlayResultButton.setOnMouseClicked(e -> viewFullPlayDetails(score, beatmap));
                     }
                 }
         });
@@ -350,6 +351,63 @@ public class ScoreDashboard {
             case C -> ImageProvider.C_RANK.getImage(rankImageSize, rankImageSize, true, true);
             case D -> ImageProvider.D_RANK.getImage(rankImageSize, rankImageSize, true, true);
         };
+    }
+
+    public Region createButtonToViewPlayDetails() {
+        Region viewPlayDetailsButton = createArrowHeadRegion(20, 20, 1);
+
+        viewPlayDetailsButton.setOnMouseEntered(e -> viewPlayDetailsButton.setStyle("""
+                -fx-cursor: hand;
+                -fx-background-color: rgba(0,255,255,0.4);
+                -fx-background-radius: 4px;
+                -fx-padding: 4;
+                """));
+        viewPlayDetailsButton.setOnMouseExited(e -> viewPlayDetailsButton.setStyle("""
+                -fx-cursor: hand;
+                -fx-background-color: #0FF;
+                -fx-background-radius: 4px;
+                -fx-padding: 4;
+                """));
+
+        return viewPlayDetailsButton;
+    }
+
+    // I didn't make this, I just had claude create a shape for me.
+    public static Region createArrowHeadRegion(double width, double height, double strokeWidth) {
+        // Create the arrow head shape using Path
+        Path arrowShape = new Path();
+
+        double halfHeight = height / 2;
+        double lineOffset = strokeWidth * 0.75; // Gap between the two lines
+
+        // First arrow line (top)
+        MoveTo start1 = new MoveTo(0, halfHeight - lineOffset);
+        LineTo tip1 = new LineTo(width, halfHeight);
+        LineTo end1 = new LineTo(0, halfHeight - strokeWidth - lineOffset);
+
+        // Second arrow line (bottom)
+        MoveTo start2 = new MoveTo(0, halfHeight + lineOffset);
+        LineTo tip2 = new LineTo(width, halfHeight);
+        LineTo end2 = new LineTo(0, halfHeight + strokeWidth + lineOffset);
+
+        arrowShape.getElements().addAll(start1, tip1, end1, start2, tip2, end2);
+
+        // Make the lines rounded
+        arrowShape.setStrokeWidth(strokeWidth);
+        arrowShape.setStroke(Color.web("#0FF"));
+        arrowShape.setFill(null); // No fill, just strokes
+        arrowShape.setStrokeLineCap(StrokeLineCap.ROUND);
+        arrowShape.setStrokeLineJoin(StrokeLineJoin.ROUND);
+
+        // Create Region and set the shape
+        Region region = new Region();
+        region.setShape(arrowShape);
+        region.setStyle("-fx-background-color: #0FF;");
+        region.setPrefSize(width, height);
+        region.setMaxSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+        region.setMinSize(Region.USE_PREF_SIZE, Region.USE_PREF_SIZE);
+
+        return region;
     }
 
     public Scene getScene() {
