@@ -45,8 +45,13 @@ public class ScoreDashboard {
 
         VBox beatmapInfoCard = createBeatmapInfoCard();
 
-        VBox scoreListWrapper = new VBox(createScoreListView());
+        Label scoreTitleLabel = new Label("Submitted Scores");
+        scoreTitleLabel.setFont(FontProvider.ARCADE_R.getFont(16));
+        scoreTitleLabel.setStyle("-fx-text-fill: white;");
+
+        VBox scoreListWrapper = new VBox(10);
         scoreListWrapper.setAlignment(Pos.TOP_CENTER);
+        scoreListWrapper.setPadding(new Insets(10));
         scoreListWrapper.setStyle(
                 """
                    -fx-background-color: linear-gradient(to bottom, #111111, #1A1A1A);
@@ -57,6 +62,7 @@ public class ScoreDashboard {
                    -fx-effect: dropshadow(gaussian, #0FF, 15, 0.2, 0, 0);
                 """
         );
+        scoreListWrapper.getChildren().addAll(scoreTitleLabel, createScoreListView());
 
         // Bind widths to 65% and 35% of the parent HBox
         root.widthProperty().addListener((obs, oldVal, newVal) -> {
