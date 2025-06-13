@@ -256,7 +256,7 @@ public class ScoreDashboard {
                     score.setFont(FontProvider.ARCADE_R.getFont(24));
                     score.setStyle("fx-text-fill: #0ff;");
 
-                    submittedAt.setFont(FontProvider.ARCADE_R.getFont(6));
+                    submittedAt.setFont(FontProvider.ARCADE_R.getFont(8));
                     submittedAt.setStyle("fx-text-fill: #0ff;");
 
                     maxCombo.setFont(FontProvider.ARCADE_R.getFont(12));
