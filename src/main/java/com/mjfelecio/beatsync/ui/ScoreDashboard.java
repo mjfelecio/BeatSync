@@ -139,7 +139,7 @@ public class ScoreDashboard {
         beatmapTitle.setFont(FontProvider.ARCADE_R.getFont(16));
         beatmapTitle.setStyle("-fx-text-fill: white;");
 
-        Label difficultyName = new Label("Hard");
+        Label difficultyName = new Label(beatmap.getDiffName());
         difficultyName.setStyle("-fx-text-fill: white;");
         difficultyName.setFont(FontProvider.ARCADE_R.getFont(12));
 
