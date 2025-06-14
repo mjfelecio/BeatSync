@@ -14,3 +14,8 @@ Note: IDK if the instructions here works lol, haven't tested them
 
 I know this readme is unhinged, but I am too sleep deprived.
 If you are interested in running it but wasn't able to, just contact me through the Issues Page.
+
+If you want to package the code after making changes, 
+change the ENVIRONMENT constant in GameConfig to "PROD" from "DEV".
+Then run `mvn clean package`. Make sure to change it back to "DEV"
+when running it in the IDE though.
